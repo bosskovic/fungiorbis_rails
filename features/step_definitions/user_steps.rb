@@ -1,6 +1,9 @@
-Given /^"([^"]*)" is a user with email id "([^"]*)" and password "([^"]*)"$/ do |full_name, email, password|
+Given /^"([^"]*)" is a ([^"]*) with email id "([^"]*)" and password "([^"]*)"$/ do |full_name, role, email, password|
   first_name, last_name = full_name.split
-  @user = User.create(email: email, password: password, password_confirmation: password, first_name: first_name.to_s, last_name: last_name.to_s, role: 'user')
+
+  roles = {user: User::USER_ROLE, contributor: User::CONTRIBUTOR_ROLE, supervisor: User::SUPERVISOR_ROLE}
+
+  @user = User.create(email: email, password: password, password_confirmation: password, first_name: first_name.to_s, last_name: last_name.to_s, role: roles[role.to_sym], confirmed_at: DateTime.now)
 end
 
 And /^his authentication token is "([^"]*)"$/ do |auth_token|
@@ -30,14 +33,14 @@ end
 
 And /^his password should be "([^"]*)"$/ do |password|
   @user.reload
-  # @user.valid_password?(password).should be_true
+  expect(@user.valid_password?(password)).to be_truthy
 end
 
 Then(/^a user should be present with the following$/) do |table|
-  User.where(table.rows_hash).present?.should be_true
+  expect(User.where(table.rows_hash).present?).to be_truthy
 end
 
-Given "the following user exists" do |table|
+Given 'the following user exists' do |table|
   User.create!(table.rows_hash)
 end
 
@@ -45,10 +48,10 @@ Then(/^there should not be any user with email "(.*?)"$/) do |email|
   User.where(email: email).first.should be_nil
 end
 
-Given "the following users exist" do |user_data|
+Given 'the following users exist' do |user_data|
   user_hashes = user_data.hashes
   user_hashes.each do |user_hash|
-    # user_hash["password_confirmation"] = user_hash["password"]
+    user_hash['password_confirmation'] = user_hash['password']
     User.create!(user_hash)
   end
   User.count.should == user_hashes.size

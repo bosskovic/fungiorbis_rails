@@ -7,6 +7,4 @@ class V1::UsersController < ApplicationController
     render json: users, status: :ok
   end
 
-  def create
-  end
 end
