@@ -39,5 +39,12 @@ RSpec.configure do |config|
   #
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
-  config.infer_spec_type_from_file_location!
+  # config.infer_spec_type_from_file_location!
+
+  config.include Devise::TestHelpers, type: :controller
+  config.include ControllerHelper, type: :controller
+  config.include AuthHelpers, :type => :controller
+
+  # needed to show jbuilder views in the response body
+  config.render_views = true
 end
