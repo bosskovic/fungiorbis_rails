@@ -1,0 +1,1 @@
+DOMAIN = 'http://example.org'

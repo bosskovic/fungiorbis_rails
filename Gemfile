@@ -27,7 +27,6 @@ end
 group :test do
   gem 'cucumber-rails', '1.4.1', :require => false
   gem 'json_spec', '1.1.2'
-  gem 'jsonpath'
   gem 'shoulda-matchers', '2.6.2'
   gem 'database_cleaner', '1.3.0'
 end

@@ -1,9 +1,8 @@
-require 'cucumber/api_steps'
 require 'json_spec/cucumber'
 
 #For json_spec
 def last_json
-  page.source
+  last_response.body
 end
 
 Before do
