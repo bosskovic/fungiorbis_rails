@@ -15,7 +15,7 @@ Feature: User confirms the account, endpoint: GET users/confirmation?confirmatio
     Given I am an unconfirmed user
     When I send a GET request to "/users/confirmation?confirmation_token=:CONFIRMATION_TOKEN" with my confirmation token
     Then the response status should be "OK"
-    And response should include my user fields authToken, firstName, lastName and role
+    And response should include my user fields firstName, lastName, role and no authToken
     And the response should include last href
     And my account should be confirmed
 

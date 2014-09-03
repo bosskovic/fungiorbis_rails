@@ -155,3 +155,9 @@ And(/^the user was not (added to|duplicated in) the database$/) do |situation|
     expect(User.count).to eq 1
   end
 end
+
+When(/^my user account is deactivated$/) do
+  u = User.find_by_role(:user)
+  u.deactivated_at = DateTime.now
+  u.save!
+end

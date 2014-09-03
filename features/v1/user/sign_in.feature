@@ -1,6 +1,7 @@
 Feature: Users sign in, endpoint: POST /users/sign_in
   User signs in by providing email and password.
   The response includes the authToken.
+  Deactivated users can not sign in before they reactivate the user account.
 
 
   Background:
@@ -32,3 +33,9 @@ Feature: Users sign in, endpoint: POST /users/sign_in
     When I send a POST request to "/users/sign_in"
     Then the response status should be "UNAUTHORIZED"
     And the JSON response at "errors" should be ["You need to sign in or sign up before continuing."]
+
+  Scenario: All provided fields are valid but my account is deactivated
+    When my user account is deactivated
+    And I send a POST request to "/users/sign_in" with my credentials
+    Then the response status should be "UNPROCESSABLE"
+    And the JSON response at "errors" should be ["Account deactivated. Please reactivate the account before signing in."]
