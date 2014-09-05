@@ -2,14 +2,16 @@ require 'rails_helper'
 
 RSpec.describe User, :type => :model do
 
-  subject { FactoryGirl.create(:user) }
+  subject { FactoryGirl.build(:user) }
+
+  it 'has a valid factory' do
+    expect(FactoryGirl.build(:user)).to be_valid
+  end
 
   describe 'validations' do
-    it { should validate_presence_of(:email) }
-    it { should validate_presence_of(:first_name) }
-    it { should validate_presence_of(:last_name) }
-
-    it { should validate_uniqueness_of(:email).case_insensitive }
+    it { is_expected.to validate_presence_of(:email) }
+    it { is_expected.to validate_presence_of(:first_name) }
+    it { is_expected.to validate_presence_of(:last_name) }
   end
 
   # TODO user roles
@@ -30,10 +32,11 @@ end
 #  role                   :string(255)      default("user"), not null
 #  institution            :string(255)
 #  phone                  :string(255)
+#  uuid                   :string(255)
 #  authentication_token   :string(255)
+#  deactivated_at         :datetime
 #  reset_password_token   :string(255)
 #  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
 #  sign_in_count          :integer          default(0), not null
 #  current_sign_in_at     :datetime
 #  last_sign_in_at        :datetime

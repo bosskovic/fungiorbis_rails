@@ -1,0 +1,21 @@
+# TODO check if it should be removed
+# class RequestParser
+#
+#   # givenName,surname,directory(name)
+#   def parse_fields(fields_string)
+#     nested_field_regex = /\w+\(\w+,?\w+\)/
+#     fields_regex = /#{nested_field_regex}|\w+/
+#
+#     result = {}
+#
+#     fields_string.scan(fields_regex).each do |field|
+#       if field.match? nested_field_regex
+#         result[]
+#       else
+#         result[:not_nested] ||= []
+#         result[:not_nested] << field
+#       end
+#     end
+#   end
+#
+# end

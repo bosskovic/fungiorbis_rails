@@ -1,38 +1,51 @@
 class User < ActiveRecord::Base
 
-  USER_ROLE = :user
-  CONTRIBUTOR_ROLE = :contributor
-  SUPERVISOR_ROLE = :supervisor
+  include Uuid
+
+  USER_ROLE = 'user'
+  CONTRIBUTOR_ROLE = 'contributor'
+  SUPERVISOR_ROLE = 'supervisor'
   ROLES = [USER_ROLE, CONTRIBUTOR_ROLE, SUPERVISOR_ROLE]
 
   acts_as_token_authenticatable
 
   # Include default devise modules. Others available are:
-  # :lockable, :timeoutable and :omniauthable
+  # :lockable, :rememberable, :timeoutable and :omniauthable
 
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable, :confirmable
+  devise :database_authenticatable, :registerable, :recoverable, :trackable, :validatable, :confirmable
 
   validates :first_name, presence: true
   validates :last_name, presence: true
   validates :role, presence: true, inclusion: {in: ROLES}
 
+  # left up to Devise to validate
+  # validates_presence_of :password_confirmation
+  # validates_uniqueness_of :email, case_sensitive: true
+
   validate :password_complexity
 
+  def supervisor?
+    self.role == SUPERVISOR_ROLE
+  end
+
+  def self.active
+    where(:deactivated_at => nil)
+  end
+
+  def active?
+    self.deactivated_at.nil?
+  end
 
   private
 
   def password_complexity
-    if password.present? && password_match and not password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W]).+/)
+    if password.present? && password_confirmed? and not password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W]).+/)
       errors.add :password, 'must include at least one of each: lowercase letter, uppercase letter, numeric digit, special character.'
     end
   end
 
-  def password_presence
-    password.present? && password_confirmation.present?
-  end
-
-  def password_match
-    password == password_confirmation
+  def password_confirmed?
+    password_confirmation.nil? || password == password_confirmation
   end
 
 
@@ -51,10 +64,11 @@ end
 #  role                   :string(255)      default("user"), not null
 #  institution            :string(255)
 #  phone                  :string(255)
+#  uuid                   :string(255)
 #  authentication_token   :string(255)
+#  deactivated_at         :datetime
 #  reset_password_token   :string(255)
 #  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
 #  sign_in_count          :integer          default(0), not null
 #  current_sign_in_at     :datetime
 #  last_sign_in_at        :datetime

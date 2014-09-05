@@ -1,14 +1,24 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
+# require 'faker'
 
 FactoryGirl.define do
-  factory :user do
-    email Forgery(:internet).email_address
-    password Forgery(:basic).password(at_least: 8)
-    first_name 'Supervisor'
-    last_name 'Fungiorbis'
-    confirmed_at DateTime.now
-    role User::SUPERVISOR_ROLE
+
+  factory :user do |user|
+    user.email { Faker::Internet.safe_email }
+    user.password { "#{Forgery(:basic).password(at_least: 8)}Aa1!" }
+    user.first_name { Faker::Name.first_name }
+    user.last_name { Faker::Name.last_name }
+    user.confirmed_at DateTime.now
+    user.role User::USER_ROLE
   end
+
+  factory :contributor, parent: :user do |user|
+    user.role = User::CONTRIBUTOR_ROLE
+  end
+
+  factory :supervisor, parent: :user do |user|
+    user.role = User::SUPERVISOR_ROLE
+  end
+
 end
 
 # == Schema Information
@@ -24,10 +34,11 @@ end
 #  role                   :string(255)      default("user"), not null
 #  institution            :string(255)
 #  phone                  :string(255)
+#  uuid                   :string(255)
 #  authentication_token   :string(255)
+#  deactivated_at         :datetime
 #  reset_password_token   :string(255)
 #  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
 #  sign_in_count          :integer          default(0), not null
 #  current_sign_in_at     :datetime
 #  last_sign_in_at        :datetime
