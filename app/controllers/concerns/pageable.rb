@@ -1,0 +1,55 @@
+module Pageable
+  extend ActiveSupport::Concern
+
+  private
+
+  def set_pagination(model, url_template)
+    @meta ||= {}
+    @meta[:page] = params[:page] || 1
+    @meta[:per_page] = page_size_within_bounds?(model, params) ? params['perPage'].to_i : model.per_page
+    @meta[:count] = model.count
+
+    @meta[:page] = 1 if page_count_out_of_bounds?
+
+    @meta[:page_count] = calculate_page_count
+    @meta[:previous_page] = first_page? ? nil : @meta[:page] - 1
+    @meta[:next_page] = last_page? ? nil : @meta[:page] + 1
+
+    @meta[:previous_href] = first_page? ? nil : previous_href(url_template)
+    @meta[:next_href] = last_page? ? nil : next_href(url_template)
+  end
+
+  def page_size_within_bounds?(model, params)
+    (1..model.per_page).include?(params['perPage'].to_i)
+  end
+
+  def page_count_out_of_bounds?
+    @meta[:page] > 1 && @meta[:count] < (@meta[:page] - 1) * @meta[:per_page]
+  end
+
+  def calculate_page_count
+    last_page_full = @meta[:count] % @meta[:per_page] == 0
+    full_pages = @meta[:count] / @meta[:per_page]
+    last_page_full ? full_pages : full_pages + 1
+  end
+
+  def first_page?
+    @meta[:page] == 1
+  end
+
+  def last_page?
+    @meta[:page] == @meta[:page_count]
+  end
+
+  def page_href(page, url_template)
+    send(url_template, page: page, perPage: @meta[:per_page])
+  end
+
+  def next_href(url_template)
+    page_href(@meta[:page]+1, url_template)
+  end
+
+  def previous_href(url_template)
+    page_href(@meta[:page]-1, url_template)
+  end
+end

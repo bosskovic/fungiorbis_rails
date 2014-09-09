@@ -12,11 +12,11 @@ FactoryGirl.define do
   end
 
   factory :contributor, parent: :user do |user|
-    user.role = User::CONTRIBUTOR_ROLE
+    user.role User::CONTRIBUTOR_ROLE
   end
 
   factory :supervisor, parent: :user do |user|
-    user.role = User::SUPERVISOR_ROLE
+    user.role User::SUPERVISOR_ROLE
   end
 
 end

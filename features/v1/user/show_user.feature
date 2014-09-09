@@ -14,27 +14,47 @@ Feature: Show User, endpoint: GET users/:UUID
     When I authenticate as user
     And I send a GET request to "/users/:UUID" for current user
     Then the response status should be "OK"
-    And response should include my user fields firstName, lastName, email, title, institution, phone, role, deactivatedAt, createdAt, updatedAt and no authToken
-    And the response should include last href
+    And response should include my user fields firstName, lastName, email, title, institution, phone, role and no authToken
+    And response should include link to endpoint /users
 
 
   Scenario: The "plain" user requests details of another user
     When I authenticate as user
     And I send a GET request to "/users/:UUID" for other user
     Then the response status should be "FORBIDDEN"
-    And the response should include last href
-    And the JSON response at "errors" should be ["Insufficient privileges"]
+    And the JSON response at "errors/details" should be ["Insufficient privileges"]
 
 
   Scenario: The request without authentication headers
     When I send a GET request to "/users/some_uuid"
     Then the response status should be "UNAUTHORIZED"
-    Then the JSON response at "errors" should be ["You need to sign in or sign up before continuing."]
+    And the JSON response at "errors/details" should be ["You need to sign in or sign up before continuing."]
 
 
   Scenario: Supervisor requests details of another user
     When I authenticate as supervisor
     And I send a GET request to "/users/:UUID" for other user
     Then the response status should be "OK"
-    And response should include user fields firstName, lastName, email, title, institution, phone, role, deactivatedAt, createdAt, updatedAt and no authToken
-    And the response should include last href
+    And response should include user fields firstName, lastName, email, title, institution, phone, role and no authToken
+    And response should include link to endpoint /users
+
+
+  Scenario: Supervisor requests details of non existing user
+    When I authenticate as supervisor
+    And I send a GET request to "/users/some_uuid"
+    Then the response status should be "NOT FOUND"
+    And the JSON response at "errors/details" should be ["User not found."]
+
+
+  Scenario: The "plain" user requests details of non existing user
+    When I authenticate as user
+    And I send a GET request to "/users/some_uuid"
+    Then the response status should be "FORBIDDEN"
+    And the JSON response at "errors/details" should be ["Insufficient privileges"]
+
+
+  Scenario: Contributor requests details of non existing user
+    When I authenticate as contributor
+    And I send a GET request to "/users/some_uuid"
+    Then the response status should be "FORBIDDEN"
+    And the JSON response at "errors/details" should be ["Insufficient privileges"]

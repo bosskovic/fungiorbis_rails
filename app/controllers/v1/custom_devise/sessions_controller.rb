@@ -12,11 +12,13 @@ module V1
       # POST /users/sign_in
       def create
         allow_params_authentication!
-        self.resource = warden.authenticate!(auth_options)
+        @user = warden.authenticate!(auth_options)
 
-        if resource.active?
-          reset_token resource
-          render file: 'v1/custom_devise/sessions/create', locals: { no_token: false }
+        if @user.active?
+          reset_token @user
+
+          @include = { authToken: true }
+          render status: :ok, file: 'v1/users/show'
         else
           render file: "#{Rails.root}/public/422.json", status: :unprocessable_entity, locals: { errors: [ACCOUNT_DEACTIVATED_ERROR] }
         end
@@ -27,6 +29,7 @@ module V1
       def destroy
         warden.authenticate!
         reset_token current_user
+        head status: :no_content
       end
 
       private

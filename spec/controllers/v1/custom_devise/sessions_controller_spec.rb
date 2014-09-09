@@ -5,26 +5,25 @@ describe V1::CustomDevise::SessionsController, :type => :controller do
   include JsonSpec::Helpers
 
   def responds_ok_with_correct_fields
-    expect(json['href']).to include user_session_url
-    expect(json['success']).to be_truthy
-    expect(json['status']).to eq 200
-    expect(json['authToken']).not_to be_nil
-    expect(json['authToken']).not_to eq old_auth_token
-    expect(json['firstName']).to eq user.first_name
-    expect(json['lastName']).to eq user.last_name
-    expect(json['role']).to eq user.role
+    expect(json['status']).to eq 'success'
+    expect(json['links']['users']).to eq users_url
+    expect(json['users']['authToken']).not_to be_nil
+    expect(json['users']['authToken']).not_to eq old_auth_token
+    expect(json['users']['firstName']).to eq user.first_name
+    expect(json['users']['lastName']).to eq user.last_name
+    expect(json['users']['role']).to eq user.role
   end
 
   def responds_unauthorized_with_message(error)
-    expect(json['success']).to be_falsey
-    expect(json['status']).to eq 401
-    expect(json['errors']).to eq [error]
+    expect(json['status']).to eq 'fail'
+    expect(json['errors']['status']).to eq '401'
+    expect(json['errors']['details']).to eq [error]
   end
 
   def responds_unprocessable_with_message(error)
-    expect(json['success']).to be_falsey
-    expect(json['status']).to eq 422
-    expect(json['errors']).to eq [error]
+    expect(json['status']).to eq 'fail'
+    expect(json['errors']['status']).to eq '422'
+    expect(json['errors']['details']).to eq [error]
   end
 
   def updates_authentication_token
@@ -111,7 +110,7 @@ describe V1::CustomDevise::SessionsController, :type => :controller do
       end
 
       subject { response }
-      it { is_expected.to respond_with_ok }
+      it { is_expected.to respond_with_no_content }
       it { updates_authentication_token }
     end
 

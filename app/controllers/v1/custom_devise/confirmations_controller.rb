@@ -10,7 +10,7 @@ module V1
         yield resource if block_given?
 
         if resource.errors.empty?
-          render file: 'v1/custom_devise/sessions/create', locals: { current_user: resource, no_token: true }
+          head :no_content
         else
           render file: "#{Rails.root}/public/422.json", status: :unprocessable_entity, locals: {errors: resource.errors.full_messages}
         end

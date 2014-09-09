@@ -5,7 +5,7 @@ Feature: Users sign in, endpoint: POST /users/sign_in
 
 
   Background:
-    Given I send and accept JSON
+    Given I send and accept JSON using version 1 of the fungiorbis API
     Given there is a user
 
 
@@ -14,28 +14,27 @@ Feature: Users sign in, endpoint: POST /users/sign_in
     Then the response status should be "OK"
     And the authentication token should have changed
     And response should include user fields: authToken, firstName, lastName, role
-    And the response should include last href
 
 
   Scenario: The provided password does not match the one stored in the db
     When I send a POST request to "/users/sign_in" with my credentials and incorrect password
     Then the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors" should be ["Invalid email or password."]
+    And the JSON response at "errors/details" should be ["Invalid email or password."]
 
 
   Scenario: The provided email address does not exist in the db
     When I send a POST request to "/users/sign_in" with incorrect credentials
     Then the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors" should be ["Invalid email or password."]
+    And the JSON response at "errors/details" should be ["Invalid email or password."]
 
 
   Scenario: No parameters are sent
     When I send a POST request to "/users/sign_in"
     Then the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors" should be ["You need to sign in or sign up before continuing."]
+    And the JSON response at "errors/details" should be ["You need to sign in or sign up before continuing."]
 
   Scenario: All provided fields are valid but my account is deactivated
     When my user account is deactivated
     And I send a POST request to "/users/sign_in" with my credentials
     Then the response status should be "UNPROCESSABLE"
-    And the JSON response at "errors" should be ["Account deactivated. Please reactivate the account before signing in."]
+    And the JSON response at "errors/details" should be ["Account deactivated. Please reactivate the account before signing in."]

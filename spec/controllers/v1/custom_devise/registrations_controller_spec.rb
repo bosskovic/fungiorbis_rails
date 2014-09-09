@@ -15,18 +15,6 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
     expect(user.created_at).to be < Time.now
   end
 
-  def responds_with_json_for(email)
-    user = User.find_by_email email
-
-    expect(json['href']).to include user_registration_url
-    expect(json['status']).to eq 201
-    expect(json).to have_key('authToken')
-    expect(json['firstName']).to eq user.first_name
-    expect(json['lastName']).to eq user.last_name
-    expect(json['role']).to eq user.role
-    expect(json['userHref']).to eq user_url(uuid: user.uuid)
-  end
-
   def does_not_create_account
     email = @request_params[:user][:email]
     first_name = @request_params[:user][:firstName]
@@ -72,7 +60,6 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
       subject { response }
       it { is_expected.to respond_with_created }
       it { creates_user_with @request_params[:user] }
-      it { responds_with_json_for @request_params[:user][:email] }
     end
 
     context 'when account already exists with email equal to the one in the request' do
@@ -162,7 +149,6 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
       subject { response }
       it { is_expected.to respond_with_created }
       it { creates_user_with @request_params[:user] }
-      it { responds_with_json_for @request_params[:user][:email] }
     end
 
 

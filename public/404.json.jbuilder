@@ -1,7 +1,7 @@
 json.status 'fail'
 
 json.errors do
-  json.status '422'
-  json.title 'UNPROCESSABLE'
+  json.status '404'
+  json.title 'NOT FOUND'
   json.details errors
 end

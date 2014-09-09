@@ -41,7 +41,7 @@ module UserHelpers
   end
 
 
-  def compare_json_with_user(json, user, fields)
+  def compare_json_with_user(json, user, fields, context = 'object')
     fields.each do |field|
       field.strip!
 
@@ -58,16 +58,12 @@ module UserHelpers
 
       my_value = my_value.nil? ? 'null' : my_value.to_json
 
-      if field == 'href'
-        expect(json).to be_json_eql("#{last_href}/#{user[:uuid]}".to_json).at_path(field)
-      elsif field == 'userHref'
-        expect(json).to be_json_eql("http://example.org/users/#{user[:uuid]}".to_json).at_path(field)
+      field = "users/#{field}" unless context == 'array'
+
+      if negated
+        expect(json).not_to include_json(field.to_json)
       else
-        if negated
-          expect(json).not_to include_json(field.to_json)
-        else
-          expect(json).to be_json_eql(JsonSpec.remember(my_value)).at_path(field)
-        end
+        expect(json).to be_json_eql(JsonSpec.remember(my_value)).at_path(field)
       end
     end
   end
@@ -116,7 +112,6 @@ module UserHelpers
       @selected_user
     end
   end
-
 
 
 end

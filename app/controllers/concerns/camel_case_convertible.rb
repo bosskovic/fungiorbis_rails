@@ -1,13 +1,22 @@
 module CamelCaseConvertible
   extend ActiveSupport::Concern
 
-  def param_keys_to_underscore(params)
+  def keys_to_underscore(params)
     r = {}
     params.each_key do |key|
       r[key.underscore] = params[key]
     end
     r
   end
+
+  def keys_to_camel_case(params)
+    r = {}
+    params.each_key do |key|
+      r[key.to_s.camelize(:lower)] = params[key]
+    end
+    r
+  end
+
 
 
   private

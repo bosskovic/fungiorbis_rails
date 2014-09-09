@@ -11,12 +11,13 @@ module V1
 
       # POST /users
       def create
-        build_resource(param_keys_to_underscore(sign_up_params))
+        build_resource(keys_to_underscore(sign_up_params))
         resource.role = User::USER_ROLE
 
         if resource.save
           sign_up(resource_name, resource)
-          render file: 'v1/custom_devise/registrations/create', status: :created
+
+          head status: :created, location: user_url(uuid: resource.uuid)
         else
           clean_up_passwords resource
           render file: "#{Rails.root}/public/422.json", status: :unprocessable_entity, locals: {errors: resource.errors.full_messages}

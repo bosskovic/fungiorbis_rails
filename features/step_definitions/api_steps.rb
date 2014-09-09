@@ -74,24 +74,37 @@ Then /^the response status should be "(#{CAPTURE_RECOGNIZED_STATUS})"$/ do |stat
     case status
       when 'OK'
         expect(last_response.status).to eq 200
-        last_json.should be_json_eql(JsonSpec.remember(200)).at_path('status')
-        last_json.should be_json_eql(JsonSpec.remember(true)).at_path('success')
+        last_json.should be_json_eql(JsonSpec.remember('success'.to_json)).at_path('status')
       when 'UNPROCESSABLE'
         expect(last_response.status).to eq 422
-        last_json.should be_json_eql(JsonSpec.remember(422)).at_path('status')
-        last_json.should be_json_eql(JsonSpec.remember(false)).at_path('success')
+        last_json.should be_json_eql(JsonSpec.remember('fail'.to_json)).at_path('status')
+        last_json.should be_json_eql(JsonSpec.remember('422'.to_json)).at_path('errors/status')
+        last_json.should be_json_eql(JsonSpec.remember(status.to_json)).at_path('errors/title')
+        last_json.should have_json_type('array').at_path('errors/details')
+      when 'NOT FOUND'
+        expect(last_response.status).to eq 404
+        last_json.should be_json_eql(JsonSpec.remember('fail'.to_json)).at_path('status')
+        last_json.should be_json_eql(JsonSpec.remember('404'.to_json)).at_path('errors/status')
+        last_json.should be_json_eql(JsonSpec.remember(status.to_json)).at_path('errors/title')
+        last_json.should have_json_type('array').at_path('errors/details')
       when 'FORBIDDEN'
         expect(last_response.status).to eq 403
-        last_json.should be_json_eql(JsonSpec.remember(403)).at_path('status')
-        last_json.should be_json_eql(JsonSpec.remember(false)).at_path('success')
+        last_json.should be_json_eql(JsonSpec.remember('fail'.to_json)).at_path('status')
+        last_json.should be_json_eql(JsonSpec.remember('403'.to_json)).at_path('errors/status')
+        last_json.should be_json_eql(JsonSpec.remember(status.to_json)).at_path('errors/title')
+        last_json.should have_json_type('array').at_path('errors/details')
       when 'UNAUTHORIZED'
         expect(last_response.status).to eq 401
-        last_json.should be_json_eql(JsonSpec.remember(401)).at_path('status')
-        last_json.should be_json_eql(JsonSpec.remember(false)).at_path('success')
+        last_json.should be_json_eql(JsonSpec.remember('fail'.to_json)).at_path('status')
+        last_json.should be_json_eql(JsonSpec.remember('401'.to_json)).at_path('errors/status')
+        last_json.should be_json_eql(JsonSpec.remember(status.to_json)).at_path('errors/title')
+        last_json.should have_json_type('array').at_path('errors/details')
       when 'CREATED'
         expect(last_response.status).to eq 201
-        last_json.should be_json_eql(JsonSpec.remember(201)).at_path('status')
-        last_json.should be_json_eql(JsonSpec.remember(true)).at_path('success')
+        expect(last_response.body.strip).to be_empty
+      when 'NO CONTENT'
+        expect(last_response.status).to eq 204
+        expect(last_response.body.strip).to be_empty
       else
         raise 'unknown status'
     end
@@ -103,23 +116,7 @@ Then /^the response status should be "(#{CAPTURE_RECOGNIZED_STATUS})"$/ do |stat
   end
 end
 
-And(/^the (?:JSON|json)(?: response)? should be$/) do |table|
-  table.hashes.first.each do |key, value|
-    negation = value.include? 'not'
-    value = value.split(' ').last if negation
 
-    if %w(string array boolean object).include? value
-      if negation
-        last_json.should_not have_json_type(value).at_path(key)
-      else
-        last_json.should have_json_type(value).at_path(key)
-      end
-    else
-      if negation
-        last_json.should_not be_json_eql(JsonSpec.remember(value)).at_path(key)
-      else
-        last_json.should be_json_eql(JsonSpec.remember(value)).at_path(key)
-      end
-    end
-  end
+And(/^the JSON response should be empty$/) do
+  expect(last_json.strip).to be_empty
 end

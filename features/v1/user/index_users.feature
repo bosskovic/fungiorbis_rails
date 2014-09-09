@@ -13,41 +13,38 @@ Feature: Index Users, endpoint:  GET /users
     And I send a GET request to "/users"
     Then the response status should be "OK"
     And the JSON response at "users" should have 3 users
-    And the users array should include my user with href, firstName, lastName, email, title, institution, phone, role, deactivatedAt, createdAt, updatedAt and no authToken
-    And the response should include last href
+    And the users array should include my user with firstName, lastName, email, title, institution, phone, role and no authToken
 
 
   Scenario: Authenticated user is "plain" user
     When I authenticate as user
     And I send a GET request to "/users"
     Then the response status should be "FORBIDDEN"
-    And the JSON response at "errors" should be ["Insufficient privileges"]
-    And the response should include last href
+    And the JSON response at "errors/details" should be ["Insufficient privileges"]
 
 
   Scenario: Authenticated user is contributor
     When I authenticate as contributor
     And I send a GET request to "/users"
     Then the response status should be "FORBIDDEN"
-    And the JSON response at "errors" should be ["Insufficient privileges"]
-    And the response should include last href
+    And the JSON response at "errors/details" should be ["Insufficient privileges"]
 
 
   Scenario: Unknown user tries to authenticate
     When I authenticate as unknown user
     And I send a GET request to "/users"
     And the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors" should be ["You need to sign in or sign up before continuing."]
+    And the JSON response at "errors/details" should be ["You need to sign in or sign up before continuing."]
 
 
   Scenario: User tries to authenticate with incorrect token
     When I authenticate with incorrect token
     And I send a GET request to "/users"
     And the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors" should be ["You need to sign in or sign up before continuing."]
+    And the JSON response at "errors/details" should be ["You need to sign in or sign up before continuing."]
 
 
   Scenario: No authentication header is sent
     When I send a GET request to "/users"
     And the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors" should be ["You need to sign in or sign up before continuing."]
+    And the JSON response at "errors/details" should be ["You need to sign in or sign up before continuing."]

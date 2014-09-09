@@ -45,7 +45,7 @@ end
 
 And(/^the users array should include my user with (.*?)$/) do |fields|
   user_json = JSON.parse(last_json)['users'].select { |user| user['email'] == @authenticated_user[:email] }.first.to_json
-  compare_json_with_user(user_json, @authenticated_user, fields)
+  compare_json_with_user(user_json, @authenticated_user, fields, 'array')
 end
 
 And(/^response should include(.*?)? user fields(?::)? (#{CAPTURE_USER_FIELDS})$/) do |scope, fields|
@@ -160,4 +160,13 @@ When(/^my user account is deactivated$/) do
   u = User.find_by_role(:user)
   u.deactivated_at = DateTime.now
   u.save!
+end
+
+And(/^response should include link to endpoint \/users$/) do
+  expect(last_json).to be_json_eql(JsonSpec.remember("#{DOMAIN}/users".to_json)).at_path('links/users')
+end
+
+And(/^location header should include link to created user$/) do
+  user = find_user_by_type(:other_user)
+  expect(last_response.header['Location']).to eq "#{DOMAIN}/users/#{user.uuid}"
 end

@@ -3,16 +3,6 @@ require 'rails_helper'
 describe V1::CustomDevise::ConfirmationsController, :type => :controller do
   include Devise::TestHelpers
 
-  def responds_ok_with_correct_fields
-    expect(json['href']).to include user_confirmation_url
-    expect(json['success']).to be_truthy
-    expect(json['status']).to eq 200
-    expect(json).not_to have_key('authToken')
-    expect(json['firstName']).to eq unconfirmed_user.first_name
-    expect(json['lastName']).to eq unconfirmed_user.last_name
-    expect(json['role']).to eq unconfirmed_user.role
-  end
-
   def confirms_user(user)
     user.reload
     expect(user.confirmation_token).to be_nil
@@ -64,8 +54,7 @@ describe V1::CustomDevise::ConfirmationsController, :type => :controller do
         end
 
         subject { response }
-        it { is_expected.to respond_with_ok }
-        it { responds_ok_with_correct_fields }
+        it { is_expected.to respond_with_no_content }
         it { confirms_user(unconfirmed_user) }
       end
 
