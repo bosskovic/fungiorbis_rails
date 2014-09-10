@@ -33,7 +33,7 @@ class V1::UsersController < ApplicationController
       return
     end
 
-    @user.update_attributes keys_to_underscore(update_params)
+    @user.update_attributes! keys_to_underscore(update_params)
 
     if only_valid_params?
       head :no_content
@@ -45,13 +45,18 @@ class V1::UsersController < ApplicationController
   private
 
   def update_params
-    @allowed_param_keys = can?(:change_role, User) ? USER_DETAILS_PARAMS + [:role] : USER_DETAILS_PARAMS
-
-    @params ||= params.fetch(:users).permit(@allowed_param_keys + [:email])
+    if params['users'].nil?
+      @params = {}
+    else
+      @allowed_param_keys = can?(:change_role, User) ? USER_DETAILS_PARAMS + [:role] : USER_DETAILS_PARAMS
+      @params ||= params.fetch(:users).permit(@allowed_param_keys + [:email])
+    end
+    @params['deactivatedAt'] = nil if @user == current_user && !current_user.active?
+    @params
   end
 
   def only_valid_params?
-    params.fetch(:users).keys.all? { |p| @allowed_param_keys.include?(p.to_sym) }
+    params['users'].nil? || params.fetch(:users).keys.all? { |p| @allowed_param_keys.include?(p.to_sym) }
   end
 
 end

@@ -28,23 +28,3 @@ Feature: Index Users, endpoint:  GET /users
     And I send a GET request to "/users"
     Then the response status should be "FORBIDDEN"
     And the JSON response at "errors/details" should be ["Insufficient privileges"]
-
-
-  Scenario: Unknown user tries to authenticate
-    When I authenticate as unknown user
-    And I send a GET request to "/users"
-    And the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors/details" should be ["You need to sign in or sign up before continuing."]
-
-
-  Scenario: User tries to authenticate with incorrect token
-    When I authenticate with incorrect token
-    And I send a GET request to "/users"
-    And the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors/details" should be ["You need to sign in or sign up before continuing."]
-
-
-  Scenario: No authentication header is sent
-    When I send a GET request to "/users"
-    And the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors/details" should be ["You need to sign in or sign up before continuing."]

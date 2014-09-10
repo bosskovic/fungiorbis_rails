@@ -51,7 +51,7 @@ RSpec.describe V1::UsersController, :type => :controller do
       when :email
         Faker::Internet.email
       when :role
-        user && user.role == 'user' ? :supervisor : :user
+        user && user.role == 'user' ? 'supervisor' : 'user'
       when :updatedAt
         DateTime.now
       else
@@ -287,8 +287,8 @@ RSpec.describe V1::UsersController, :type => :controller do
               it { has_expected_user_fields(json['users'], @any_user) }
               it 'sets unconfirmed_email and does not change email' do
                 @any_user.reload
-                expect(@any_user.unconfirmed_email).to eq  @params[:users][:email]
-                expect(@any_user.email).not_to eq  @params[:users][:email]
+                expect(@any_user.unconfirmed_email).to eq @params[:users][:email]
+                expect(@any_user.email).not_to eq @params[:users][:email]
               end
 
             end
@@ -385,6 +385,34 @@ RSpec.describe V1::UsersController, :type => :controller do
 
       subject { response }
       it { is_expected.to respond_with_unauthorized }
+    end
+
+    context 'when authenticated as deactivated user' do
+      before(:each) do
+        @user = FactoryGirl.create(:user)
+        @user.deactivate!
+        auth_token_to_headers(@user)
+      end
+
+      context 'with no params' do
+        before(:each) do
+          patch :update, { uuid: @user.uuid, format: 'json' }
+          @user.reload
+        end
+
+        specify { expect(@user.active?).to be_truthy }
+      end
+
+      context 'with params' do
+        before(:each) do
+          @params = random_attributes_hash_for([:firstName])
+          patch :update, { uuid: @user.uuid, format: 'json' }.merge(@params)
+          @user.reload
+        end
+
+        specify { expect(@user.active?).to be_truthy }
+        specify { expect(@user.first_name).to eq @params[:users][:firstName] }
+      end
     end
   end
 end

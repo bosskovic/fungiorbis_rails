@@ -7,8 +7,10 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :null_session
 
-  rescue_from StandardError do |e|
-    render file: "#{Rails.root}/public/500.json", status: :internal_server_error, locals: {errors: [e.message]}
+  unless Rails.env.test?
+    rescue_from StandardError do |e|
+      render file: "#{Rails.root}/public/500.json", status: :internal_server_error, locals: {errors: [e.message]}
+    end
   end
 
   rescue_from CanCan::AccessDenied do |exception|

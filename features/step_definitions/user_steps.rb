@@ -1,6 +1,6 @@
 # Authentication steps
 
-When (/^I authenticate as (user|contributor|supervisor|unknown user)$/) do |user_type|
+When (/^I authenticate as (user|contributor|supervisor|unknown user|deactivated user)$/) do |user_type|
   if user_type == :unknown_user
     token = SecureRandom.hex
     email = Faker::Internet.email
@@ -162,6 +162,11 @@ When(/^my user account is deactivated$/) do
   u.save!
 end
 
+And(/^user should be activated$/) do
+  expect(@authenticated_user.active?).to be_falsey
+  expect(User.find_by_uuid(@authenticated_user.uuid).active?).to be_truthy
+end
+
 And(/^response should include link to endpoint \/users$/) do
   expect(last_json).to be_json_eql(JsonSpec.remember("#{DOMAIN}/users".to_json)).at_path('links/users')
 end
@@ -191,16 +196,24 @@ And(/^I send a PATCH request (?:for|to) "([^"]*)" with updated fields "(#{CAPTUR
   }
 end
 
+And(/^I send a blank PATCH request to "([^"]*)" for (#{CAPTURE_USER_TYPES})$/) do |path, user_type|
+  @selected_user = find_user_by_type user_type
+  path = path.gsub(':UUID', selected_user.uuid)
+  steps %{
+    When I send a PATCH request to "#{path}"
+  }
+end
+
 And(/^user field(?:s)? "(#{CAPTURE_USER_FIELDS})" (?:were|was)( not)? updated$/) do |fields, negation|
   old_user_object = selected_user.dup
-  selected_user.reload
+  new_user_object = User.find_by_uuid selected_user.uuid
   fields.each do |field|
     field = field.underscore.to_sym
 
     if negation
-      expect(old_user_object.send(field)).to eq selected_user.send(field)
+      expect(old_user_object.send(field)).to eq new_user_object.send(field)
     else
-      expect(old_user_object.send(field)).not_to eq selected_user.send(field)
+      expect(old_user_object.send(field)).not_to eq new_user_object.send(field)
     end
   end
 end

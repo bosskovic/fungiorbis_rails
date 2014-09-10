@@ -17,6 +17,8 @@ module UserHelpers
       User.where(confirmed_at: nil).first
     elsif user_type == :confirmed_user
       User.where.not(confirmed_at: nil).first
+    elsif user_type == :deactivated_user
+      User.where.not(deactivated_at: nil).first
     else
       nil
     end
@@ -35,6 +37,8 @@ module UserHelpers
 
       attributes[:confirmation_token] = conf_token
     end
+
+    u.deactivate! if user_type == :deactivated_user
 
     @users ||= {}
     @users[user_type] = attributes
@@ -105,6 +109,8 @@ module UserHelpers
         Faker::Internet.email
       when :role
         user && user.role == 'user' ? :supervisor : :user
+      when :updatedAt
+        DateTime.now
       else
         raise 'unknown user field'
     end

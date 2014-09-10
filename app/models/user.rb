@@ -38,6 +38,14 @@ class User < ActiveRecord::Base
     self.deactivated_at.nil?
   end
 
+  def deactivate!
+    self.update!(deactivated_at: DateTime.now)
+  end
+
+  def activate!
+    self.update!(deactivated_at: nil)
+  end
+
   private
 
   def password_complexity

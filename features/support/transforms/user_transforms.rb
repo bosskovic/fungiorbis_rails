@@ -1,4 +1,4 @@
-CAPTURE_USER_TYPES = Transform /^(?:(?:confirmed user|unconfirmed user|user|contributor|supervisor|unknown user|other user|current user)(?:,\s|\sand\s)?)+$/ do |user_types|
+CAPTURE_USER_TYPES = Transform /^(?:(?:confirmed user|unconfirmed user|user|contributor|supervisor|unknown user|other user|current user|deactivated user)(?:,\s|\sand\s)?)+$/ do |user_types|
   types = user_types.gsub('and', ',').split(',').map { |e| e.strip.gsub(' ', '_').to_sym }
   types.length == 1 ? types.first : types
 end

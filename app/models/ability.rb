@@ -8,7 +8,7 @@ class Ability
     if @user.supervisor?
       can :manage, :all
     else
-      can [:show, :update], User, uuid: @user.uuid, deactivated_at: nil
+      can [:show, :update], User, uuid: @user.uuid
       can :activate, User, uuid: @user.uuid
     end
   end
