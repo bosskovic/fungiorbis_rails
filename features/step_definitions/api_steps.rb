@@ -19,7 +19,7 @@ end
 # Requests
 
 # request with a table
-When /^I send a (GET|POST|PUT|DELETE) request to "([^"]*)" with the object "([^"]*)" and the following fields:$/ do |request_type, path, object, fields|
+When /^I send a (GET|POST|PUT|DELETE|PATCH) request to "([^"]*)" with the object "([^"]*)" and the following fields:$/ do |request_type, path, object, fields|
   camelized_hash = {}
   fields.hashes.first.each do |key, value|
     camelized_hash[key.camelize(:lower)] = value
@@ -34,7 +34,7 @@ When /^I send a (GET|POST|PUT|DELETE) request to "([^"]*)" with the object "([^"
 end
 
 # request with a json
-When /^I send a (GET|POST|PUT|DELETE) request (?:for|to) "([^"]*)"(?: with the following json:)?$/ do |*args|
+When /^I send a (GET|POST|PUT|DELETE|PATCH) request (?:for|to) "([^"]*)"(?: with the following json:)?$/ do |*args|
   request_type = args.shift
   path = args.shift
   input = args.shift

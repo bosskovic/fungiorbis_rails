@@ -131,6 +131,9 @@ RSpec::Matchers.define :respond_with_meta do |model, meta_hash|
     meta_hash.each_key { |key| expect(meta[key]).to eq meta_hash[key] }
     expect(meta.keys.length).to eq meta_hash.keys.length
   end
+  description do
+    'responds with expected meta object'
+  end
 end
 
 

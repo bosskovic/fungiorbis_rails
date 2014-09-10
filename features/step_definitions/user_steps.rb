@@ -49,7 +49,7 @@ And(/^the users array should include my user with (.*?)$/) do |fields|
 end
 
 And(/^response should include(.*?)? user fields(?::)? (#{CAPTURE_USER_FIELDS})$/) do |scope, fields|
-  user = scope && scope.match('my') ? @authenticated_user : find_user_by_type(:other_user)
+  user = scope && scope.match('my') ? User.find_by_uuid(@authenticated_user.uuid) : find_user_by_type(:other_user)
   compare_json_with_user(last_json, user, fields)
 end
 
@@ -169,4 +169,38 @@ end
 And(/^location header should include link to created user$/) do
   user = find_user_by_type(:other_user)
   expect(last_response.header['Location']).to eq "#{DOMAIN}/users/#{user.uuid}"
+end
+
+And(/^I send a PATCH request (?:for|to) "([^"]*)" with updated fields "(#{CAPTURE_USER_FIELDS})" for (#{CAPTURE_USER_TYPES})$/) do |path, fields, user_type|
+  @selected_user = find_user_by_type user_type
+  path = path.gsub(':UUID', selected_user.uuid)
+
+  params = {}
+  fields.each do |field|
+    field = field.strip.to_sym
+    params[field] = random_user_attribute field, selected_user
+  end
+
+  json = { users: params }.to_json
+
+  steps %{
+    When I send a PATCH request to "#{path}" with the following json:
+    """
+    #{ json }
+    """
+  }
+end
+
+And(/^user field(?:s)? "(#{CAPTURE_USER_FIELDS})" (?:were|was)( not)? updated$/) do |fields, negation|
+  old_user_object = selected_user.dup
+  selected_user.reload
+  fields.each do |field|
+    field = field.underscore.to_sym
+
+    if negation
+      expect(old_user_object.send(field)).to eq selected_user.send(field)
+    else
+      expect(old_user_object.send(field)).not_to eq selected_user.send(field)
+    end
+  end
 end

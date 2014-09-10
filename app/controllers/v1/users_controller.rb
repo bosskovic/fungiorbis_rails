@@ -9,6 +9,7 @@ class V1::UsersController < ApplicationController
   load_and_authorize_resource only: :index
 
   USER_NOT_FOUND_ERROR = 'User not found.'
+  USER_DETAILS_PARAMS = [:firstName, :lastName, :institution, :title, :phone]
 
   def index
     set_pagination User, 'users_url'
@@ -23,5 +24,34 @@ class V1::UsersController < ApplicationController
     render file: "#{Rails.root}/public/404.json", status: :not_found, locals: { errors: [USER_NOT_FOUND_ERROR] } unless @user
   end
 
+  def update
+    @user = User.find_by_uuid(params[:uuid])
+    authorize! :update, @user
+
+    unless @user
+      render file: "#{Rails.root}/public/404.json", status: :not_found, locals: { errors: [USER_NOT_FOUND_ERROR] }
+      return
+    end
+
+    @user.update_attributes keys_to_underscore(update_params)
+
+    if only_valid_params?
+      head :no_content
+    else
+      render :show
+    end
+  end
+
+  private
+
+  def update_params
+    @allowed_param_keys = can?(:change_role, User) ? USER_DETAILS_PARAMS + [:role] : USER_DETAILS_PARAMS
+
+    @params ||= params.fetch(:users).permit(@allowed_param_keys + [:email])
+  end
+
+  def only_valid_params?
+    params.fetch(:users).keys.all? { |p| @allowed_param_keys.include?(p.to_sym) }
+  end
 
 end

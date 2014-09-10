@@ -4,3 +4,4 @@ user_fields = [:first_name, :last_name, :email, :title, :institution, :phone, :r
 json.extract! user, *user_fields
 
 json.authToken user.authentication_token if include && include[:authToken]
+json.unconfirmedEmail user.unconfirmed_email if user.unconfirmed_email

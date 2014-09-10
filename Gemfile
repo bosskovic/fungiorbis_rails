@@ -9,7 +9,7 @@ gem 'jbuilder', '~> 2.0'
 
 gem 'devise', '3.2.4'
 gem 'simple_token_authentication', '1.5.0'
-gem 'cancan', '1.6.10'
+gem 'cancancan', '1.9.2'
 gem 'will_paginate', '3.0.7'
 
 gem 'rails-i18n'
