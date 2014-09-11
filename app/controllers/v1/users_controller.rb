@@ -1,5 +1,3 @@
-# require "#{Rails.root}/app/serializers/restpack/user_serializer"
-
 class V1::UsersController < ApplicationController
   include CamelCaseConvertible
   include Pageable
@@ -9,7 +7,8 @@ class V1::UsersController < ApplicationController
   load_and_authorize_resource only: :index
 
   USER_NOT_FOUND_ERROR = 'User not found.'
-  USER_DETAILS_PARAMS = [:firstName, :lastName, :institution, :title, :phone]
+  PUBLIC_FIELDS = [:email, :firstName, :lastName, :institution, :title, :phone, :role]
+  OPTIONAL_RESPONSE_FIELDS = [:unconfirmedEmail]
 
   def index
     set_pagination User, 'users_url'
@@ -35,7 +34,7 @@ class V1::UsersController < ApplicationController
 
     @user.update_attributes! keys_to_underscore(update_params)
 
-    if only_valid_params?
+    if params['users'].nil? || all_passed_fields_processed?
       head :no_content
     else
       render :show
@@ -48,15 +47,19 @@ class V1::UsersController < ApplicationController
     if params['users'].nil?
       @params = {}
     else
-      @allowed_param_keys = can?(:change_role, User) ? USER_DETAILS_PARAMS + [:role] : USER_DETAILS_PARAMS
-      @params ||= params.fetch(:users).permit(@allowed_param_keys + [:email])
+      @params ||= params.fetch(:users).permit(public_fields)
     end
     @params['deactivatedAt'] = nil if @user == current_user && !current_user.active?
     @params
   end
 
-  def only_valid_params?
-    params['users'].nil? || params.fetch(:users).keys.all? { |p| @allowed_param_keys.include?(p.to_sym) }
+  def all_passed_fields_processed?
+    email_change_requested = params['users']['email'] && params['users']['email'] != current_user.email
+    unprocessed_fields = params['users'].dup.reject { |f| public_fields.include? f.to_sym }
+    unprocessed_fields.empty? && !email_change_requested
   end
 
+  def public_fields
+    can?(:change_role, User) ? PUBLIC_FIELDS : PUBLIC_FIELDS - [:role]
+  end
 end

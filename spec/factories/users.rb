@@ -1,5 +1,3 @@
-# require 'faker'
-
 FactoryGirl.define do
 
   factory :user do |user|
@@ -19,6 +17,11 @@ FactoryGirl.define do
     user.role User::SUPERVISOR_ROLE
   end
 
+  factory :deactivated_user, parent: :user do |user|
+    after(:create) do |u|
+      u.deactivate!
+    end
+  end
 end
 
 # == Schema Information
@@ -57,4 +60,5 @@ end
 #  index_users_on_confirmation_token    (confirmation_token) UNIQUE
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
+#  index_users_on_uuid                  (uuid) UNIQUE
 #

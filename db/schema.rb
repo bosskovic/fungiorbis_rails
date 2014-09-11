@@ -11,7 +11,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140811150356) do
+ActiveRecord::Schema.define(version: 20140910233506) do
+
+  create_table "species", force: true do |t|
+    t.string   "name",       null: false
+    t.string   "genus",      null: false
+    t.string   "familia",    null: false
+    t.string   "ordo",       null: false
+    t.string   "subclassis", null: false
+    t.string   "classis",    null: false
+    t.string   "subphylum",  null: false
+    t.string   "phylum",     null: false
+    t.text     "synonyms"
+    t.string   "url"
+    t.string   "uuid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "species", ["url"], name: "index_species_on_url", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                                   null: false
@@ -44,5 +62,6 @@ ActiveRecord::Schema.define(version: 20140811150356) do
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["uuid"], name: "index_users_on_uuid", unique: true, using: :btree
 
 end

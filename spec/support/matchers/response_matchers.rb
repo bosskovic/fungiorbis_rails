@@ -113,27 +113,44 @@ RSpec::Matchers.define :respond_with_objects_array do |model|
     json = JSON.parse(response.body)
     array = json[model.to_s.downcase.pluralize]
     expect(array).to be_an_instance_of(Array)
+
+    model_count = model.count
+    array_count = model_count > model.per_page ? model.per_page : model_count
+
     expect(array).not_to be_empty
-    expect(array.count).to eq model.count
+    expect(array.count).to eq array_count
   end
 end
 
-RSpec::Matchers.define :respond_with_meta do |model, meta_hash|
+RSpec::Matchers.define :respond_with_meta do |model_class, expected_meta|
   match do |response|
     json = JSON.parse(response.body)
 
-    meta = json['meta']
-    expect(meta.keys.length).to eq 1
+    response_meta = json['meta']
+    expect(response_meta.keys.length).to eq 1
 
-    meta = meta[model.to_s.downcase.pluralize]
-    expect(meta).to be_an_instance_of(Hash)
+    response_meta = response_meta[model_class.to_s.downcase.pluralize]
+    expect(response_meta).to be_an_instance_of(Hash)
 
-    meta_hash.each_key { |key| expect(meta[key]).to eq meta_hash[key] }
-    expect(meta.keys.length).to eq meta_hash.keys.length
+    expected_meta.each_key { |key| expect(response_meta[key]).to eq expected_meta[key] }
+    expect(response_meta.keys.length).to eq expected_meta.keys.length
   end
   description do
     'responds with expected meta object'
   end
 end
 
+RSpec::Matchers.define :respond_with_links do |model|
+  match do |response|
+    json = JSON.parse(response.body)
+    links = json['links']
 
+    case model
+      when :user
+        expect(links.keys.length).to eq 1
+        expect(links['users']).to eq 'http://test.host/users/{users.id}'
+      else
+        raise 'unknown model for meta links'
+    end
+  end
+end

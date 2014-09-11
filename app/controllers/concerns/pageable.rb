@@ -28,9 +28,7 @@ module Pageable
   end
 
   def calculate_page_count
-    last_page_full = @meta[:count] % @meta[:per_page] == 0
-    full_pages = @meta[:count] / @meta[:per_page]
-    last_page_full ? full_pages : full_pages + 1
+    @meta[:count] / @meta[:per_page] + (@meta[:count] % @meta[:per_page] == 0 ? 0 : 1)
   end
 
   def first_page?

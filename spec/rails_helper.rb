@@ -42,6 +42,7 @@ RSpec.configure do |config|
   # config.infer_spec_type_from_file_location!
 
   config.include ControllerHelper, type: :controller
+  config.include MetaHelper, type: :controller
   config.include AuthHelpers, type: :controller
 
   # needed to show jbuilder views in the response body
