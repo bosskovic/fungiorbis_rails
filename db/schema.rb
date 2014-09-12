@@ -14,15 +14,17 @@
 ActiveRecord::Schema.define(version: 20140910233506) do
 
   create_table "species", force: true do |t|
-    t.string   "name",       null: false
-    t.string   "genus",      null: false
-    t.string   "familia",    null: false
-    t.string   "ordo",       null: false
-    t.string   "subclassis", null: false
-    t.string   "classis",    null: false
-    t.string   "subphylum",  null: false
-    t.string   "phylum",     null: false
+    t.string   "name",            null: false
+    t.string   "genus",           null: false
+    t.string   "familia",         null: false
+    t.string   "ordo",            null: false
+    t.string   "subclassis",      null: false
+    t.string   "classis",         null: false
+    t.string   "subphylum",       null: false
+    t.string   "phylum",          null: false
     t.text     "synonyms"
+    t.string   "growth_type"
+    t.string   "nutritive_group"
     t.string   "url"
     t.string   "uuid"
     t.datetime "created_at"

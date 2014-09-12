@@ -12,6 +12,9 @@ class CreateSpecies < ActiveRecord::Migration
 
       t.text :synonyms
 
+      t.string :growth_type
+      t.string :nutritive_group
+
       t.string :url, unique: true
       t.string :uuid
 

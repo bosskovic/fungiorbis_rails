@@ -16,6 +16,9 @@ RSpec.describe Species, :type => :model do
     it { is_expected.to validate_presence_of(:classis) }
     it { is_expected.to validate_presence_of(:subphylum) }
     it { is_expected.to validate_presence_of(:phylum) }
+
+    # TODO nutritive_group
+    # TODO growth_type
   end
 
 end
@@ -24,20 +27,22 @@ end
 #
 # Table name: species
 #
-#  id         :integer          not null, primary key
-#  name       :string(255)      not null
-#  genus      :string(255)      not null
-#  familia    :string(255)      not null
-#  ordo       :string(255)      not null
-#  subclassis :string(255)      not null
-#  classis    :string(255)      not null
-#  subphylum  :string(255)      not null
-#  phylum     :string(255)      not null
-#  synonyms   :text
-#  url        :string(255)
-#  uuid       :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  id              :integer          not null, primary key
+#  name            :string(255)      not null
+#  genus           :string(255)      not null
+#  familia         :string(255)      not null
+#  ordo            :string(255)      not null
+#  subclassis      :string(255)      not null
+#  classis         :string(255)      not null
+#  subphylum       :string(255)      not null
+#  phylum          :string(255)      not null
+#  synonyms        :text
+#  growth_type     :string(255)
+#  nutritive_group :string(255)
+#  url             :string(255)
+#  uuid            :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
 #
 # Indexes
 #

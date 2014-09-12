@@ -3,7 +3,7 @@ class V1::SpeciesController < ApplicationController
   include Pageable
 
   SPECIES_NOT_FOUND_ERROR = 'Species not found.'
-  PUBLIC_FIELDS = [:name, :genus, :familia, :ordo, :subclassis, :classis, :subphylum, :phylum, :synonyms]
+  PUBLIC_FIELDS = [:name, :genus, :familia, :ordo, :subclassis, :classis, :subphylum, :phylum, :synonyms, :growthType, :nutritiveGroup]
 
   before_filter :authenticate_user!, :except => [:index, :show]
 
