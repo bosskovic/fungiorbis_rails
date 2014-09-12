@@ -7,7 +7,7 @@ Feature: User update
 
   Background:
     Given I send and accept JSON using version 1 of the fungiorbis API
-    Given there are users: user and supervisor
+    Given there are users: user, contributor and supervisor
     Given I authenticate as user
 
 
@@ -16,26 +16,23 @@ Feature: User update
     Then the response status should be "NO CONTENT"
     And user fields "firstName, lastName, institution, title, phone" were updated
 
-  Scenario: user updates all fields except email; "updatedAt" is among non-permitted fields in the request
-    When I send a PATCH request to "/users/:UUID" with updated fields "firstName, lastName, institution, title, phone and updatedAt" for current user
+  Scenario Outline: if the request for user update includes unknown or unauthorized fields or if it includes email, the server sends response with the updated user resource
+    When I send a PATCH request to "/users/:UUID" with <updated_fields>
     Then the response status should be "OK"
-    And response should include my user fields firstName, lastName, email, title, institution, phone, role and no authToken
-    And user fields "firstName, lastName, institution, title, phone" were updated
+    And response should include <my_user_fields>
+    And <user_fields> were updated
     And user field "role" was not updated
+  Examples:
+    | updated_fields                                                                                 | my_user_fields                                                                                                | user_fields                                                  |
+    | updated fields "firstName, lastName, institution, title, phone and updatedAt" for current user | my user fields firstName, lastName, email, title, institution, phone, role and no authToken                   | user fields "firstName, lastName, institution, title, phone" |
+    | updated fields "firstName, lastName and email" for current user                                | my user fields firstName, lastName, email, title, institution, phone, role, unconfirmedEmail and no authToken | user fields "firstName, lastName, unconfirmedEmail"          |
 
-  Scenario: user updates some fields including email; no non-permitted fields in the request
-    When I send a PATCH request to "/users/:UUID" with updated fields "firstName, lastName and email" for current user
-    Then the response status should be "OK"
-    And response should include my user fields firstName, lastName, email, title, institution, phone, role, unconfirmedEmail and no authToken
-    And user fields "firstName, lastName, unconfirmedEmail" were updated
-    And user field "email" was not updated
 
-  Scenario: The "plain" user tries to update another user
-    When I send a PATCH request to "/users/:UUID" with updated fields "firstName, lastName" for other user
+  Scenario Outline: Signed in user that is not supervisor tries to update another or non existent user
+    When I send a PATCH request to <path> with updated fields "firstName, lastName" for other user
     Then the response status should be "FORBIDDEN"
     And the JSON response at "errors/details" should be ["Insufficient privileges"]
-
-  Scenario: The "plain" user requests details of non existing user
-    When I send a PATCH request to "/users/some_uuid" with updated fields "firstName, lastName" for other user
-    Then the response status should be "FORBIDDEN"
-    And the JSON response at "errors/details" should be ["Insufficient privileges"]
+  Examples:
+    | path               |
+    | "/users/:UUID"     |
+    | "/users/some_uuid" |

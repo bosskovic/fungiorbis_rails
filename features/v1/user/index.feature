@@ -14,17 +14,15 @@ Feature: Index Users, endpoint:  GET /users
     Then the response status should be "OK"
     And the JSON response at "users" should have 3 users
     And the users array should include my user with firstName, lastName, email, title, institution, phone, role and no authToken
+    And response should include link to endpoint /users/{users.id}
 
 
-  Scenario: Authenticated user is "plain" user
-    When I authenticate as user
+  Scenario Outline: Authenticated, but not supervisor
+    When I authenticate as <user_or_contributor>
     And I send a GET request to "/users"
     Then the response status should be "FORBIDDEN"
     And the JSON response at "errors/details" should be ["Insufficient privileges"]
-
-
-  Scenario: Authenticated user is contributor
-    When I authenticate as contributor
-    And I send a GET request to "/users"
-    Then the response status should be "FORBIDDEN"
-    And the JSON response at "errors/details" should be ["Insufficient privileges"]
+  Examples:
+    | user_or_contributor |
+    | user                |
+    | contributor         |

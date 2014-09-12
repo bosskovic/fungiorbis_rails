@@ -26,13 +26,11 @@ Feature: User confirms the account, endpoint: GET users/confirmation?confirmatio
     And the JSON response at "errors/details" should be ["Email was already confirmed, please try signing in"]
 
 
-  Scenario: request with the incorrect confirmation token
-    When I send a GET request to "/users/confirmation?confirmation_token=abcd"
+  Scenario Outline: request with blank or incorrect confirmation token
+    When I send a GET request to "/users/confirmation?confirmation_token=<confirmation_token>"
     Then the response status should be "UNPROCESSABLE"
-    And the JSON response at "errors/details" should be ["Confirmation token is invalid"]
-
-
-  Scenario: request without the confirmation token
-    When I send a GET request to "/users/confirmation"
-    Then the response status should be "UNPROCESSABLE"
-    And the JSON response at "errors/details" should be ["Confirmation token can't be blank"]
+    And the JSON response at "errors/details" should be ["<error_message>"]
+  Examples:
+    | confirmation_token | error_message                     |
+    | abcd               | Confirmation token is invalid     |
+    |                    | Confirmation token can't be blank |

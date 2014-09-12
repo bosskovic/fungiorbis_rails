@@ -9,7 +9,7 @@ Rails.application.routes.draw do
         sessions: 'v1/custom_devise/sessions'
     }
     resources :users, only: [:index, :create, :show, :update], param: :uuid
-    resources :species, only: :index
+    resources :species, only: [:index, :show], param: :uuid
   end
 
 end

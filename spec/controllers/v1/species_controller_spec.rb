@@ -24,8 +24,28 @@ RSpec.describe V1::SpeciesController, :type => :controller do
       it { is_expected.to respond_with_ok }
       it { is_expected.to respond_with_objects_array(Species) }
       it { responds_with_species_objects_in_array }
+      it { is_expected.to respond_with_links(:species) }
     end
 
     it_behaves_like 'an index with meta object', Species
   end
+
+  describe 'GET #show' do
+
+    context 'when requesting an existing species resource' do
+      before(:each) do
+        @species = FactoryGirl.create(:species)
+        get :show, { uuid: @species.uuid, format: 'json' }
+      end
+
+      subject { response }
+      it { is_expected.to respond_with_ok }
+      it { has_all_fields(json['species'], @species, public_fields) }
+    end
+
+    context 'when requesting non existent species resource' do
+      it_behaves_like 'not found', :get, :show, V1::SpeciesController::SPECIES_NOT_FOUND_ERROR
+    end
+  end
+
 end

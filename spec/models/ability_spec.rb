@@ -24,4 +24,11 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:manage, User) }
     it { is_expected.to be_able_to(:change_role, User) }
   end
+
+  context 'visitor' do
+    let(:user) { nil }
+
+    it { is_expected.to be_able_to(:index, Species) }
+    it { is_expected.to be_able_to(:show, Species) }
+  end
 end

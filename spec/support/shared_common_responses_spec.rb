@@ -26,3 +26,10 @@ RSpec.shared_examples 'unauthorized for non authenticated users' do |method, act
   subject { response }
   it { is_expected.to respond_with_unauthorized }
 end
+
+RSpec.shared_examples 'not found' do |method, action, error|
+  before(:each) { send(method, action, { uuid: 'some_uuid', format: 'json' }) }
+
+  subject { response }
+  it { is_expected.to respond_with_not_found([error]) }
+end

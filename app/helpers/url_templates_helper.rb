@@ -8,7 +8,11 @@ module UrlTemplatesHelper
     user_url(uuid: 'xxx').gsub('xxx', '{users.id}')
   end
 
-  def species_url_template
+  def species_index_url_template
     species_index_url
+  end
+
+  def species_url_template
+    species_url(uuid: 'xxx').gsub('xxx', '{species.id}')
   end
 end

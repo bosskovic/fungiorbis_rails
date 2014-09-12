@@ -65,9 +65,14 @@ And /^I send a GET request to "#{USER_URL}" for (#{CAPTURE_USER_TYPES})$/ do |us
 end
 
 # sign in request
-When (/^I send a POST request to "\/users\/sign_in" with (?:my)?(incorrect)? credentials( and incorrect password)?$/) do |incorrect_credentials, incorrect_password|
-  email = incorrect_credentials ? Faker::Internet.email : users[:user][:email]
-  password = incorrect_credentials || incorrect_password ? '123' : users[:user][:password]
+When (/^I send a POST request to "\/users\/sign_in" with (?:my)?(incorrect|no)? credentials( and incorrect password)?$/) do |incorrect_credentials, incorrect_password|
+  if incorrect_credentials && incorrect_credentials == 'no'
+    email = nil
+    password = nil
+  else
+    email = incorrect_credentials ? Faker::Internet.email : users[:user][:email]
+    password = incorrect_credentials || incorrect_password ? '123' : users[:user][:password]
+  end
 
   steps %{
     When I send a POST request to "/users/sign_in" with the object "user" and the following fields:
@@ -165,10 +170,6 @@ end
 And(/^user should be activated$/) do
   expect(@authenticated_user.active?).to be_falsey
   expect(User.find_by_uuid(@authenticated_user.uuid).active?).to be_truthy
-end
-
-And(/^response should include link to endpoint \/users$/) do
-  expect(last_json).to be_json_eql(JsonSpec.remember("#{DOMAIN}/users".to_json)).at_path('links/users')
 end
 
 And(/^location header should include link to created user$/) do

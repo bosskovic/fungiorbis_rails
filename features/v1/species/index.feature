@@ -9,4 +9,5 @@ Feature: Index species, endpoint:  GET /species
     And I send a GET request to "/species"
     Then the response status should be "OK"
     And the JSON response at "species" should have 5 species
-    And the species array should include objects with fields: name, genus, familia, ordo, subclassis, classis, subphylum, phylum, synonyms
+    And the species array should include objects with all public fields
+    And response should include link to endpoint /species/{species.id}

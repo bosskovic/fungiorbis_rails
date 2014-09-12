@@ -13,7 +13,7 @@ class Ability
       end
     end
 
-    can :index, Species
+    can [:index, :show], Species
   end
 
 end

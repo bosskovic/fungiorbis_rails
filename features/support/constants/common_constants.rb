@@ -1,1 +1,0 @@
-DOMAIN = 'http://example.org'

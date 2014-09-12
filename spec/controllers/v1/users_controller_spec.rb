@@ -88,10 +88,7 @@ RSpec.describe V1::UsersController, :type => :controller do
         end
 
         context 'when requesting non existent user' do
-          before(:each) { get :show, { uuid: 'some_uuid', format: 'json' } }
-
-          subject { response }
-          it { is_expected.to respond_with_not_found([V1::UsersController::USER_NOT_FOUND_ERROR]) }
+          it_behaves_like 'not found', :get, :show, V1::UsersController::USER_NOT_FOUND_ERROR
         end
       end
 

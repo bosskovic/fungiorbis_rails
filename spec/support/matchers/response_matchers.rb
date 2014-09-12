@@ -149,6 +149,9 @@ RSpec::Matchers.define :respond_with_links do |model|
       when :user
         expect(links.keys.length).to eq 1
         expect(links['users']).to eq 'http://test.host/users/{users.id}'
+      when :species
+        expect(links.keys.length).to eq 1
+        expect(links['species']).to eq 'http://test.host/species/{species.id}'
       else
         raise 'unknown model for meta links'
     end

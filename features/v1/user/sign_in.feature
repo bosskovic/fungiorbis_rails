@@ -15,23 +15,16 @@ Feature: Users sign in, endpoint: POST /users/sign_in
     And the authentication token should have changed
     And response should include user fields: authToken, firstName, lastName, role
 
-
-  Scenario: The provided password does not match the one stored in the db
-    When I send a POST request to "/users/sign_in" with my credentials and incorrect password
+  Scenario Outline: The provided login details are invalid
+    When I send a POST request to "/users/sign_in" <incorrect_details>
     Then the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors/details" should be ["Invalid email or password."]
+    And the JSON response at "errors/details" should be <error_message>
+  Examples:
+    | incorrect_details                          | error_message                                         |
+    | with my credentials and incorrect password | ["Invalid email or password."]                        |
+    | with incorrect credentials                 | ["Invalid email or password."]                        |
+    | with no credentials                        | ["You need to sign in or sign up before continuing."] |
 
-
-  Scenario: The provided email address does not exist in the db
-    When I send a POST request to "/users/sign_in" with incorrect credentials
-    Then the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors/details" should be ["Invalid email or password."]
-
-
-  Scenario: No parameters are sent
-    When I send a POST request to "/users/sign_in"
-    Then the response status should be "UNAUTHORIZED"
-    And the JSON response at "errors/details" should be ["You need to sign in or sign up before continuing."]
 
   Scenario: All provided fields are valid but my account is deactivated
     When my user account is deactivated

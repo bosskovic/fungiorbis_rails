@@ -7,12 +7,12 @@ Feature: User activation
     Given I authenticate as deactivated user
 
 
-  Scenario: deactivated user activates account
+  Scenario: deactivated user activates account by passing blank patch request
     Given I send a blank PATCH request to "/users/:UUID" for current user
     Then the response status should be "NO CONTENT"
     And user should be activated
 
-  Scenario: deactivated user activates account
+  Scenario: deactivated user activates account by updating account
     Given I send a PATCH request to "/users/:UUID" with updated fields "firstName, lastName, institution, title, phone" for current user
     Then the response status should be "NO CONTENT"
     And user fields "firstName, lastName, institution, title, phone" were updated
