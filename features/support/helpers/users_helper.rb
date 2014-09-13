@@ -25,9 +25,10 @@ module UserHelpers
   end
 
   def create_user_by_type(user_type)
-    attributes = random_user_attributes(user_type)
+    attributes = FactoryGirl.attributes_for([:contributor, :supervisor].include?(user_type) ? user_type : :user)
 
     u = User.create! attributes
+    attributes[:authentication_token] = u.authentication_token
 
     if [:unconfirmed_user, :confirmed_user].include? user_type
       u.confirmed_at = nil if user_type == :unconfirmed_user
@@ -72,26 +73,6 @@ module UserHelpers
     end
   end
 
-
-  def random_user_attributes(user_type)
-    email = Faker::Internet.email
-    authentication_token = SecureRandom.hex
-    password = "#{SecureRandom.hex}Aa1."
-    first_name = Faker::Name.first_name
-    last_name = Faker::Name.last_name
-    role = [:contributor, :supervisor].include?(user_type) ? user_type.to_s : 'user'
-
-    {
-        email: email,
-        authentication_token: authentication_token,
-        password: password,
-        password_confirmation: password,
-        role: role,
-        first_name: first_name,
-        last_name: last_name,
-        confirmed_at: DateTime.now
-    }
-  end
 
   def random_user_attribute(field, user=nil)
     case field
@@ -140,6 +121,13 @@ module UserHelpers
     end
   end
 
+  def authenticated_user
+    if @authenticated_user.nil?
+      raise '@authenticated_user is nil'
+    else
+      @authenticated_user
+    end
+  end
 
 end
 

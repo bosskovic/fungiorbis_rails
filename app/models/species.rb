@@ -4,10 +4,13 @@ class Species < ActiveRecord::Base
 
   GROWTH_TYPES = %w(single group)
   NUTRITIVE_GROUPS = %w(parasitic mycorrhizal saprotrophic parasitic-saprotrophic saprotrophic-parasitic)
+  NAME_GENUS_VALIDATION_ERROR = '- genus combination must be unique'
+  GROWTH_TYPE_VALIDATION_ERROR = "has to be one of: #{GROWTH_TYPES.inspect}"
+  NUTRITIVE_GROUPS_VALIDATION_ERROR = "has to be one of: #{NUTRITIVE_GROUPS.inspect}"
 
   before_validation :generate_url
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: { scope: :genus, case_sensitive: false, message: NAME_GENUS_VALIDATION_ERROR }
   validates :genus, presence: true
   validates :familia, presence: true
   validates :ordo, presence: true
@@ -15,10 +18,10 @@ class Species < ActiveRecord::Base
   validates :classis, presence: true
   validates :subphylum, presence: true
   validates :phylum, presence: true
-  validates :url, presence: true, uniqueness: true
+  # validates :url, presence: true, uniqueness: true
 
-  validates :growth_type, allow_nil: true, inclusion: {in: GROWTH_TYPES}
-  validates :nutritive_group, allow_nil: true, inclusion: {in: NUTRITIVE_GROUPS}
+  validates :growth_type, allow_nil: true, inclusion: { in: GROWTH_TYPES, message: GROWTH_TYPE_VALIDATION_ERROR }
+  validates :nutritive_group, allow_nil: true, inclusion: { in: NUTRITIVE_GROUPS, message: NUTRITIVE_GROUPS_VALIDATION_ERROR }
 
   self.per_page = 10
 

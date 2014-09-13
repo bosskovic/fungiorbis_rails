@@ -32,7 +32,7 @@ class V1::UsersController < ApplicationController
       return
     end
 
-    @user.update_attributes! keys_to_underscore(update_params)
+    @user.update_attributes! to_underscore(update_params)
 
     if params['users'].nil? || all_passed_fields_processed?
       head :no_content

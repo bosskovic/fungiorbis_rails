@@ -10,7 +10,7 @@ Feature: Changing user role
     When I authenticate as user
     And I send a PATCH request to "/users/:UUID" with updated fields "firstName, lastName, institution, title, phone and role" for current user
     Then the response status should be "OK"
-    And response should include my user fields firstName, lastName, email, title, institution, phone, role and no authToken
+    And response should include my user object with all public fields
     And user fields "firstName, lastName, institution, title, phone" were updated
     And user field "role" was not updated
 

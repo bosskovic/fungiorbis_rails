@@ -13,7 +13,7 @@ Feature: Users sign in, endpoint: POST /users/sign_in
     When I send a POST request to "/users/sign_in" with my credentials
     Then the response status should be "OK"
     And the authentication token should have changed
-    And response should include user fields: authToken, firstName, lastName, role
+    And response should include user object with fields: authToken, firstName, lastName, role
 
   Scenario Outline: The provided login details are invalid
     When I send a POST request to "/users/sign_in" <incorrect_details>

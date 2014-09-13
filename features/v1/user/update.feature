@@ -23,9 +23,9 @@ Feature: User update
     And <user_fields> were updated
     And user field "role" was not updated
   Examples:
-    | updated_fields                                                                                 | my_user_fields                                                                                                | user_fields                                                  |
-    | updated fields "firstName, lastName, institution, title, phone and updatedAt" for current user | my user fields firstName, lastName, email, title, institution, phone, role and no authToken                   | user fields "firstName, lastName, institution, title, phone" |
-    | updated fields "firstName, lastName and email" for current user                                | my user fields firstName, lastName, email, title, institution, phone, role, unconfirmedEmail and no authToken | user fields "firstName, lastName, unconfirmedEmail"          |
+    | updated_fields                                                                                 | my_user_fields                                              | user_fields                                                  |
+    | updated fields "firstName, lastName, institution, title, phone and updatedAt" for current user | my user object with all public fields                       | user fields "firstName, lastName, institution, title, phone" |
+    | updated fields "firstName, lastName and email" for current user                                | my user object with all public fields plus unconfirmedEmail | user fields "firstName, lastName, unconfirmedEmail"          |
 
 
   Scenario Outline: Signed in user that is not supervisor tries to update another or non existent user

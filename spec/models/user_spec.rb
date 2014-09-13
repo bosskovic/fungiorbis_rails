@@ -12,9 +12,10 @@ RSpec.describe User, :type => :model do
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name) }
+
+    it { is_expected.to ensure_inclusion_of(:role).in_array(User::ROLES) }
   end
 
-  # TODO user roles
   # TODO password complexity
 
 end

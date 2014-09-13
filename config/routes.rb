@@ -8,8 +8,8 @@ Rails.application.routes.draw do
         confirmations: 'v1/custom_devise/confirmations',
         sessions: 'v1/custom_devise/sessions'
     }
-    resources :users, only: [:index, :create, :show, :update], param: :uuid
-    resources :species, only: [:index, :show], param: :uuid
+    resources :users, only: [:index, :show, :update], param: :uuid
+    resources :species, only: [:index, :show, :create], param: :uuid
   end
 
 end

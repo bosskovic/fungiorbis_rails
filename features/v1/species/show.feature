@@ -1,7 +1,6 @@
 Feature: Show Species, endpoint: GET species/:UUID
   The response includes the species object.
 
-
   Background:
     Given I send and accept JSON using version 1 of the fungiorbis API
     Given there are 5 species

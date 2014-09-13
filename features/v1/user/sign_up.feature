@@ -40,4 +40,4 @@ Feature: Users sign up, endpoint POST /users
     When I send a POST request to "/users" with firstName, lastName, email and password and passwordConfirmation where posted email already exists in the database
     Then the response status should be "UNPROCESSABLE"
     And the JSON response at "errors/details" should be ["Email has already been taken"]
-    And the user was not duplicated in the database
+    And the user was not added to the database

@@ -11,7 +11,7 @@ module V1
 
       # POST /users
       def create
-        build_resource(keys_to_underscore(sign_up_params))
+        build_resource(to_underscore(sign_up_params))
         resource.role = User::USER_ROLE
 
         if resource.save

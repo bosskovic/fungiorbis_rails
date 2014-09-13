@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Species, :type => :model do
-  subject { FactoryGirl.build(:species) }
+  subject { FactoryGirl.create(:species) }
 
   it 'has a valid factory' do
-    expect(FactoryGirl.build(:species)).to be_valid
+    expect(subject).to be_valid
   end
 
   describe 'validations' do
@@ -17,8 +17,10 @@ RSpec.describe Species, :type => :model do
     it { is_expected.to validate_presence_of(:subphylum) }
     it { is_expected.to validate_presence_of(:phylum) }
 
-    # TODO nutritive_group
-    # TODO growth_type
+    it { is_expected.to validate_uniqueness_of(:name).scoped_to(:genus).with_message(Species::NAME_GENUS_VALIDATION_ERROR) }
+
+    it { is_expected.to ensure_inclusion_of(:nutritive_group).in_array(Species::NUTRITIVE_GROUPS) }
+    it { is_expected.to ensure_inclusion_of(:growth_type).in_array(Species::GROWTH_TYPES) }
   end
 
 end

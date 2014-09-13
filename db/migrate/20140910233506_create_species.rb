@@ -22,5 +22,6 @@ class CreateSpecies < ActiveRecord::Migration
     end
 
     add_index :species, :url, unique: true
+    add_index :species, [:name, :genus]
   end
 end

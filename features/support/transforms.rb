@@ -16,11 +16,15 @@ CAPTURE_USER_TYPES = Transform /^(?:(?:confirmed user|unconfirmed user|user|cont
 end
 
 CAPTURE_USER_FIELDS = Transform /^(?:(?:authToken|firstName|lastName|role|email|title|institution|phone|role|deactivatedAt|createdAt|updatedAt|unconfirmedEmail)(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
-  fields.gsub('and', ',').split(',').map { |e| e.strip }
+  fields_string_to_array(fields, output: :string)
 end
 
 # species
 
-CAPTURE_SPECIES_FIELDS = Transform /^(?:(?:name|genus|familia|ordo|subclassis|classis|subphylum|phylum|synonyms)(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
-  fields.gsub('and', ',').split(',').map { |e| e.strip }
+CAPTURE_SPECIES_FIELDS = Transform /^(?:(?:name|genus|familia|ordo|subclassis|classis|subphylum|phylum|synonyms|growthType|nutritiveGroup)(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
+  fields_string_to_array(fields, output: :string)
+end
+
+CAPTURE_FIELDS = Transform /^(?:(?:authToken|firstName|lastName|role|email|title|institution|phone|role|deactivatedAt|createdAt|updatedAt|unconfirmedEmail|name|genus|familia|ordo|subclassis|classis|subphylum|phylum|synonyms|growthType|nutritiveGroup)(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
+  fields_string_to_array(fields, output: :string)
 end

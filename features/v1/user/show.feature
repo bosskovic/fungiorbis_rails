@@ -11,7 +11,7 @@ Feature: Show User, endpoint: GET users/:UUID
     Given I authenticate as user
     When I send a GET request to "/users/:UUID" for current user
     Then the response status should be "OK"
-    And response should include my user fields firstName, lastName, email, title, institution, phone, role and no authToken
+    And response should include my user object with all public fields
     And response should include link to endpoint /users
 
   Scenario Outline: User that does not have supervisor privileges requests unknown or a a user other then himself

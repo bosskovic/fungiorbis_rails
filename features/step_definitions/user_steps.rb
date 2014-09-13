@@ -48,11 +48,6 @@ And(/^the users array should include my user with (.*?)$/) do |fields|
   compare_json_with_user(user_json, @authenticated_user, fields, 'array')
 end
 
-And(/^response should include(.*?)? user fields(?::)? (#{CAPTURE_USER_FIELDS})$/) do |scope, fields|
-  user = scope && scope.match('my') ? User.find_by_uuid(@authenticated_user.uuid) : find_user_by_type(:other_user)
-  compare_json_with_user(last_json, user, fields)
-end
-
 
 # requests
 
@@ -92,19 +87,13 @@ end
 
 # sign up request
 When(/^I send a POST request to "\/users" with firstName, lastName, email(?:,|\sand) password (?:and\s)?([\w\s]*)$/) do |situation|
-  attributes = random_user_attributes :user
-
-  params_hash = { firstName: attributes[:first_name],
-                  lastName: attributes[:last_name],
-                  email: attributes[:email],
-                  password: attributes[:password],
-                  passwordConfirmation: attributes[:password_confirmation] }
+  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:user), output:'symbols')
+  remove_keys_from_hash!(params_hash, [:confirmedAt])
 
   case situation
     when 'no passwordConfirmation'
-      params_hash.except!(:passwordConfirmation)
     when 'passwordConfirmation that does not match'
-      params_hash[:passwordConfirmation] = 'Aa1!abab'
+          params_hash[:passwordConfirmation] = 'Aa1!abab'
     when 'too short'
       params_hash[:password] = 'Aa1!'
       params_hash[:passwordConfirmation] = 'Aa1!'
@@ -112,6 +101,7 @@ When(/^I send a POST request to "\/users" with firstName, lastName, email(?:,|\s
       params_hash[:password] = '12345678'
       params_hash[:passwordConfirmation] = '12345678'
     when 'passwordConfirmation where posted email already exists in the database'
+      params_hash[:passwordConfirmation] = params_hash[:password]
       params_hash[:email] = find_user_by_type(:any_user)[:email]
     else
       raise 'unknown case' unless situation == 'matching passwordConfirmation'
@@ -153,14 +143,6 @@ Given(/^I am (?:an|a)? (#{CAPTURE_USER_TYPES})$/) do |user_type|
   @selected_users_type = user_type
 end
 
-And(/^the user was not (added to|duplicated in) the database$/) do |situation|
-  if situation == 'added to'
-    expect(User.count).to eq 0
-  elsif situation == 'duplicated in'
-    expect(User.count).to eq 1
-  end
-end
-
 When(/^my user account is deactivated$/) do
   u = User.find_by_role(:user)
   u.deactivated_at = DateTime.now
@@ -168,8 +150,8 @@ When(/^my user account is deactivated$/) do
 end
 
 And(/^user should be activated$/) do
-  expect(@authenticated_user.active?).to be_falsey
-  expect(User.find_by_uuid(@authenticated_user.uuid).active?).to be_truthy
+  expect(authenticated_user.active?).to be_falsey
+  expect(User.find_by_uuid(authenticated_user.uuid).active?).to be_truthy
 end
 
 And(/^location header should include link to created user$/) do

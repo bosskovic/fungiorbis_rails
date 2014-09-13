@@ -12,7 +12,7 @@ Feature: Show User, endpoint: GET users/:UUID
   Scenario: Supervisor requests details of another user
     When I send a GET request to "/users/:UUID" for other user
     Then the response status should be "OK"
-    And response should include user fields firstName, lastName, email, title, institution, phone, role and no authToken
+    And response should include user object with all public fields
     And response should include link to endpoint /users
 
 
