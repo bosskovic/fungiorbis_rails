@@ -25,23 +25,18 @@ And(/^response should include\s?(.*?)? (user|species) object with all public fie
       raise "unknown scope: #{scope}"
   end
 
-
-  json_object = JSON.parse(last_json)[model.to_s.pluralize]
-
   fields = Array(additional_fields) + public_fields(model) - ['id']
 
-  fields.each do |field|
-    my_value = json_object[field]
-    expect(record.send(field.underscore.to_sym)).to eq my_value
-  end
+  expect(correct_representation?(model, record, fields)).to be_truthy
 end
 
 And (/^response should include (user|species) object with fields: (.*?)$/) do |model, fields|
-
+  resource_hash = resource_hash_from_response(model)
+  expect(resource_hash.keys).to include(*fields)
 end
 
 And(/^the (user|species) was(\snot)? added to the database$/) do |model, negation|
-  record = resource_from_request(model)
+  record = resource_from_request(model.to_sym)
 
   if negation
     expect(record).to be_nil

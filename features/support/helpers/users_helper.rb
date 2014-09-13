@@ -1,28 +1,26 @@
 module UserHelpers
 
   def find_user_by_type(user_type)
-    if [:current_user, :authenticated_user].include? user_type
-      @authenticated_user
-    elsif user_type == :other_user
-      if @authenticated_user
-        User.where.not(email: @authenticated_user.email).first
-      else
+    case user_type
+      when :current_user, :authenticated_user
+        @authenticated_user
+      when :other_user
+        @authenticated_user ? User.where.not(email: @authenticated_user.email).first : User.first
+      when :user, :contributor, :supervisor
+        User.find_by_role user_type.to_s
+      when :any_user
         User.first
-      end
-    elsif  [:user, :contributor, :supervisor].include? user_type
-      User.find_by_role user_type.to_s
-    elsif user_type == :any_user
-      User.first
-    elsif user_type == :unconfirmed_user
-      User.where(confirmed_at: nil).first
-    elsif user_type == :confirmed_user
-      User.where.not(confirmed_at: nil).first
-    elsif user_type == :deactivated_user
-      User.where.not(deactivated_at: nil).first
-    else
-      nil
+      when :unconfirmed_user
+        User.where(confirmed_at: nil).first
+      when :confirmed_user
+        User.where.not(confirmed_at: nil).first
+      when :deactivated_user
+        User.where.not(deactivated_at: nil).first
+      else
+        raise "cannot find user, unknown user type #{user_type}"
     end
   end
+
 
   def create_user_by_type(user_type)
     attributes = FactoryGirl.attributes_for([:contributor, :supervisor].include?(user_type) ? user_type : :user)

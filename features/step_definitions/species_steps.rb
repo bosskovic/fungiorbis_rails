@@ -3,7 +3,7 @@ Given(/^there (?:are|is) (\d+) species$/) do |number_of_species|
 end
 
 And(/^the species array should include objects with all public fields$/) do
-  expect(JSON.parse(last_json)['species'].first.keys).to match_array public_species_fields
+  expect(JSON.parse(last_json)['species'].first.keys).to match_array public_fields(:species, output: :string)
 end
 
 And /^I send a GET request to "#{SPECIES_URL}" for first species in database$/ do

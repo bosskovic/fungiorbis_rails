@@ -7,6 +7,8 @@ FactoryGirl.define do
     user.last_name { Faker::Name.last_name }
     user.confirmed_at DateTime.now
     user.role User::USER_ROLE
+    user.institution { Faker::Company.name }
+    user.phone { Faker::PhoneNumber.phone_number }
   end
 
   factory :contributor, parent: :user do |user|
