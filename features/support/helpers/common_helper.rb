@@ -11,7 +11,7 @@ module CommonHelper
 
 
   def resource_hash_from_response(model)
-    JSON.parse(last_json)[model.to_s.pluralize]
+    JSON.parse(last_json)[resource_name(model)]
   end
 
   def correct_representation?(model, record, fields=nil)
@@ -30,7 +30,7 @@ module CommonHelper
     case model
       when :user
         keys_for_removal += [:password, :password_confirmation]
-      when :species
+      when :species, :reference
       else
         raise "unknown model #{model} for resource from request"
     end
@@ -43,6 +43,10 @@ module CommonHelper
 
   def model_class(model)
     Object.const_get(model.to_s.capitalize)
+  end
+
+  def resource_name(model)
+    model.to_s.pluralize
   end
 
   def load_last_record(model)
@@ -59,7 +63,7 @@ module CommonHelper
   def resource_hash_from_request(model)
     request = JSON.parse(last_request.body.entries.first)
 
-    hash = request[model.to_s.pluralize] || request[model.to_s]
+    hash = request[resource_name(model)] || request[model.to_s]
 
     to_underscore hash, output: 'symbols'
   end

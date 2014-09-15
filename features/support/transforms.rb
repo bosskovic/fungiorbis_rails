@@ -31,3 +31,10 @@ species_fields = public_fields(:species, output: :string)
 CAPTURE_SPECIES_FIELDS = Transform /^(?:(?:#{species_fields.join('|')})(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
   csv_string_to_array(fields, output: :string)
 end
+
+# references
+
+reference_fields = public_fields(:reference, output: :string)
+CAPTURE_REFERENCE_FIELDS = Transform /^(?:(?:#{reference_fields.join('|')})(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
+  csv_string_to_array(fields, output: :string)
+end

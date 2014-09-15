@@ -42,6 +42,9 @@ RSpec.describe Ability do
     context 'with Reference' do
       it { is_expected.to be_able_to(:index, Reference) }
       it { is_expected.to be_able_to(:show, Reference) }
+      it { is_expected.not_to be_able_to(:create, Reference) }
+      it { is_expected.not_to be_able_to(:update, Reference) }
+      it { is_expected.not_to be_able_to(:destroy, Reference) }
     end
   end
 end

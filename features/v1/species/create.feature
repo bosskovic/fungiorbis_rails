@@ -25,7 +25,7 @@ Feature: Adding new Species, endpoint: POST species
     And response should include last species object with all public fields
     And the species was added to the database
 
-  Scenario Outline: Supervisor sends invalid request to adda a species
+  Scenario Outline: Supervisor sends invalid request to add a species
     Given I authenticate as supervisor
     When I send a POST request to "/species" with <invalid_request>
     Then the response status should be "UNPROCESSABLE"

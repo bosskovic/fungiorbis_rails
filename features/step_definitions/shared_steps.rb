@@ -8,7 +8,7 @@ And(/^response should include link to endpoint \/([^"]*)$/) do |resource_path|
   expect(last_json).to be_json_eql(JsonSpec.remember("#{DOMAIN}/#{resource_path}".to_json)).at_path("links/#{resource_name}")
 end
 
-And(/^response should include\s?(.*?)? (user|species) object with all public fields(?: plus )?(#{CAPTURE_FIELDS})?$/) do |scope, model, additional_fields|
+And(/^response should include\s?(.*?)? (user|species|reference) object with all public fields(?: plus )?(#{CAPTURE_FIELDS})?$/) do |scope, model, additional_fields|
   case scope
     when 'first'
       record = model_class(model).first
@@ -42,7 +42,7 @@ And (/^response should include (user|species) object with fields: (.*?)$/) do |m
   expect(resource_hash.keys).to include(*fields)
 end
 
-And(/^the (user|species) was(\snot)? (?:added to|updated in) the database$/) do |model, negation|
+And(/^the (user|species|reference) was(\snot)? (?:added to|updated in) the database$/) do |model, negation|
   record = resource_from_request(model.to_sym)
 
   if negation
@@ -63,7 +63,7 @@ When(/^I send a PATCH request (?:for|to) "([^"]*)" with (?:")?(all public fields
     attributes = random_attributes_hash_for fields
   end
 
-  json = { model.to_s.pluralize => to_camel_case(attributes) }.to_json
+  json = { resource_name(model) => to_camel_case(attributes) }.to_json
 
   steps %{
     When I send a PATCH request to "#{path}" with the following json:
@@ -109,4 +109,16 @@ And(/^the last (species) was(\snot)? deleted$/) do |model, negation|
   else
     expect { last_record.reload }.to raise_error(ActiveRecord::RecordNotFound)
   end
+end
+
+And(/^location header should include link to created (species|reference)$/) do |model|
+  record = model_class(model).last
+  expect(last_response.header['Location']).to eq "#{DOMAIN}/#{resource_name(model)}/#{record.uuid}"
+end
+
+And /^I send a GET request to "([^"]*)" for first (species|reference) in database$/ do |path, model|
+  uuid = model_class(model).first.uuid
+  path.gsub!(':UUID', uuid)
+  @last_href = "#{DOMAIN}#{path}"
+  get(path).inspect
 end
