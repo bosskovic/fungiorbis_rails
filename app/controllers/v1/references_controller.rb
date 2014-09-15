@@ -53,6 +53,21 @@ class V1::ReferencesController < ApplicationController
     end
   end
 
+  def destroy
+    @reference = Reference.find_by_uuid(params[:uuid])
+
+    unless @reference
+      render file: "#{Rails.root}/public/404.json", status: :not_found, locals: { errors: [REFERENCE_NOT_FOUND_ERROR] }
+      return
+    end
+
+    if @reference.destroy
+      head status: :no_content
+    else
+      render file: "#{Rails.root}/public/422.json", status: :unprocessable_entity, locals: { errors: @reference.errors.full_messages }
+    end
+  end
+
   private
 
   def permitted_params

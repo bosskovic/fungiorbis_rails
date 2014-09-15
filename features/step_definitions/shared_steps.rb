@@ -97,7 +97,7 @@ And(/^the (species|references) array should include objects with all public fiel
   expect(resource_hash_from_response(model).first.keys).to match_array public_fields(model.to_sym, output: :string)
 end
 
-When(/^I send a DELETE request (?:for|to) "([^"]*)" for (?:the last|a) (species)$/) do |path, model|
+When(/^I send a DELETE request (?:for|to) "([^"]*)" for (?:the last|a) (species|reference)$/) do |path, model|
   load_last_record(model)
 
   path = path.gsub(':UUID', last_record.uuid)
@@ -105,7 +105,7 @@ When(/^I send a DELETE request (?:for|to) "([^"]*)" for (?:the last|a) (species)
   steps %{ When I send a DELETE request to "#{path}" }
 end
 
-And(/^the last (species) was(\snot)? deleted$/) do |model, negation|
+And(/^the last (species|reference) was(\snot)? deleted$/) do |model, negation|
   if negation
     expect(last_record.reload).not_to be_nil
   else

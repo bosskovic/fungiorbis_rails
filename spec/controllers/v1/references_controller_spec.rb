@@ -265,4 +265,39 @@ RSpec.describe V1::ReferencesController, :type => :controller do
       it_behaves_like 'unauthorized for non authenticated users', :patch, :update, { format: 'json', uuid: 'some_uuid' }, :reference
     end
   end
+
+  describe 'DELETE #destroy' do
+    let(:supervisor) { FactoryGirl.create(:supervisor) }
+    let(:contributor) { FactoryGirl.create(:contributor) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:reference) { FactoryGirl.create(:reference) }
+
+    context 'with supervisor' do
+      before(:each) do
+        auth_token_to_headers(supervisor)
+      end
+
+      context 'when deleting existing record' do
+        before(:each) { delete :destroy, { format: 'json', uuid: reference.uuid } }
+
+        subject { response }
+        it { is_expected.to respond_with_no_content }
+        specify { expect(response.body.strip).to be_empty }
+        it { expect { reference.reload }.to raise_error(ActiveRecord::RecordNotFound) }
+      end
+
+      context 'when deleting non existing record' do
+        it_behaves_like 'not found', :delete, :destroy, V1::ReferencesController::REFERENCE_NOT_FOUND_ERROR
+      end
+    end
+
+    context 'with user or contributor' do
+      it_behaves_like 'forbidden for non supervisors', :delete, :destroy, { format: 'json', uuid: 'some_uuid' }, :reference
+    end
+
+    context 'with non authenticated user' do
+      it_behaves_like 'unauthorized for non authenticated users', :delete, :destroy, { format: 'json', uuid: 'some_uuid' }, :reference
+    end
+  end
+
 end
