@@ -1,7 +1,3 @@
-Given(/^there (?:are|is) (\d+) species$/) do |number_of_species|
-  FactoryGirl.create_list(:species, number_of_species.to_i)
-end
-
 And /^I send a GET request to "#{SPECIES_URL}" for first species in database$/ do
   uuid = Species.first.uuid
   path = SPECIES_URL.gsub('\\', '').gsub(':UUID', uuid)

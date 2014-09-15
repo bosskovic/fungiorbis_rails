@@ -11,7 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140910233506) do
+ActiveRecord::Schema.define(version: 20140915102752) do
+
+  create_table "references", force: true do |t|
+    t.string   "title",      null: false
+    t.string   "authors"
+    t.string   "isbn"
+    t.string   "url"
+    t.string   "uuid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "references", ["uuid"], name: "index_references_on_uuid", unique: true, using: :btree
 
   create_table "species", force: true do |t|
     t.string   "name",            null: false
@@ -31,7 +43,9 @@ ActiveRecord::Schema.define(version: 20140910233506) do
     t.datetime "updated_at"
   end
 
+  add_index "species", ["name", "genus"], name: "index_species_on_name_and_genus", using: :btree
   add_index "species", ["url"], name: "index_species_on_url", unique: true, using: :btree
+  add_index "species", ["uuid"], name: "index_species_on_uuid", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                                   null: false

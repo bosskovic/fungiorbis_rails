@@ -1,3 +1,8 @@
+Given(/^there (?:are|is) (\d+) (species|reference)(?: records)?$/) do |number, model|
+  FactoryGirl.create_list(model.to_sym, number.to_i)
+end
+
+
 And(/^response should include link to endpoint \/([^"]*)$/) do |resource_path|
   resource_name = resource_path.split('/').first
   expect(last_json).to be_json_eql(JsonSpec.remember("#{DOMAIN}/#{resource_path}".to_json)).at_path("links/#{resource_name}")
@@ -86,7 +91,7 @@ And(/^(?:")?(all public|#{CAPTURE_FIELDS})(?:")? fields of the last (species) we
   end
 end
 
-And(/^the (species) array should include objects with all public fields$/) do |model|
+And(/^the (species|references) array should include objects with all public fields$/) do |model|
   expect(resource_hash_from_response(model).first.keys).to match_array public_fields(model.to_sym, output: :string)
 end
 

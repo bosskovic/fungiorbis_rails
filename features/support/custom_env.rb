@@ -28,8 +28,10 @@ def public_fields(model, options={})
       fields += V1::UsersController::OPTIONAL_RESPONSE_FIELDS if options[:include_optional]
     when :species
       fields += V1::SpeciesController::PUBLIC_FIELDS
+    when :reference, :references
+      fields += V1::ReferencesController::PUBLIC_FIELDS
     else
-      raise 'unknown model'
+      raise "unknown model #{model} for public fields"
   end
 
   options[:output] == :symbol ? fields : fields.map { |f| f.to_s }

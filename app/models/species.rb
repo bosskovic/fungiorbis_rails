@@ -56,5 +56,7 @@ end
 #
 # Indexes
 #
-#  index_species_on_url  (url) UNIQUE
+#  index_species_on_name_and_genus  (name,genus)
+#  index_species_on_url             (url) UNIQUE
+#  index_species_on_uuid            (uuid) UNIQUE
 #

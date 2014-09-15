@@ -21,6 +21,7 @@ class CreateSpecies < ActiveRecord::Migration
       t.timestamps
     end
 
+    add_index :species, :uuid, unique: true
     add_index :species, :url, unique: true
     add_index :species, [:name, :genus]
   end

@@ -153,12 +153,10 @@ RSpec::Matchers.define :respond_with_links do |model|
     links = json['links']
 
     case model
-      when :user
+      when :user, :species, :reference
         expect(links.keys.length).to eq 1
-        expect(links['users']).to eq 'http://test.host/users/{users.id}'
-      when :species
-        expect(links.keys.length).to eq 1
-        expect(links['species']).to eq 'http://test.host/species/{species.id}'
+        plural = model.to_s.pluralize
+        expect(links[plural]).to eq "http://test.host/#{plural}/{#{plural}.id}"
       else
         raise 'unknown model for meta links'
     end

@@ -1,7 +1,9 @@
 require 'rails_helper'
+require "#{Rails.root}/lib/fungiorbis/factory"
 
 RSpec.describe V1::UsersController, :type => :controller do
   include Devise::TestHelpers
+  include Fungiorbis::Factory
 
   let(:supervisor) { FactoryGirl.create(:supervisor) }
   let(:contributor) { FactoryGirl.create(:contributor) }
@@ -118,7 +120,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
             context 'with only public fields excluding email and role' do
               before(:each) do
-                @params = random_attributes_hash_for(public_fields - [:email, :role], User)
+                @params = random_attributes_hash_for(public_fields - [:email, :role], class:User)
                 patch :update, { uuid: @any_user.uuid, format: 'json' }.merge(@params)
               end
 
@@ -129,7 +131,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
             context 'with some non-permitted fields (updatedAt) excluding email' do
               before(:each) do
-                patch :update, { uuid: @any_user.uuid, format: 'json' }.merge(random_attributes_hash_for([:firstName, :updatedAt], User, @any_user))
+                patch :update, { uuid: @any_user.uuid, format: 'json' }.merge(random_attributes_hash_for([:firstName, :updatedAt], {class:User, object:@any_user}))
               end
 
               subject { response }
@@ -139,7 +141,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
             context 'with email' do
               before(:each) do
-                @params = random_attributes_hash_for([:firstName, :email], User)
+                @params = random_attributes_hash_for([:firstName, :email], class:User)
                 patch :update, { uuid: @any_user.uuid, format: 'json' }.merge(@params)
               end
 
@@ -164,7 +166,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
           context 'with only public fields including role, excluding email' do
             before(:each) do
-              patch :update, { uuid: user.uuid, format: 'json' }.merge(random_attributes_hash_for(public_fields - [:email], User))
+              patch :update, { uuid: user.uuid, format: 'json' }.merge(random_attributes_hash_for(public_fields - [:email], class:User))
             end
 
             subject { response }
@@ -173,7 +175,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
           context 'with some non-permitted fields (updatedAt) excluding email' do
             before(:each) do
-              patch :update, { uuid: user.uuid, format: 'json' }.merge(random_attributes_hash_for([:firstName, :updatedAt], User, user))
+              patch :update, { uuid: user.uuid, format: 'json' }.merge(random_attributes_hash_for([:firstName, :updatedAt], {class:User, object:user}))
             end
 
             subject { response }
@@ -183,7 +185,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
           context 'with role' do
             before(:each) do
-              patch :update, { uuid: user.uuid, format: 'json' }.merge(random_attributes_hash_for([:firstName, :role], User, user))
+              patch :update, { uuid: user.uuid, format: 'json' }.merge(random_attributes_hash_for([:firstName, :role], {class:User, object:user}))
             end
 
             subject { response }
@@ -192,7 +194,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
           context 'with email' do
             before(:each) do
-              patch :update, { uuid: user.uuid, format: 'json' }.merge(random_attributes_hash_for([:firstName, :email], User))
+              patch :update, { uuid: user.uuid, format: 'json' }.merge(random_attributes_hash_for([:firstName, :email], class:User))
             end
 
             subject { response }
@@ -203,7 +205,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
         context 'when requesting non existent user' do
           before(:each) do
-            patch :update, { uuid: 'some_uuid', format: 'json' }.merge(random_attributes_hash_for([:firstName], User))
+            patch :update, { uuid: 'some_uuid', format: 'json' }.merge(random_attributes_hash_for([:firstName], class:User))
           end
 
           subject { response }
@@ -235,7 +237,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
       context 'with params' do
         before(:each) do
-          @params = random_attributes_hash_for([:firstName], User)
+          @params = random_attributes_hash_for([:firstName], class:User)
           patch :update, { uuid: @user.uuid, format: 'json' }.merge(@params)
           @user.reload
         end

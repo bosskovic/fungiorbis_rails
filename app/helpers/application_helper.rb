@@ -1,4 +1,6 @@
+require 'fungiorbis/camel_case'
 module ApplicationHelper
+  include Fungiorbis::CamelCase
 
   # TODO check if this should be removed
   # def show_field?(fields, field)

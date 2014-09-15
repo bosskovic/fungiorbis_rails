@@ -14,6 +14,7 @@ class Ability
     end
 
     can [:index, :show], Species
+    can [:index, :show], Reference
   end
 
 end
