@@ -34,5 +34,6 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:show, Species) }
     it { is_expected.not_to be_able_to(:create, Species) }
     it { is_expected.not_to be_able_to(:update, Species) }
+    it { is_expected.not_to be_able_to(:destroy, Species) }
   end
 end

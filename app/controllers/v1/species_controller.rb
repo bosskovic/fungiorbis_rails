@@ -58,6 +58,23 @@ class V1::SpeciesController < ApplicationController
     end
   end
 
+  def destroy
+    authorize! :destroy, Species
+
+    @species = Species.find_by_uuid(params[:uuid])
+
+    unless @species
+      render file: "#{Rails.root}/public/404.json", status: :not_found, locals: { errors: [SPECIES_NOT_FOUND_ERROR] }
+      return
+    end
+
+    if @species.destroy
+      head status: :no_content
+    else
+      render file: "#{Rails.root}/public/422.json", status: :unprocessable_entity, locals: { errors: @species.errors.full_messages }
+    end
+  end
+
   private
 
   def permitted_params

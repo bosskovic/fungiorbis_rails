@@ -89,3 +89,19 @@ end
 And(/^the (species) array should include objects with all public fields$/) do |model|
   expect(resource_hash_from_response(model).first.keys).to match_array public_fields(model.to_sym, output: :string)
 end
+
+When(/^I send a DELETE request (?:for|to) "([^"]*)" for (?:the last|a) (species)$/) do |path, model|
+  load_last_record(model)
+
+  path = path.gsub(':UUID', last_record.uuid)
+
+  steps %{ When I send a DELETE request to "#{path}" }
+end
+
+And(/^the last (species) was(\snot)? deleted$/) do |model, negation|
+  if negation
+    expect(last_record.reload).not_to be_nil
+  else
+    expect { last_record.reload }.to raise_error(ActiveRecord::RecordNotFound)
+  end
+end

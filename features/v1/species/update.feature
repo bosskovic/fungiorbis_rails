@@ -1,4 +1,4 @@
-Feature: Updating species
+Feature: Updating species, endpoint: PATCH species/:UUID
   Only supervisors can update species
   Response body of successful update has no content
 

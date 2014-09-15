@@ -1,4 +1,4 @@
-Feature: Adding new Species, endpoint: POST species/:UUID
+Feature: Adding new Species, endpoint: POST species
   Only supervisors can add species
   The response body is blank, and the header contains location of created resource.
 
