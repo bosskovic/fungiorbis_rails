@@ -72,7 +72,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
       subject { response }
       it { is_expected.to respond_with_unprocessable }
       it { does_not_create_account }
-      it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:email_taken]]) }
+      it { is_expected.to serve_422_json_with([@response_errors[:email_taken]]) }
     end
 
     context 'when the email format is invalid' do
@@ -85,7 +85,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_create_account }
-        it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:email_invalid]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:email_invalid]]) }
       end
     end
 
@@ -99,7 +99,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_create_account }
-        it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:email_blank]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:email_blank]]) }
       end
 
       context 'when firstName is missing' do
@@ -111,7 +111,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_create_account }
-        it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:first_name_blank]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:first_name_blank]]) }
       end
 
       context 'when lastName is missing' do
@@ -123,7 +123,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_create_account }
-        it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:last_name_blank]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:last_name_blank]]) }
       end
 
       context 'when password is missing' do
@@ -136,7 +136,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_create_account }
-        it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:password_blank]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:password_blank]]) }
       end
     end
 
@@ -164,7 +164,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_create_account }
-        it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:password_mismatch]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:password_mismatch]]) }
       end
 
       context 'when password is too short' do
@@ -178,7 +178,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_create_account }
-        it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:password_too_short]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:password_too_short]]) }
       end
 
       context 'when password is too simple' do
@@ -192,7 +192,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_create_account }
-        it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:password_too_simple]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:password_too_simple]]) }
       end
 
       context 'when password confirmation is nil and password is too simple' do
@@ -205,7 +205,7 @@ describe V1::CustomDevise::RegistrationsController, type: :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_create_account }
-        it { is_expected.to serve_422_json_with(user_registration_url, [@response_errors[:password_too_simple]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:password_too_simple]]) }
       end
 
     end

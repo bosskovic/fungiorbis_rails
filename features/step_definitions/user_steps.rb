@@ -44,7 +44,7 @@ end
 # lookup
 
 And(/^the users array should include my user with (.*?)$/) do |fields|
-  user_json = JSON.parse(last_json)['users'].select { |user| user['email'] == @authenticated_user[:email] }.first.to_json
+  user_json = resource_hash_from_response(:user).select { |user| user['email'] == @authenticated_user[:email] }.first.to_json
   compare_json_with_user(user_json, @authenticated_user, fields, 'array')
 end
 
@@ -166,7 +166,7 @@ And(/^I send a PATCH request (?:for|to) "([^"]*)" with updated fields "(#{CAPTUR
   params = {}
   fields.each do |field|
     field = field.strip.to_sym
-    params[field] = random_user_attribute field, selected_user
+    params[field] = random_attribute field, selected_user
   end
 
   json = { users: params }.to_json

@@ -8,6 +8,11 @@ CAPTURE_RESOURCE_NAME = Transform /^user|species$/ do |resource_name|
   resource_name
 end
 
+all_fields = public_fields(:all, output: :string, include_optional: true) + %w(deactivatedAt createdAt updatedAt)
+CAPTURE_FIELDS = Transform /^(?:(?:#{all_fields.join('|')})(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
+  csv_string_to_array(fields, output: :string)
+end
+
 # users
 
 CAPTURE_USER_TYPES = Transform /^(?:(?:confirmed user|unconfirmed user|user|contributor|supervisor|unknown user|other user|current user|deactivated user)(?:,\s|\sand\s)?)+$/ do |user_types|
@@ -15,17 +20,14 @@ CAPTURE_USER_TYPES = Transform /^(?:(?:confirmed user|unconfirmed user|user|cont
   types.length == 1 ? types.first : types
 end
 
-CAPTURE_USER_FIELDS = Transform /^(?:(?:authToken|firstName|lastName|role|email|title|institution|phone|role|deactivatedAt|createdAt|updatedAt|unconfirmedEmail)(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
-  fields_string_to_array(fields, output: :string)
+user_fields = public_fields(:user, output: :string, include_optional: true) + %w(deactivatedAt createdAt updatedAt)
+CAPTURE_USER_FIELDS = Transform /^(?:(?:#{user_fields.join('|')})(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
+  csv_string_to_array(fields, output: :string)
 end
 
 # species
 
-CAPTURE_SPECIES_FIELDS = Transform /^(?:(?:#{public_fields(:species, output: :string).join('|')})(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
-  fields_string_to_array(fields, output: :string)
-end
-
-
-CAPTURE_FIELDS = Transform /^(?:(?:#{public_fields(:all, output: :string).join('|')})(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
-  fields_string_to_array(fields, output: :string)
+species_fields = public_fields(:species, output: :string)
+CAPTURE_SPECIES_FIELDS = Transform /^(?:(?:#{species_fields.join('|')})(?:,\s|\sand\s)?(?:no\s)?)+$/ do |fields|
+  csv_string_to_array(fields, output: :string)
 end

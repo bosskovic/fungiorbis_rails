@@ -7,12 +7,22 @@ Feature: Adding new Species, endpoint: POST species/:UUID
     Given there are users: user, contributor and supervisor
     Given there is 1 species
 
-  Scenario: Supervisor adds a species
+  Scenario: Supervisor submits only supported fields and adds a species
+  Species is created and response body is empty
     Given I authenticate as supervisor
     When I send a POST request to "/species" with all mandatory fields valid
     Then the response status should be "CREATED"
     And location header should include link to created species
     And the JSON response should be empty
+    And the species was added to the database
+
+  Scenario: Supervisor submits some unsupported fields along with supported fields
+  Species is created and response body contains all public fields of the species
+    Given I authenticate as supervisor
+    When I send a POST request to "/species" with all mandatory fields valid and "createdAt"
+    Then the response status should be "CREATED"
+    And location header should include link to created species
+    And response should include last species object with all public fields
     And the species was added to the database
 
   Scenario Outline: Supervisor sends invalid request to adda a species
@@ -26,7 +36,7 @@ Feature: Adding new Species, endpoint: POST species/:UUID
     | all mandatory fields missing       | ["Name can't be blank", "Genus can't be blank", "Familia can't be blank", "Ordo can't be blank", "Subclassis can't be blank", "Classis can't be blank", "Subphylum can't be blank", "Phylum can't be blank"] |
     | name-genus not unique              | ["Name - genus combination must be unique"]                                                                                                                                                                  |
     | incorrect value for growthType     | ["Growth type has to be one of: [\"single\", \"group\"]"]                                                                                                                                                    |
-    | incorrect value for nutritiveGroup | ["Nutritive group has to be one of: [\"parasitic\", \"mycorrhizal\", \"saprotrophic\", \"parasitic-saprotrophic\", \"saprotrophic-parasitic\"]"]                                                                                                                                                    |
+    | incorrect value for nutritiveGroup | ["Nutritive group has to be one of: [\"parasitic\", \"mycorrhizal\", \"saprotrophic\", \"parasitic-saprotrophic\", \"saprotrophic-parasitic\"]"]                                                             |
 
 
   Scenario Outline: User that is not supervisor tries to add a species

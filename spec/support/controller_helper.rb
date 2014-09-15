@@ -1,4 +1,7 @@
+require 'fungiorbis/factory'
 module ControllerHelper
+  include Fungiorbis::Factory
+
   def json
     @json ||= JSON.parse(response.body)
   end
@@ -27,34 +30,6 @@ module ControllerHelper
     expect(response_hash.keys.length).to eq public_fields.length + intersection.length + 1
   end
 
-  def random_user_attribute(field, record=nil)
-    case field
-      when :firstName
-        Faker::Name.first_name
-      when :lastName
-        Faker::Name.last_name
-      when :title
-        Faker::Name.prefix
-      when :institution
-        Faker::Company.name
-      when :phone
-        Faker::PhoneNumber.phone_number
-      when :email
-        Faker::Internet.email
-      when :role
-        record && record.role == 'user' ? 'supervisor' : 'user'
-      when :updatedAt
-        DateTime.now
-      else
-        raise 'unknown user field'
-    end
-  end
 
-  def random_attributes_hash_for(fields, klass, selected_user=nil)
-    params = {}
-    fields.each { |field| params[field] = random_user_attribute field, selected_user }
-
-    { klass.to_s.downcase.pluralize.to_sym => params }
-  end
 
 end

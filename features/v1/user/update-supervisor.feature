@@ -15,6 +15,8 @@ Feature: User update
     Then the response status should be "NO CONTENT"
     And user fields "firstName, lastName" were updated
 
+# TODO Scenario: Supervisor tries to update another user, and removes all mandatory fields
+
   Scenario: Supervisor tries to update non existing user
     When I send a PATCH request to "/users/some_uuid" with updated fields "firstName, lastName" for other user
     Then the response status should be "NOT FOUND"

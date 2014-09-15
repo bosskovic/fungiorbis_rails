@@ -101,7 +101,7 @@ Then /^the response status should be "(#{CAPTURE_RECOGNIZED_STATUS})"$/ do |stat
         last_json.should have_json_type('array').at_path('errors/details')
       when 'CREATED'
         expect(last_response.status).to eq 201
-        expect(last_response.body.strip).to be_empty
+        last_json.should be_json_eql(JsonSpec.remember('success'.to_json)).at_path('status') unless last_response.body.strip.empty?
       when 'NO CONTENT'
         expect(last_response.status).to eq 204
         expect(last_response.body.strip).to be_empty

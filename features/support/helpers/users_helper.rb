@@ -72,29 +72,6 @@ module UserHelpers
   end
 
 
-  def random_user_attribute(field, user=nil)
-    case field
-      when :firstName
-        Faker::Name.first_name
-      when :lastName
-        Faker::Name.last_name
-      when :title
-        Faker::Name.prefix
-      when :institution
-        Faker::Company.name
-      when :phone
-        Faker::PhoneNumber.phone_number
-      when :email
-        Faker::Internet.email
-      when :role
-        user && user.role == 'user' ? :supervisor : :user
-      when :updatedAt
-        DateTime.now
-      else
-        raise 'unknown user field'
-    end
-  end
-
   def users
     if @users.nil?
       raise '@users is nil'

@@ -1,6 +1,6 @@
-require 'camel_case'
+require 'fungiorbis/camel_case'
 module CamelCaseConvertible
   extend ActiveSupport::Concern
 
-  include CamelCase
+  include Fungiorbis::CamelCase
 end

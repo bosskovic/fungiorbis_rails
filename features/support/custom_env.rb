@@ -1,22 +1,31 @@
 require 'json_spec/cucumber'
-require 'camel_case'
+require 'fungiorbis/camel_case'
+require 'fungiorbis/util'
+require 'fungiorbis/factory'
 
-include CamelCase
+include Fungiorbis::CamelCase
+include Fungiorbis::Util
 
 #For json_spec
 def last_json
   last_response.body
 end
 
+
+# @param [String] model (resource name)
+# @param [Hash] options
+# @option options [Symbol] :output (:symbol for array of symbols)
+# @option options [Boolean] :include_optional
 def public_fields(model, options={})
   fields = [:id]
   case model.to_sym
     when :all
-      fields += (V1::UsersController::PUBLIC_FIELDS +
-          V1::UsersController::OPTIONAL_RESPONSE_FIELDS +
-          V1::SpeciesController::PUBLIC_FIELDS).uniq
+      fields += V1::UsersController::PUBLIC_FIELDS
+      fields += V1::UsersController::OPTIONAL_RESPONSE_FIELDS if options[:include_optional]
+      fields += V1::SpeciesController::PUBLIC_FIELDS
     when :user
       fields += V1::UsersController::PUBLIC_FIELDS
+      fields += V1::UsersController::OPTIONAL_RESPONSE_FIELDS if options[:include_optional]
     when :species
       fields += V1::SpeciesController::PUBLIC_FIELDS
     else
@@ -25,6 +34,7 @@ def public_fields(model, options={})
 
   options[:output] == :symbol ? fields : fields.map { |f| f.to_s }
 end
+
 
 Before do
   DatabaseCleaner.start

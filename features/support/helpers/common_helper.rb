@@ -1,4 +1,5 @@
 module CommonHelper
+  include Fungiorbis::Factory
 
   def last_href
     if @last_href.nil?
@@ -8,10 +9,6 @@ module CommonHelper
     end
   end
 
-
-  def fields_string_to_array(fields, options={})
-    fields.to_s.gsub('and', ',').split(',').map { |f| options[:output] == :symbol ? f.strip.to_sym : f.strip }
-  end
 
   def resource_hash_from_response(model)
     JSON.parse(last_json)[model.to_s.pluralize]
@@ -28,11 +25,11 @@ module CommonHelper
   def resource_from_request(model)
     attributes = resource_hash_from_request(model)
 
-    keys_for_removal = []
+    keys_for_removal = [:created_at, :updated_at]
 
     case model
       when :user
-        keys_for_removal = [:password, :password_confirmation]
+        keys_for_removal += [:password, :password_confirmation]
       when :species
       else
         raise "unknown model #{model} for resource from request"
@@ -40,15 +37,21 @@ module CommonHelper
 
     remove_keys_from_hash!(attributes, keys_for_removal)
 
-    Object.const_get(model.capitalize).send(:where, attributes).first
+    model_class(model).send(:where, attributes).first
   end
 
-  def remove_keys_from_hash!(hash, keys)
-    keys.each { |key| hash.tap { |h| h.delete(key) } }
+
+  def model_class(model)
+    Object.const_get(model.to_s.capitalize)
   end
 
-  def keep_keys_in_hash!(hash, keys)
-    hash.each_key { |key| hash.tap { |h| h.delete(key) unless keys.include?(key.to_s) } }
+  def load_last_record(model)
+    @last_record = model_class(model).last
+  end
+
+  def last_record
+    raise 'last record is nil' unless @last_record
+    @last_record
   end
 
   private

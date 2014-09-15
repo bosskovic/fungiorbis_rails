@@ -1,8 +1,8 @@
-require 'camel_case'
+require 'fungiorbis/camel_case'
 
-RSpec.describe CamelCase do
+RSpec.describe Fungiorbis::CamelCase do
 
-  include CamelCase
+  include Fungiorbis::CamelCase
 
   def hash
     { context: 'hash',

@@ -8,7 +8,7 @@ class V1::UsersController < ApplicationController
 
   USER_NOT_FOUND_ERROR = 'User not found.'
   PUBLIC_FIELDS = [:email, :firstName, :lastName, :institution, :title, :phone, :role]
-  OPTIONAL_RESPONSE_FIELDS = [:unconfirmedEmail]
+  OPTIONAL_RESPONSE_FIELDS = [:unconfirmedEmail, :authToken]
 
   def index
     set_pagination User, 'users_url'
@@ -55,8 +55,7 @@ class V1::UsersController < ApplicationController
 
   def all_passed_fields_processed?
     email_change_requested = params['users']['email'] && params['users']['email'] != current_user.email
-    unprocessed_fields = params['users'].dup.reject { |f| public_fields.include? f.to_sym }
-    unprocessed_fields.empty? && !email_change_requested
+    !email_change_requested && to_camel_case(params['users'].keys).all? { |f| public_fields.include? f.to_sym }
   end
 
   def public_fields

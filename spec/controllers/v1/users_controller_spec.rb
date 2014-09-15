@@ -105,7 +105,7 @@ RSpec.describe V1::UsersController, :type => :controller do
   end
 
 
-  describe 'PUT #update' do
+  describe 'PATCH #update' do
     context 'when authenticated' do
 
       [:user, :contributor, :supervisor].each do |user_role|

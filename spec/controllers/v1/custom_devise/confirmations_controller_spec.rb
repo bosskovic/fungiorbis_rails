@@ -66,7 +66,7 @@ describe V1::CustomDevise::ConfirmationsController, :type => :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_confirm_user(unconfirmed_user) }
-        it { is_expected.to serve_422_json_with(user_confirmation_url, [@response_errors[:invalid_token]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:invalid_token]]) }
       end
 
       context 'without token' do
@@ -77,7 +77,7 @@ describe V1::CustomDevise::ConfirmationsController, :type => :controller do
         subject { response }
         it { is_expected.to respond_with_unprocessable }
         it { does_not_confirm_user(unconfirmed_user) }
-        it { is_expected.to serve_422_json_with(user_confirmation_url, [@response_errors[:blank_token]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:blank_token]]) }
       end
     end
 
@@ -89,7 +89,7 @@ describe V1::CustomDevise::ConfirmationsController, :type => :controller do
 
         subject { response }
         it { is_expected.to respond_with_unprocessable }
-        it { is_expected.to serve_422_json_with(user_confirmation_url, [@response_errors[:already_confirmed]]) }
+        it { is_expected.to serve_422_json_with([@response_errors[:already_confirmed]]) }
       end
     end
 

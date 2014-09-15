@@ -2,7 +2,6 @@ RSpec::Matchers.define :respond_with_created do
   match do |response|
     expect(response.message).to eq 'Created'
     expect(response.response_code).to eq 201
-    expect(response.body.strip).to be_empty
   end
   failure_message do |response|
     "expected the response '201 Created', got '#{response.response_code} #{response.message} instead"
@@ -65,7 +64,9 @@ RSpec::Matchers.define :respond_with_not_found do |errors|
     expect(body['errors']['details']).to eq errors
   end
   failure_message do |response|
-    "expected the response '404 Not Found', got '#{response.response_code} #{response.message} instead"
+    "expected the response '404 Not Found', got '#{response.response_code} #{response.message}\n
+    expected ['errors']['details'] = #{errors}\n
+    got: #{JSON.parse(response.body)['errors']['details']}"
   end
   description do
     "responds with '404 Not Found'"
@@ -98,13 +99,19 @@ RSpec::Matchers.define :respond_with_forbidden do
   end
 end
 
-RSpec::Matchers.define :serve_422_json_with do |href, errors|
+RSpec::Matchers.define :serve_422_json_with do |errors|
   match do |response|
     expect(response).to render_template(file: "#{Rails.root}/public/422.json.jbuilder")
 
     expect(JSON.parse(response.body)['status']).to eq 'fail'
     expect(JSON.parse(response.body)['errors']['status']).to eq '422'
     expect(JSON.parse(response.body)['errors']['details']).to eq errors
+  end
+  failure_message do |response|
+    "expected the response '422 Unprocessable', got '#{response.response_code} #{response.message}\n
+    expected to render_template public/422.json.jbuilder\n
+    expected ['errors']['details'] = #{errors}\n
+    got: #{JSON.parse(response.body)['errors']['details']}"
   end
 end
 
