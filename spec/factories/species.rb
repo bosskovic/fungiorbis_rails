@@ -13,6 +13,11 @@ FactoryGirl.define do
     s.nutritive_group { (Species::NUTRITIVE_GROUPS + [nil]).sample }
   end
 
+  factory :species_with_characteristics, parent: :species do |species|
+    after(:create) do |s|
+      create(:characteristic, species: s)
+    end
+  end
 end
 
 # == Schema Information

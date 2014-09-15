@@ -5,5 +5,5 @@ json.links do
 end
 
 json.species do
-  json.partial! 'v1/species/species', species: @species
+  json.partial! 'v1/species/species', species: @species, options: { expand: [:characteristics] }
 end

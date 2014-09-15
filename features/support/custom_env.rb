@@ -31,6 +31,8 @@ def public_fields(model, options={})
       fields += V1::SpeciesController::PUBLIC_FIELDS
     when :reference, :references
       fields += V1::ReferencesController::PUBLIC_FIELDS
+    when :characteristic
+      fields += V1::CharacteristicController::PUBLIC_FIELDS
     else
       raise "unknown model #{model} for public fields"
   end

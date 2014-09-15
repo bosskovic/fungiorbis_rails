@@ -19,6 +19,8 @@ module CommonHelper
 
     fields = json_object.keys unless fields
 
+    fields -= ['characteristics'] if model == 'species'
+
     fields.all? { |field| record.send(field.underscore.to_sym) == json_object[field] }
   end
 

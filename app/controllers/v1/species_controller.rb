@@ -4,7 +4,7 @@ class V1::SpeciesController < ApplicationController
   include CamelCaseConvertible
 
   SPECIES_NOT_FOUND_ERROR = 'Species not found.'
-  PUBLIC_FIELDS = [:name, :genus, :familia, :ordo, :subclassis, :classis, :subphylum, :phylum, :synonyms, :growthType, :nutritiveGroup]
+  PUBLIC_FIELDS = [:name, :genus, :familia, :ordo, :subclassis, :classis, :subphylum, :phylum, :synonyms, :growthType, :nutritiveGroup, :characteristics]
 
   before_filter :authenticate_user!, :except => [:index, :show]
 
@@ -12,7 +12,7 @@ class V1::SpeciesController < ApplicationController
 
   def index
     set_pagination Species, 'species_index_url'
-    @species = Species.paginate(page: @meta[:page], per_page: @meta[:per_page])
+    @species = Species.includes(:characteristics).paginate(page: @meta[:page], per_page: @meta[:per_page])
   end
 
   def show

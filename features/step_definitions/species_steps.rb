@@ -61,3 +61,20 @@ When(/^I send a PATCH request (?:for|to) "\/species\/:UUID" \(last species\) wit
     """
   }
 end
+
+
+And(/^each species should have characteristics with array of characteristics ids$/) do
+  first_species = resource_hash_from_response(:species).first
+  expect(first_species['characteristics']).to have_json_type('array')
+  characteristics_uuid = first_species['characteristics'].first
+  expect(Characteristic.find_by_uuid(characteristics_uuid)).not_to be_nil
+end
+
+And(/^species should include array of characteristics with all public fields$/) do
+  record = model_class(:species).first.characteristics.first
+  json_object = resource_hash_from_response(:species)['characteristics'].first
+
+  fields = public_fields(:characteristic) - ['id']
+
+  fields.all? { |field| record.send(field.underscore.to_sym) == json_object[field] }
+end

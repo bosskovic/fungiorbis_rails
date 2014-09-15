@@ -20,7 +20,9 @@ module ControllerHelper
     record.reload
 
     public_fields.each do |field|
-      expect(response_hash[field.to_s]).to eq record.send(field.to_s.underscore.to_sym)
+      unless record.is_a?(Species) && field == :characteristics
+        expect(response_hash[field.to_s]).to eq record.send(field.to_s.underscore.to_sym)
+      end
     end
 
     expect(response_hash['id']).to eq record.uuid

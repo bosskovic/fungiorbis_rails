@@ -11,7 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140915102752) do
+ActiveRecord::Schema.define(version: 20140915152225) do
+
+  create_table "characteristics", force: true do |t|
+    t.integer  "reference_id",  null: false
+    t.integer  "species_id",    null: false
+    t.boolean  "edible"
+    t.boolean  "cultivated"
+    t.boolean  "poisonous"
+    t.boolean  "medicinal"
+    t.text     "fruiting_body"
+    t.text     "microscopy"
+    t.text     "flesh"
+    t.text     "chemistry"
+    t.text     "note"
+    t.text     "habitats"
+    t.text     "substratums"
+    t.string   "uuid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "characteristics", ["uuid"], name: "index_characteristics_on_uuid", unique: true, using: :btree
 
   create_table "references", force: true do |t|
     t.string   "title",      null: false

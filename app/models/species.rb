@@ -8,6 +8,8 @@ class Species < ActiveRecord::Base
   GROWTH_TYPE_VALIDATION_ERROR = "has to be one of: #{GROWTH_TYPES.inspect}"
   NUTRITIVE_GROUPS_VALIDATION_ERROR = "has to be one of: #{NUTRITIVE_GROUPS.inspect}"
 
+  has_many :characteristics, dependent: :destroy
+
   before_validation :generate_url
 
   validates :name, presence: true, uniqueness: { scope: :genus, case_sensitive: false, message: NAME_GENUS_VALIDATION_ERROR }

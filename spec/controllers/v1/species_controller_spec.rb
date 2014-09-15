@@ -12,6 +12,10 @@ RSpec.describe V1::SpeciesController, :type => :controller do
     V1::SpeciesController::PUBLIC_FIELDS
   end
 
+  def public_characteristic_fields
+    to_camel_case(V1::CharacteristicController::PUBLIC_FIELDS)
+  end
+
   def creates_a_species
     if @non_allowed_keys
       expect(Species.where(to_underscore(@params)).first).to be_nil
@@ -44,12 +48,18 @@ RSpec.describe V1::SpeciesController, :type => :controller do
     species_object = json['species'].first
     species = Species.find_by_uuid species_object['id']
     has_all_fields(species_object, species, public_fields)
+
+    expect(species_object['characteristics']).to have_json_type('array')
+
+    characteristics_object = species_object['characteristics'].first
+    characteristic = species.characteristics.first
+    expect(Characteristic.find_by_uuid(characteristics_object)).to eq characteristic
   end
 
   describe 'GET #index' do
     context 'without any GET params' do
       before(:each) do
-        FactoryGirl.create_list(:species, 5)
+        FactoryGirl.create_list(:species_with_characteristics, 5)
         get :index, { format: 'json' }
       end
 
@@ -67,13 +77,14 @@ RSpec.describe V1::SpeciesController, :type => :controller do
 
     context 'when requesting an existing species resource' do
       before(:each) do
-        @species = FactoryGirl.create(:species)
+        @species = FactoryGirl.create(:species_with_characteristics)
         get :show, { uuid: @species.uuid, format: 'json' }
       end
 
       subject { response }
       it { is_expected.to respond_with_ok }
       it { has_all_fields(json['species'], @species, public_fields) }
+      it { has_all_fields(json['species']['characteristics'].first, @species.characteristics.first, public_characteristic_fields) }
     end
 
     context 'when requesting non existent species resource' do
@@ -283,7 +294,8 @@ RSpec.describe V1::SpeciesController, :type => :controller do
     let(:supervisor) { FactoryGirl.create(:supervisor) }
     let(:contributor) { FactoryGirl.create(:contributor) }
     let(:user) { FactoryGirl.create(:user) }
-    let(:species) { FactoryGirl.create(:species) }
+    let!(:species) { FactoryGirl.create(:species_with_characteristics) }
+    let!(:characteristic) { species.characteristics.first }
 
     context 'with supervisor' do
       before(:each) do
@@ -297,6 +309,7 @@ RSpec.describe V1::SpeciesController, :type => :controller do
         it { is_expected.to respond_with_no_content }
         specify { expect(response.body.strip).to be_empty }
         it { expect { species.reload }.to raise_error(ActiveRecord::RecordNotFound) }
+        it { expect { characteristic.reload }.to raise_error(ActiveRecord::RecordNotFound) }
       end
 
       context 'when deleting non existing record' do
