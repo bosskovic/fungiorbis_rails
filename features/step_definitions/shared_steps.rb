@@ -52,7 +52,7 @@ And(/^the (user|species|reference) was(\snot)? (?:added to|updated in) the datab
   end
 end
 
-When(/^I send a PATCH request (?:for|to) "([^"]*)" with (?:")?(all public fields|#{CAPTURE_FIELDS})(?:")? updating (?:last|a) (species)$/) do |path, fields, model|
+When(/^I send a PATCH request (?:for|to) "([^"]*)" with (?:")?(all public fields|#{CAPTURE_FIELDS})(?:")? updating (?:last|a) (species|reference)$/) do |path, fields, model|
   load_last_record(model)
 
   path = path.gsub(':UUID', last_record.uuid)
@@ -73,15 +73,17 @@ When(/^I send a PATCH request (?:for|to) "([^"]*)" with (?:")?(all public fields
   }
 end
 
-And(/^(?:")?(all public|#{CAPTURE_FIELDS})(?:")? fields of the last (species) were updated$/) do |fields, model|
+And(/^(?:")?(all public|#{CAPTURE_FIELDS})(?:")? fields of the last (species|reference) were updated$/) do |fields, model|
   new_record = model_class(model).last
 
   fields = public_fields(model, output: :symbol) if fields == 'all public'
-  fields = to_underscore fields
+  fields = to_underscore(fields) - [:id]
 
   case model.to_sym
     when :species
-      fields -= [:id, :synonyms, :growth_type, :nutritive_group]
+      fields -= [:synonyms, :growth_type, :nutritive_group]
+    when :reference
+
     else
       raise "unsupported model #{model} for checking updated fields in last record"
   end

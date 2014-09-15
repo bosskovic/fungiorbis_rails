@@ -27,20 +27,20 @@ RSpec.describe V1::ReferencesController, :type => :controller do
   end
 
 
-  # def updates_a_reference(species)
-  #   if @non_allowed_keys
-  #     expect(Species.where(to_underscore(@params)).first).to be_nil
-  #     remove_keys_from_hash!(@params, @non_allowed_keys)
-  #   end
-  #   expect(Species.where(to_underscore(@params)).first.uuid).to eq species.uuid
-  # end
+  def updates_a_reference(reference)
+    if @non_allowed_keys
+      expect(Reference.where(to_underscore(@params)).first).to be_nil
+      remove_keys_from_hash!(@params, @non_allowed_keys)
+    end
+    expect(Reference.where(to_underscore(@params)).first.uuid).to eq reference.uuid
+  end
 
 
-  # def does_not_update_reference(species)
-  #   updated_at = species.updated_at
-  #   species.reload
-  #   expect(updated_at).to eq species.updated_at
-  # end
+  def does_not_update_reference(reference)
+    updated_at = reference.updated_at
+    reference.reload
+    expect(updated_at).to eq reference.updated_at
+  end
 
   def responds_with_reference_objects_in_array
     reference_object = json['references'].first
@@ -174,6 +174,95 @@ RSpec.describe V1::ReferencesController, :type => :controller do
 
     context 'with non authenticated user' do
       it_behaves_like 'unauthorized for non authenticated users', :post, :create, { references: '' }, :reference
+    end
+  end
+
+  describe 'PATCH #update' do
+    let(:supervisor) { FactoryGirl.create(:supervisor) }
+    let(:contributor) { FactoryGirl.create(:contributor) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:other_reference) { FactoryGirl.create(:reference, url: 'http://site1', isbn: 'abc1') }
+    let(:reference) { FactoryGirl.create(:reference, updated_at: DateTime.yesterday) }
+
+    context 'with supervisor' do
+      before(:each) do
+        @params = to_camel_case FactoryGirl.attributes_for(:reference)
+        auth_token_to_headers(supervisor)
+      end
+
+      context 'when sending valid params to existing record' do
+        before(:each) { patch :update, { format: 'json', uuid: reference.uuid }.merge(references: @params) }
+
+        subject { response }
+        it { is_expected.to respond_with_no_content }
+        specify { expect(response.body.strip).to be_empty }
+        it { updates_a_reference(reference) }
+      end
+
+      context 'when sending valid params to existing record and some unsupported params' do
+        before(:each) do
+          @non_allowed_keys = [:createdAt]
+          @non_allowed_keys.each { |field| @params[field] = random_attribute(field) }
+          patch :update, { format: 'json', uuid: reference.uuid }.merge(references: @params)
+        end
+
+        subject { response }
+        it { is_expected.to respond_with_ok }
+        it { has_all_fields(json['references'], reference, public_fields) }
+        it { updates_a_reference(reference) }
+      end
+
+      context 'when removing mandatory params' do
+        before(:each) do
+          mandatory_keys = [:title]
+          mandatory_keys.each { |key| @params[key] = nil }
+          patch :update, { format: 'json', uuid: reference.uuid }.merge(references: @params)
+        end
+
+        subject { response }
+        it { is_expected.to respond_with_unprocessable }
+        it { is_expected.to serve_422_json_with(["Title can't be blank"]) }
+        it { does_not_update_reference(reference) }
+      end
+
+      context 'when url not unique' do
+        before(:each) do
+          @params[:url] = other_reference.url
+          patch :update, { format: 'json', uuid: reference.uuid }.merge(references: @params)
+        end
+
+        subject { response }
+        it { is_expected.to respond_with_unprocessable }
+        it { is_expected.to serve_422_json_with(['Url has already been taken']) }
+        it { does_not_update_reference(reference) }
+
+      end
+
+      context 'when isbn not unique' do
+        before(:each) do
+          @params[:isbn] = other_reference.isbn
+          patch :update, { format: 'json', uuid: reference.uuid }.merge(references: @params)
+        end
+
+        subject { response }
+        it { is_expected.to respond_with_unprocessable }
+        it { is_expected.to serve_422_json_with(['Isbn has already been taken']) }
+        it { does_not_update_reference(reference) }
+
+      end
+
+      context 'when sending params to non existing record' do
+        it_behaves_like 'not found', :patch, :update, V1::ReferencesController::REFERENCE_NOT_FOUND_ERROR
+      end
+
+    end
+
+    context 'with user or contributor' do
+      it_behaves_like 'forbidden for non supervisors', :patch, :update, { format: 'json', uuid: 'some_uuid' }, :reference
+    end
+
+    context 'with non authenticated user' do
+      it_behaves_like 'unauthorized for non authenticated users', :patch, :update, { format: 'json', uuid: 'some_uuid' }, :reference
     end
   end
 end

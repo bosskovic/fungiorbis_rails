@@ -26,3 +26,34 @@ When(/^I send a POST request to "\/references" with ([\w\s-]*)(?: and ")?(#{CAPT
     """
   }
 end
+
+When(/^I send a PATCH request (?:for|to) "\/references\/:UUID" \(last reference\) with (.*?)$/) do |situation|
+  load_last_record(:reference)
+
+  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:reference), output: 'symbols')
+
+  case situation
+    when 'url not unique'
+      reference = FactoryGirl.create(:reference, url: 'http://site')
+      params_hash[:url] = reference.url
+    when 'isbn not unique'
+      reference = FactoryGirl.create(:reference, isbn: 'abc')
+      params_hash[:isbn] = reference.isbn
+    when 'all mandatory fields removed'
+      [:title].each do |field|
+        params_hash[field] = nil
+      end
+    else
+      raise "unknown situation: #{situation}"
+  end
+
+  path = "/references/#{last_record.uuid}"
+  json = { references: params_hash }.to_json
+
+  steps %{
+    When I send a PATCH request to "#{path}" with the following json:
+    """
+    #{ json }
+    """
+  }
+end

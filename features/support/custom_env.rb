@@ -23,6 +23,7 @@ def public_fields(model, options={})
       fields += V1::UsersController::PUBLIC_FIELDS
       fields += V1::UsersController::OPTIONAL_RESPONSE_FIELDS if options[:include_optional]
       fields += V1::SpeciesController::PUBLIC_FIELDS
+      fields += V1::ReferencesController::PUBLIC_FIELDS
     when :user
       fields += V1::UsersController::PUBLIC_FIELDS
       fields += V1::UsersController::OPTIONAL_RESPONSE_FIELDS if options[:include_optional]

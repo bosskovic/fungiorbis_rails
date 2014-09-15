@@ -37,8 +37,8 @@ When(/^I send a PATCH request (?:for|to) "\/species\/:UUID" \(last species\) wit
   case situation
     when 'name-genus not unique'
       species = FactoryGirl.create(:species)
-      params_hash[:name] = species[:name]
-      params_hash[:genus] = species[:genus]
+      params_hash[:name] = species.name
+      params_hash[:genus] = species.genus
     when 'incorrect value for growthType'
       params_hash[:growthType] = 'abc'
     when 'incorrect value for nutritiveGroup'
@@ -48,7 +48,7 @@ When(/^I send a PATCH request (?:for|to) "\/species\/:UUID" \(last species\) wit
         params_hash[field] = nil
       end
     else
-      raise 'unknown situation'
+      raise "unknown situation: #{situation}"
   end
 
   path = "/species/#{last_record.uuid}"

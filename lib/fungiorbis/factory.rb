@@ -29,6 +29,13 @@ module Fungiorbis
             ordo = Faker::Name.first_name
             break ordo if Species.find_by_ordo(ordo).nil?
           end
+        when :url
+          loop do
+            url = Faker::Internet.url
+            break url
+          end
+        when :title
+          Faker::Lorem.sentence
         else
           raise "unknown field #{field} for random attribute generation"
       end

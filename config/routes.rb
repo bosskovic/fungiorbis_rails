@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     }
     resources :users, only: [:index, :show, :update], param: :uuid
     resources :species, only: [:index, :show, :create, :update, :destroy], param: :uuid
-    resources :references, only: [:index, :show, :create], param: :uuid
+    resources :references, only: [:index, :show, :create, :update], param: :uuid
   end
 
 end
