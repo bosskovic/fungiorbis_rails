@@ -16,7 +16,7 @@ class CreateCharacteristics < ActiveRecord::Migration
       t.text :note
 
       t.text :habitats
-      t.text :substratums
+      t.text :substrates
 
       t.string :uuid
 

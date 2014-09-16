@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20140915152225) do
     t.text     "chemistry"
     t.text     "note"
     t.text     "habitats"
-    t.text     "substratums"
+    t.text     "substrates"
     t.string   "uuid"
     t.datetime "created_at"
     t.datetime "updated_at"

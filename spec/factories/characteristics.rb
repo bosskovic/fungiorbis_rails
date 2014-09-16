@@ -12,7 +12,7 @@ FactoryGirl.define do
     chemistry { {} }
     note { {} }
     habitats { [] }
-    substratums { [] }
+    substrates { [] }
   end
 end
 
@@ -33,7 +33,7 @@ end
 #  chemistry     :text
 #  note          :text
 #  habitats      :text
-#  substratums   :text
+#  substrates    :text
 #  uuid          :string(255)
 #  created_at    :datetime
 #  updated_at    :datetime

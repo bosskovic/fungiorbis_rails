@@ -11,7 +11,7 @@ class Characteristic < ActiveRecord::Base
   serialize :note, Hash
 
   serialize :habitats, Array
-  serialize :substratums, Array
+  serialize :substrates, Array
 
 end
 
@@ -32,7 +32,7 @@ end
 #  chemistry     :text
 #  note          :text
 #  habitats      :text
-#  substratums   :text
+#  substrates    :text
 #  uuid          :string(255)
 #  created_at    :datetime
 #  updated_at    :datetime

@@ -19,7 +19,7 @@ RSpec.describe Characteristic, :type => :model do
     it { is_expected.to serialize(:chemistry) }
     it { is_expected.to serialize(:note) }
     it { is_expected.to serialize(:habitats) }
-    it { is_expected.to serialize(:substratums) }
+    it { is_expected.to serialize(:substrates) }
   end
 
 end
@@ -41,7 +41,7 @@ end
 #  chemistry     :text
 #  note          :text
 #  habitats      :text
-#  substratums   :text
+#  substrates    :text
 #  uuid          :string(255)
 #  created_at    :datetime
 #  updated_at    :datetime
