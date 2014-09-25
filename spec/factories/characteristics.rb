@@ -1,6 +1,11 @@
+require_relative '../../lib/fungiorbis/habitat_helper'
+require_relative '../../lib/fungiorbis/substrate_helper'
+include Fungiorbis::HabitatHelper
+include Fungiorbis::SubstrateHelper
+
 FactoryGirl.define do
   factory :characteristic do
-    species
+    association :species, factory: :species
     reference
     edible { [false, true, nil].sample }
     cultivated { [false, true, nil].sample }
@@ -11,8 +16,8 @@ FactoryGirl.define do
     flesh { {} }
     chemistry { {} }
     note { {} }
-    habitats { [] }
-    substrates { [] }
+    habitats { random_habitats }
+    substrates { random_substrates }
   end
 end
 

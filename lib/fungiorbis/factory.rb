@@ -36,6 +36,8 @@ module Fungiorbis
           end
         when :title
           Faker::Lorem.sentence
+        when :characteristics
+          FactoryGirl.attributes_for(:characteristic)
         else
           raise "unknown field #{field} for random attribute generation"
       end

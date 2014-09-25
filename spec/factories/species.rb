@@ -15,7 +15,7 @@ FactoryGirl.define do
 
   factory :species_with_characteristics, parent: :species do |species|
     after(:create) do |s|
-      create(:characteristic, species: s)
+      (1 + rand(3)).times{ create(:characteristic, species: s)}
     end
   end
 end

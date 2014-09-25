@@ -12,5 +12,13 @@ module Fungiorbis
     def csv_string_to_array(fields, options={})
       fields.to_s.gsub(' and ', ',').split(',').map { |f| options[:output] == :symbol ? f.strip.to_sym : f.strip }.reject { |f| f.empty? }
     end
+
+    def elements_to_sym(array)
+      array.map { |e| e.to_sym }
+    end
+
+    def elements_to_str(array)
+      array.map { |e| e.to_s }
+    end
   end
 end

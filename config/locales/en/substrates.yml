@@ -1,0 +1,15 @@
+en:
+  substrates:
+    ground: Ground
+    litter: Litter
+    living_tree: Living tree
+    dead_upright_trunk: Dead upright trunk
+    lying_trunk: Lying trunk
+    branches: Branches
+    stump: Stump
+    leaves: Leaves
+    cones: Cones
+    moss: Moss
+    animals: Animals
+    feces: Feces
+    mushroom: Mushroom

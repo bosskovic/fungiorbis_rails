@@ -1,0 +1,84 @@
+en:
+  species:
+    coniferous:
+      pine: Pine
+      spruce: Spruce
+      fir: Fir
+    decidous:
+      birch: Birch
+      beech: Beech
+      hornbeam: Hornbeam
+      oak: Oak
+      poplar: Poplar
+      willow: Willow
+      cornel: Cornel
+      linden: Linden
+    orchard:
+      plum: Plum
+      apple: Apple
+    grasses:
+      zubača: Zubača
+  species_group_title:
+    coniferous: Coniferous
+    decidous: Decidous
+    orchard: Orchard
+    grasses: Grasses
+  habitats:
+    forest:
+      subhabitat:
+        anthropogenic:
+          title: Anthropogenic forest
+          allowed_species_groups:
+            - coniferous
+            - decidous
+        coniferous:
+          title: Coniferous forest
+          allowed_species_groups:
+            - coniferous
+        decidous:
+          title: Decidous forest
+          allowed_species_groups:
+            - decidous
+        mixed:
+          title: Mixed forest
+          allowed_species_groups:
+            - coniferous
+            - decidous
+        freshwater_swamp:
+          title: Freshwater swamp forest
+          allowed_species_groups:
+            - decidous
+      title: Forrest
+      allowed_species_groups:
+        - coniferous
+        - decidous
+    meadow:
+      title: Meadow
+      allowed_species_groups:
+        - grasses
+    sands:
+      title: Sands
+      allowed_species_groups:
+        - coniferous
+        - decidous
+        - grasses
+    peat:
+      title: Peat
+    anthropogenic:
+      title: Anthropogenic
+      subhabitat:
+        park:
+          title: Park
+          allowed_species_groups:
+            - coniferous
+            - decidous
+        garden:
+          title: Garden
+        yard:
+          title: Yard
+        orchard:
+          title: Orchard
+          allowed_species_groups:
+            - orchard
+        vineyard:
+          title: Vineyard
