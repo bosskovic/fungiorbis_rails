@@ -1,4 +1,4 @@
-Given(/^there (?:are|is) (\d+) (species|species with characteristics|reference)(?: records)?$/) do |number, model|
+Given(/^there (?:are|is) (\d+) (species|species with characteristics|reference|reference with characteristics)(?: records)?$/) do |number, model|
   model.gsub!(' ', '_')
   FactoryGirl.create_list(model.to_sym, number.to_i)
 end

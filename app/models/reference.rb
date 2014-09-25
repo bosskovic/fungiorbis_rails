@@ -1,6 +1,8 @@
 class Reference < ActiveRecord::Base
   include Uuid
 
+  has_many :characteristics, dependent: :destroy
+
   validates :title, presence: true
   validates :isbn, uniqueness: true, if: 'isbn.present?'
   validates :url, format: { with: URI.regexp }, uniqueness: true, if: 'url.present?'

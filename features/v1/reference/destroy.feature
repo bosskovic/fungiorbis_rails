@@ -5,13 +5,14 @@ Feature: Deleting reference, endpoint: DELETE references/:UUID
   Background:
     Given I send and accept JSON using version 1 of the fungiorbis API
     Given there are users: user, contributor and supervisor
-    Given there is 1 reference
+    Given there is 1 reference with characteristics
 
   Scenario: Supervisor sends request to delete a reference
     Given I authenticate as supervisor
     When I send a DELETE request to "/references/:UUID" for the last reference
     Then the response status should be "NO CONTENT"
     And the last reference was deleted
+    And characteristics associated to reference were deleted
 
   Scenario: Supervisor sends request to delete a non existing reference
     Given I authenticate as supervisor

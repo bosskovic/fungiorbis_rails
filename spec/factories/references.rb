@@ -5,6 +5,12 @@ FactoryGirl.define do
     url { [Faker::Internet.url, nil].sample }
     isbn { [Faker::Code.isbn, nil].sample }
   end
+
+  factory :reference_with_characteristics, parent: :reference do |reference|
+    after(:create) do |r|
+      (1 + rand(3)).times{ create(:characteristic, reference: r)}
+    end
+  end
 end
 
 # == Schema Information

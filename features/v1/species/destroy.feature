@@ -13,7 +13,7 @@ Feature: Deleting Species, endpoint: DELETE species/:UUID
     When I send a DELETE request to "/species/:UUID" for the last species
     Then the response status should be "NO CONTENT"
     And the last species was deleted
-    And associated characteristics were deleted
+    And characteristics associated to species were deleted
 
   Scenario: Supervisor sends request to delete a non existing species
     Given I authenticate as supervisor

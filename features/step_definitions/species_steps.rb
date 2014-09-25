@@ -85,6 +85,7 @@ And(/^species characteristics were (not )?changed$/) do |negation|
   }
 end
 
-And(/^associated characteristics were deleted$/) do
-  expect(Characteristic.where(:species_id => last_record.id).first).to be_nil
+And(/^characteristics associated to (species|reference) were deleted$/) do |model|
+  foreign_key = "#{model.to_s}_id".to_sym
+  expect(Characteristic.where(foreign_key => last_record.id).first).to be_nil
 end
