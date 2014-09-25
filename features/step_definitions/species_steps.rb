@@ -1,5 +1,5 @@
 When(/^I send a POST request to "\/species" with ([\w\s-]*)(?: and ")?(#{CAPTURE_FIELDS})?(?:")?$/) do |situation, fields|
-  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:species), output: 'symbols')
+  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:species), output: :symbol)
 
   case situation
     when 'all mandatory fields valid'
@@ -32,7 +32,7 @@ end
 When(/^I send a PATCH request (?:for|to) "\/species\/:UUID" \(last species\) with (.*?)$/) do |situation|
   load_last_record(:species)
 
-  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:species), output: 'symbols')
+  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:species), output: :symbol)
 
   case situation
     when 'name-genus not unique'
@@ -77,4 +77,14 @@ And(/^species should include array of characteristics with all public fields$/) 
   fields = public_fields(:characteristic) - ['id']
 
   fields.all? { |field| record.send(field.underscore.to_sym) == json_object[field] }
+end
+
+And(/^species characteristics were (not )?changed$/) do |negation|
+  steps %{
+     And characteristics of species were#{ negation ? ' not' : ''} changed
+  }
+end
+
+And(/^associated characteristics were deleted$/) do
+  expect(Characteristic.where(:species_id => last_record.id).first).to be_nil
 end

@@ -60,14 +60,16 @@ module CommonHelper
     @last_record
   end
 
-  private
-
   def resource_hash_from_request(model)
     request = JSON.parse(last_request.body.entries.first)
 
     hash = request[resource_name(model)] || request[model.to_s]
 
-    to_underscore hash, output: 'symbols'
+    to_underscore hash, output: :symbol
+  end
+
+  def associations(model)
+    model_class(model).reflect_on_all_associations.map { |a| a.name }
   end
 
 end

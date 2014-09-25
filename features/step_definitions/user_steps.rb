@@ -87,7 +87,7 @@ end
 
 # sign up request
 When(/^I send a POST request to "\/users" with firstName, lastName, email(?:,|\sand) password (?:and\s)?([\w\s]*)$/) do |situation|
-  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:user), output:'symbols')
+  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:user), output: :symbol)
   remove_keys_from_hash!(params_hash, [:confirmedAt])
 
   case situation

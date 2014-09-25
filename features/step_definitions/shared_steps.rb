@@ -61,7 +61,7 @@ When(/^I send a PATCH request (?:for|to) "([^"]*)" with (?:")?(all public fields
   if fields == 'all public fields'
     attributes = FactoryGirl.attributes_for(model.to_sym)
   else
-    attributes = random_attributes_hash_for fields
+    attributes = random_attributes_hash_for(fields)
   end
 
   json = { resource_name(model) => to_camel_case(attributes) }.to_json
@@ -78,7 +78,7 @@ And(/^(?:")?(all public|#{CAPTURE_FIELDS})(?:")? fields of the last (species|ref
   new_record = model_class(model).last
 
   fields = public_fields(model, output: :symbol) if fields == 'all public'
-  fields = to_underscore(fields) - [:id]
+  fields = to_underscore(fields, output: :symbol) - [:id] - associations(model)
 
   case model.to_sym
     when :species
@@ -89,8 +89,24 @@ And(/^(?:")?(all public|#{CAPTURE_FIELDS})(?:")? fields of the last (species|ref
       raise "unsupported model #{model} for checking updated fields in last record"
   end
 
+  sent_params = resource_hash_from_request(model)
+
   fields.each do |field|
-    expect(new_record.send(field)).not_to eq last_record.send(field)
+    sent_value = sent_params[field]
+    db_value = new_record.send(field)
+    expect(sent_value).to eq db_value
+  end
+end
+
+And(/^([^"]*) of (species) were( not)? changed$/) do |associations, model, negation|
+  new_record = model_class(model).last
+  associations = associations.is_a?(Array) ? to_underscore(associations, output: :symbol) : csv_string_to_array(associations, output: :symbol)
+  associations.each do |association|
+    if negation
+      expect(new_record.send(association)).to eq last_record.send(association)
+    else
+      expect(new_record.send(association)).not_to eq last_record.send(association)
+    end
   end
 end
 

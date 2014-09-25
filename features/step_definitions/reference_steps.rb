@@ -1,5 +1,5 @@
 When(/^I send a POST request to "\/references" with ([\w\s-]*)(?: and ")?(#{CAPTURE_FIELDS})?(?:")?$/) do |situation, fields|
-  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:reference), output: 'symbols')
+  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:reference), output: :symbol)
 
   case situation
     when 'all mandatory fields valid'
@@ -30,7 +30,7 @@ end
 When(/^I send a PATCH request (?:for|to) "\/references\/:UUID" \(last reference\) with (.*?)$/) do |situation|
   load_last_record(:reference)
 
-  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:reference), output: 'symbols')
+  params_hash = keys_to_camel_case(FactoryGirl.attributes_for(:reference), output: :symbol)
 
   case situation
     when 'url not unique'
