@@ -41,7 +41,7 @@ RSpec.describe Fungiorbis::CamelCase do
             expect(to_underscore(@obj[:camel_sym])).to eq @obj[:snake_sym]
           end
           it 'outputs the strings because the option is set so' do
-            expect(to_underscore(@obj[:camel_sym], output: 'strings')).to eq @obj[:snake_str]
+            expect(to_underscore(@obj[:camel_sym], output: :string)).to eq @obj[:snake_str]
           end
         end
 
@@ -50,7 +50,7 @@ RSpec.describe Fungiorbis::CamelCase do
             expect(to_underscore(@obj[:camel_str])).to eq @obj[:snake_str]
           end
           it 'outputs the symbols because the option is set so' do
-            expect(to_underscore(@obj[:camel_str], output: 'symbols')).to eq @obj[:snake_sym]
+            expect(to_underscore(@obj[:camel_str], output: :symbol)).to eq @obj[:snake_sym]
           end
         end
 
@@ -76,7 +76,7 @@ RSpec.describe Fungiorbis::CamelCase do
             expect(to_camel_case(@obj[:snake_sym])).to eq @obj[:camel_sym]
           end
           it 'outputs the strings because the option is set so' do
-            expect(to_camel_case(@obj[:snake_sym], output: 'strings')).to eq @obj[:camel_str]
+            expect(to_camel_case(@obj[:snake_sym], output: :string)).to eq @obj[:camel_str]
           end
         end
 
@@ -85,7 +85,7 @@ RSpec.describe Fungiorbis::CamelCase do
             expect(to_camel_case(@obj[:snake_str])).to eq @obj[:camel_str]
           end
           it 'outputs the symbols because the option is set so' do
-            expect(to_camel_case(@obj[:snake_str], output: 'symbols')).to eq @obj[:camel_sym]
+            expect(to_camel_case(@obj[:snake_str], output: :symbol)).to eq @obj[:camel_sym]
           end
         end
 
