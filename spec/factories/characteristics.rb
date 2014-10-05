@@ -4,7 +4,7 @@ include Fungiorbis::HabitatHelper
 include Fungiorbis::SubstrateHelper
 
 FactoryGirl.define do
-  factory :characteristic do
+  factory :characteristic do |c|
     association :species, factory: :species
     reference
     edible { [false, true, nil].sample }

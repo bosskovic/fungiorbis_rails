@@ -2,16 +2,18 @@ class V1::ReferencesController < ApplicationController
 
   include Pageable
   include CamelCaseConvertible
+  include FieldSelectable
 
   REFERENCE_NOT_FOUND_ERROR = 'Reference not found.'
   PUBLIC_FIELDS = [:title, :authors, :isbn, :url]
 
-  before_filter :authenticate_user!, :except => [:index, :show]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_fields, only: [:index, :show, :create, :update]
+  before_action { |controller| controller.send :set_pagination, Reference, 'references_url' if action_name == 'index' }
 
   load_and_authorize_resource
 
   def index
-    set_pagination Reference, 'references_url'
     @references = Reference.paginate(page: @meta[:page], per_page: @meta[:per_page])
   end
 
@@ -76,5 +78,23 @@ class V1::ReferencesController < ApplicationController
 
   def all_passed_fields_processed?
     to_camel_case(params['references'].keys).all? { |f| PUBLIC_FIELDS.include? f.to_sym }
+  end
+
+  def default_fields(action)
+    case action
+      when :index, :show, :create, :update
+        PUBLIC_FIELDS
+      else
+        raise 'unsupported action'
+    end
+  end
+
+  def default_nested_fields(action)
+    case action
+      when :index, :show, :create, :update
+        { }
+      else
+        raise 'unsupported action'
+    end
   end
 end

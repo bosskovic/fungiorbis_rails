@@ -25,6 +25,10 @@ en:
     grasses: Grasses
   habitats:
     forest:
+      title: Forrest
+      allowed_species_groups:
+        - coniferous
+        - decidous
       subhabitat:
         anthropogenic:
           title: Anthropogenic forest
@@ -48,10 +52,6 @@ en:
           title: Freshwater swamp forest
           allowed_species_groups:
             - decidous
-      title: Forrest
-      allowed_species_groups:
-        - coniferous
-        - decidous
     meadow:
       title: Meadow
       allowed_species_groups:

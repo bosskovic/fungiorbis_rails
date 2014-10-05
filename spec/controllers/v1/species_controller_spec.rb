@@ -13,7 +13,11 @@ RSpec.describe V1::SpeciesController, :type => :controller do
   end
 
   def public_characteristic_fields
-    to_camel_case(V1::CharacteristicController::PUBLIC_FIELDS)
+    to_camel_case(V1::CharacteristicsController::PUBLIC_FIELDS)
+  end
+
+  def public_reference_fields
+    V1::ReferencesController::PUBLIC_FIELDS
   end
 
   def creates_a_species
@@ -44,16 +48,22 @@ RSpec.describe V1::SpeciesController, :type => :controller do
     expect(updated_at).to eq species.updated_at
   end
 
-  def responds_with_species_objects_in_array
+  def responds_with_species_objects_in_array(fields=public_fields)
     species_object = json['species'].first
     species = Species.find_by_uuid species_object['id']
-    has_all_fields(species_object, species, public_fields)
+    has_all_fields(species_object, species, fields)
+  end
 
-    expect(species_object['characteristics']).to have_json_type('array')
+  def includes_characteristics_array(fields=public_characteristic_fields)
+    characteristics_array = json['species'].first['characteristics']
+    characteristic = Characteristic.find_by_uuid characteristics_array.first['id']
+    has_all_fields(characteristics_array.first, characteristic, fields)
+  end
 
-    characteristics_object = species_object['characteristics'].first
-    characteristic = species.characteristics.first
-    expect(Characteristic.find_by_uuid(characteristics_object)).to eq characteristic
+  def includes_reference_object(fields=public_reference_fields)
+    reference_object = json['species'].first['characteristics'].first['reference']
+    reference = Reference.find_by_uuid reference_object['id']
+    has_all_fields(reference_object, reference, fields)
   end
 
   describe 'GET #index' do
@@ -67,6 +77,41 @@ RSpec.describe V1::SpeciesController, :type => :controller do
       it { is_expected.to respond_with_ok }
       it { is_expected.to respond_with_objects_array(Species) }
       it { responds_with_species_objects_in_array }
+      it { has_all_links(json, 'species', %(characteristics)) }
+      it { is_expected.to respond_with_links(:species) }
+    end
+
+    context 'with custom fields' do
+      let(:fields) { [:name, :genus] }
+
+      before(:each) do
+        FactoryGirl.create_list(:species_with_characteristics, 5)
+        get :index, { format: 'json', 'fields' => fields.join(',') }
+      end
+
+      subject { response }
+      it { is_expected.to respond_with_ok }
+      it { is_expected.to respond_with_objects_array(Species) }
+      it { responds_with_species_objects_in_array(fields) }
+      it { is_expected.to respond_with_links(:species) }
+    end
+
+    context 'with custom inclusion' do
+      let(:inclusion) { 'characteristics,characteristics.reference' }
+      let(:characteristics_fields) { [:edible, :cultivated] }
+      let(:reference_fields) { [:isbn] }
+
+      before(:each) do
+        FactoryGirl.create(:species_with_characteristics)
+        get :index, { format: 'json', 'include' => inclusion, 'fields[characteristics]' => characteristics_fields.join(','), 'fields[characteristics][reference]' => reference_fields.join(',') }
+      end
+
+      subject { response }
+      it { is_expected.to respond_with_ok }
+      it { is_expected.to respond_with_objects_array(Species) }
+      it { responds_with_species_objects_in_array }
+      it { includes_characteristics_array(characteristics_fields) }
+      it { includes_reference_object(reference_fields) }
       it { is_expected.to respond_with_links(:species) }
     end
 

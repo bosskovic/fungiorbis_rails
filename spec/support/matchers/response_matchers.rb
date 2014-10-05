@@ -145,20 +145,42 @@ RSpec::Matchers.define :respond_with_meta do |model_class, expected_meta|
   description do
     'responds with expected meta object'
   end
+  failure_message do |response|
+    json = JSON.parse(response.body)
+    response_meta = json['meta'][model_class.to_s.downcase.pluralize]
+
+    if json['meta'].keys.length != 1
+      "Expected 1 meta field, got: #{json['meta'].keys.length} - #{json['meta'].keys.inspect}"
+    elsif !response_meta.is_a?(Hash)
+      "Expected response meta to be Hash, got #{response_meta.class.name}"
+    else
+      "#{expected_meta.keys.inspect}
+#{response_meta.keys.inspect}"
+    end
+  end
 end
 
 RSpec::Matchers.define :respond_with_links do |model|
+  plural = model.to_s.pluralize
+
   match do |response|
     json = JSON.parse(response.body)
     links = json['links']
 
     case model
       when :user, :species, :reference
-        expect(links.keys.length).to eq 1
-        plural = model.to_s.pluralize
+        # expect(links.keys.length).to eq 1
         expect(links[plural]).to eq "http://test.host/#{plural}/{#{plural}.id}"
+      when :characteristic
+        expect(links[plural]).to eq "http://test.host/species/{species.id}/characteristics/{characteristics.id}"
       else
         raise 'unknown model for meta links'
     end
+  end
+  failure_message do |response|
+    json = JSON.parse(response.body)
+    links = json['links']
+
+    "expected link to eq http://test.host/#{plural}/{#{plural}.id},\n got: #{links[plural]}"
   end
 end

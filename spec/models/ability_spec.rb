@@ -26,6 +26,7 @@ RSpec.describe Ability do
 
     it { is_expected.to be_able_to(:manage, Species) }
     it { is_expected.to be_able_to(:manage, Reference) }
+    it { is_expected.to be_able_to(:manage, Characteristic) }
   end
 
   context 'when visitor' do
@@ -45,6 +46,14 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:create, Reference) }
       it { is_expected.not_to be_able_to(:update, Reference) }
       it { is_expected.not_to be_able_to(:destroy, Reference) }
+    end
+
+    context 'with Characteristic' do
+      it { is_expected.to be_able_to(:index, Characteristic) }
+      it { is_expected.to be_able_to(:show, Characteristic) }
+      it { is_expected.not_to be_able_to(:create, Characteristic) }
+      it { is_expected.not_to be_able_to(:update, Characteristic) }
+      it { is_expected.not_to be_able_to(:destroy, Characteristic) }
     end
   end
 end

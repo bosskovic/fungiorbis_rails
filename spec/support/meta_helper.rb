@@ -27,6 +27,7 @@ def pagination_with_context(context, model_class)
 
   private
 
+  # TODO refactor to get rid of Characteristic dependency
   def pagination(model, page, per_page, page_count, count)
     page ||= 1
 
@@ -34,8 +35,15 @@ def pagination_with_context(context, model_class)
     page_count ||= 1
     previous_page = page == 1 ? nil : page-1
     next_page = page == page_count ? nil : page+1
-    previous_href = previous_page ? "http://test.host/#{model.to_s.downcase.pluralize}?page=#{previous_page}&perPage=#{per_page}" : nil
-    next_href = next_page ? "http://test.host/#{model.to_s.downcase.pluralize}?page=#{next_page}&perPage=#{per_page}" : nil
+
+    if model == Characteristic
+      previous_href = previous_page ? "http://test.host/species/#{Characteristic.first.species.uuid}/#{model.to_s.downcase.pluralize}?page=#{previous_page}&perPage=#{per_page}" : nil
+      next_href = next_page ? "http://test.host/species/#{Characteristic.first.species.uuid}/#{model.to_s.downcase.pluralize}?page=#{next_page}&perPage=#{per_page}" : nil
+    else
+      previous_href = previous_page ? "http://test.host/#{model.to_s.downcase.pluralize}?page=#{previous_page}&perPage=#{per_page}" : nil
+      next_href = next_page ? "http://test.host/#{model.to_s.downcase.pluralize}?page=#{next_page}&perPage=#{per_page}" : nil
+    end
+
     { 'page' => page,
       'perPage' => per_page,
       'count' => count,

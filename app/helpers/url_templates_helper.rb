@@ -23,4 +23,12 @@ module UrlTemplatesHelper
   def reference_url_template
     reference_url(uuid: 'xxx').gsub('xxx', '{references.id}')
   end
+
+  def characteristics_url_template
+    species_characteristics_url(species_uuid: 'xxx').gsub('xxx', '{species.id}')
+  end
+
+  def characteristic_url_template
+    species_characteristic_url(species_uuid: 'xxx', uuid: 'yyy').gsub('xxx', '{species.id}').gsub('yyy', '{characteristics.id}')
+  end
 end

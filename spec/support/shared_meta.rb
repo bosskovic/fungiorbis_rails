@@ -9,7 +9,10 @@ RSpec.shared_examples 'an index with meta object' do |model_class|
      { context: 'with page outside the limit', perPage: nil, page: 11 }].each do |pagination_context|
 
       context pagination_context[:context] do
-        before(:each) { get :index, { format: 'json', perPage: pagination_context[:perPage], page: pagination_context[:page] } }
+        before(:each) do
+          additional_params = model_class == Characteristic ? { species_uuid: Species.first.uuid } : {}
+          get :index, { format: 'json', perPage: pagination_context[:perPage], page: pagination_context[:page] }.merge(additional_params)
+        end
 
         subject { response }
         it { is_expected.to respond_with_meta(model_class, send(:pagination_with_context, pagination_context[:context], model_class)) }

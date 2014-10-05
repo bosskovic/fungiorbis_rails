@@ -10,5 +10,5 @@ Feature: Index species, endpoint:  GET /species
     Then the response status should be "OK"
     And the JSON response at "species" should have 5 species
     And the species array should include objects with all public fields
-    And each species should have characteristics with array of characteristics ids
+    And the characteristic ids should be present in the links object
     And response should include link to endpoint /species/{species.id}

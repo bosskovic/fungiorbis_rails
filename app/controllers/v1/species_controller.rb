@@ -2,16 +2,21 @@ class V1::SpeciesController < ApplicationController
 
   include Pageable
   include CamelCaseConvertible
+  include Includable
+  include FieldSelectable
 
   SPECIES_NOT_FOUND_ERROR = 'Species not found.'
-  PUBLIC_FIELDS = [:name, :genus, :familia, :ordo, :subclassis, :classis, :subphylum, :phylum, :synonyms, :growthType, :nutritiveGroup, :characteristics]
+  PUBLIC_FIELDS = [:name, :genus, :familia, :ordo, :subclassis, :classis, :subphylum, :phylum, :synonyms, :growthType, :nutritiveGroup]
+  PUBLIC_ASSOCIATIONS = [:characteristics]
 
-  before_filter :authenticate_user!, :except => [:index, :show]
+  before_action :authenticate_user!, except: [:index, :show]
+  before_action :set_inclusions, only: [:index, :show, :create, :update]
+  before_action :set_fields, only: [:index, :show, :create, :update]
+  before_action { |controller| controller.send :set_pagination, Species, 'species_index_url' if action_name == 'index' }
 
   load_and_authorize_resource only: :index
 
   def index
-    set_pagination Species, 'species_index_url'
     @species = Species.includes(:characteristics).paginate(page: @meta[:page], per_page: @meta[:per_page])
   end
 
@@ -83,5 +88,41 @@ class V1::SpeciesController < ApplicationController
 
   def all_passed_fields_processed?
     to_camel_case(params['species'].keys).all? { |f| PUBLIC_FIELDS.include? f.to_sym }
+  end
+
+  def default_inclusions(action)
+    case action
+      when :index
+        []
+      when :show, :create, :update
+        %w(characteristics characteristics.reference)
+      else
+        raise 'unsupported action'
+    end
+  end
+
+  def default_fields(action)
+    case action
+      when :index, :show, :create, :update
+        PUBLIC_FIELDS
+      else
+        raise 'unsupported action'
+    end
+  end
+
+  def default_nested_fields(action)
+    case action
+      when :index, :show, :create, :update
+        { 'characteristics' => {
+            fields: V1::CharacteristicsController::PUBLIC_FIELDS,
+            nested_fields: {
+                'reference' => {
+                    fields: V1::ReferencesController::PUBLIC_FIELDS
+                }
+            }
+        } }
+      else
+        raise 'unsupported action'
+    end
   end
 end

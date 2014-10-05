@@ -1,11 +1,18 @@
-options ||= {}
 json.id species.uuid
 
-species_fields = V1::SpeciesController::PUBLIC_FIELDS.map { |f| f.to_s.underscore.to_sym }
+species_fields = to_underscore(fields)
 json.extract! species, *species_fields
 
-if expand? :characteristics, options
-  json.characteristics species.characteristics, partial: 'v1/species/characteristic', collection: species.characteristics, as: :characteristic
+if expand? :characteristics, inclusions
+  json.characteristics species.characteristics,
+                       partial: 'v1/characteristics/characteristic',
+                       collection: species.characteristics,
+                       as: :characteristic,
+                       inclusions: inclusions_for_nested_resource(:characteristics, inclusions),
+                       fields: nested_fields['characteristics'][:fields],
+                       nested_fields: nested_fields['characteristics'][:nested_fields]
 else
-  json.characteristics species.characteristics.map { |c| c.uuid }
+  json.links do
+    json.characteristics species.characteristics.map { |c| c.uuid }
+  end
 end

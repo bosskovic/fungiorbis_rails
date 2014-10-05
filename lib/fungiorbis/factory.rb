@@ -38,6 +38,10 @@ module Fungiorbis
           Faker::Lorem.sentence
         when :characteristics
           FactoryGirl.attributes_for(:characteristic)
+        when :edible
+          [true, false].sample
+        when :cultivated
+          [true, false].sample
         else
           raise "unknown field #{field} for random attribute generation"
       end

@@ -14,14 +14,10 @@ RSpec.describe V1::UsersController, :type => :controller do
     V1::UsersController::PUBLIC_FIELDS
   end
 
-  def optional_response_fields
-    V1::UsersController::OPTIONAL_RESPONSE_FIELDS
-  end
-
   def responds_with_user_objects_in_array
     user_object = json['users'].first
     user = User.find_by_email user_object['email']
-    has_all_fields(user_object, user, public_fields, optional_response_fields)
+    has_all_fields(user_object, user, public_fields)
   end
 
 
@@ -73,7 +69,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
             subject { response }
             it { is_expected.to respond_with_ok }
-            it { has_all_fields(json['users'], @any_user, public_fields, optional_response_fields) }
+            it { has_all_fields(json['users'], @any_user, public_fields) }
           end
         end
       end
@@ -86,7 +82,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
           subject { response }
           it { is_expected.to respond_with_ok }
-          it { has_all_fields(json['users'], user, public_fields, optional_response_fields) }
+          it { has_all_fields(json['users'], user, public_fields) }
         end
 
         context 'when requesting non existent user' do
@@ -136,7 +132,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
               subject { response }
               it { is_expected.to respond_with_ok }
-              it { has_all_fields(json['users'], @any_user, public_fields, optional_response_fields) }
+              it { has_all_fields(json['users'], @any_user, public_fields) }
             end
 
             context 'with email' do
@@ -147,7 +143,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
               subject { response }
               it { is_expected.to respond_with_ok }
-              it { has_all_fields(json['users'], @any_user, public_fields, optional_response_fields) }
+              it { has_all_fields(json['users'], @any_user, public_fields) }
               it 'sets unconfirmed_email and does not change email' do
                 @any_user.reload
                 expect(@any_user.unconfirmed_email).to eq @params[:users][:email]
@@ -180,7 +176,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
             subject { response }
             it { is_expected.to respond_with_ok }
-            it { has_all_fields(json['users'], user, public_fields, optional_response_fields) }
+            it { has_all_fields(json['users'], user, public_fields) }
           end
 
           context 'with role' do
@@ -199,7 +195,7 @@ RSpec.describe V1::UsersController, :type => :controller do
 
             subject { response }
             it { is_expected.to respond_with_ok }
-            it { has_all_fields(json['users'], user, public_fields, optional_response_fields) }
+            it { has_all_fields(json['users'], user, public_fields) }
           end
         end
 

@@ -5,5 +5,8 @@ json.links do
 end
 
 json.references do
-  json.partial! 'v1/references/reference', reference: @reference
+  json.partial! 'v1/references/reference',
+                reference: @reference,
+                fields: @fields,
+                nested_fields: @nested_fields
 end

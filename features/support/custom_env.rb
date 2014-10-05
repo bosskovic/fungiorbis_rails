@@ -24,6 +24,7 @@ def public_fields(model, options={})
       fields += V1::UsersController::OPTIONAL_RESPONSE_FIELDS if options[:include_optional]
       fields += V1::SpeciesController::PUBLIC_FIELDS
       fields += V1::ReferencesController::PUBLIC_FIELDS
+      fields += V1::CharacteristicsController::PUBLIC_FIELDS
     when :user
       fields += V1::UsersController::PUBLIC_FIELDS
       fields += V1::UsersController::OPTIONAL_RESPONSE_FIELDS if options[:include_optional]
@@ -31,8 +32,8 @@ def public_fields(model, options={})
       fields += V1::SpeciesController::PUBLIC_FIELDS
     when :reference, :references
       fields += V1::ReferencesController::PUBLIC_FIELDS
-    when :characteristic
-      fields += V1::CharacteristicController::PUBLIC_FIELDS
+    when :characteristic, :characteristics
+      fields += V1::CharacteristicsController::PUBLIC_FIELDS
     else
       raise "unknown model #{model} for public fields"
   end

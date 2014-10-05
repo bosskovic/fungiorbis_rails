@@ -2,7 +2,8 @@ class V1::UsersController < ApplicationController
   include CamelCaseConvertible
   include Pageable
 
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
+  before_action { |controller| controller.send :set_pagination, User, 'users_url' if action_name == 'index' }
 
   load_and_authorize_resource only: :index
 
@@ -11,9 +12,7 @@ class V1::UsersController < ApplicationController
   OPTIONAL_RESPONSE_FIELDS = [:unconfirmedEmail, :authToken]
 
   def index
-    set_pagination User, 'users_url'
     @users = User.active.paginate(page: @meta[:page], per_page: @meta[:per_page])
-
     head :no_content if @users.empty?
   end
 

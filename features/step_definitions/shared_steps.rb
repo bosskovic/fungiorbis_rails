@@ -3,13 +3,18 @@ Given(/^there (?:are|is) (\d+) (species|species with characteristics|reference|r
   FactoryGirl.create_list(model.to_sym, number.to_i)
 end
 
-
+# TODO refactor ?
 And(/^response should include link to endpoint \/([^"]*)$/) do |resource_path|
-  resource_name = resource_path.split('/').first
+  if resource_path.include? 'characteristic'
+    resource_name = 'characteristics'
+  else
+    resource_name = resource_path.split('/').first
+  end
+
   expect(last_json).to be_json_eql(JsonSpec.remember("#{DOMAIN}/#{resource_path}".to_json)).at_path("links/#{resource_name}")
 end
 
-And(/^response should include\s?(.*?)? (user|species|reference) object with all public fields(?: plus )?(#{CAPTURE_FIELDS})?$/) do |scope, model, additional_fields|
+And(/^response should include\s?(.*?)? (user|species|reference|characteristic) object with all public fields(?: plus )?(#{CAPTURE_FIELDS})?$/) do |scope, model, additional_fields|
   case scope
     when 'first'
       record = model_class(model).first
@@ -43,7 +48,7 @@ And (/^response should include (user|species) object with fields: (.*?)$/) do |m
   expect(resource_hash.keys).to include(*fields)
 end
 
-And(/^the (user|species|reference) was(\snot)? (?:added to|updated in) the database$/) do |model, negation|
+And(/^the (user|species|reference|characteristic) was(\snot)? (?:added to|updated in) the database$/) do |model, negation|
   record = resource_from_request(model.to_sym)
 
   if negation
@@ -53,10 +58,15 @@ And(/^the (user|species|reference) was(\snot)? (?:added to|updated in) the datab
   end
 end
 
-When(/^I send a PATCH request (?:for|to) "([^"]*)" with (?:")?(all public fields|#{CAPTURE_FIELDS})(?:")? updating (?:last|a) (species|reference)$/) do |path, fields, model|
+# TODO refactor ?
+When(/^I send a PATCH request (?:for|to) "([^"]*)" with (?:")?(all public fields|#{CAPTURE_FIELDS})(?:")? updating (?:last|a) (species|reference|characteristic)$/) do |path, fields, model|
   load_last_record(model)
 
-  path = path.gsub(':UUID', last_record.uuid)
+  path.gsub!(':UUID', last_record.uuid)
+
+  if model == 'characteristic'
+    path.gsub!(':SPECIES_UUID', last_record.species.uuid)
+  end
 
   if fields == 'all public fields'
     attributes = FactoryGirl.attributes_for(model.to_sym)
@@ -74,7 +84,7 @@ When(/^I send a PATCH request (?:for|to) "([^"]*)" with (?:")?(all public fields
   }
 end
 
-And(/^(?:")?(all public|#{CAPTURE_FIELDS})(?:")? fields of the last (species|reference) were updated$/) do |fields, model|
+And(/^(?:")?(all public|#{CAPTURE_FIELDS})(?:")? fields of the last (species|reference|characteristic) were updated$/) do |fields, model|
   new_record = model_class(model).last
 
   fields = public_fields(model, output: :symbol) if fields == 'all public'
@@ -83,7 +93,7 @@ And(/^(?:")?(all public|#{CAPTURE_FIELDS})(?:")? fields of the last (species|ref
   case model.to_sym
     when :species
       fields -= [:synonyms, :growth_type, :nutritive_group]
-    when :reference
+    when :reference, :characteristic
 
     else
       raise "unsupported model #{model} for checking updated fields in last record"
@@ -94,7 +104,7 @@ And(/^(?:")?(all public|#{CAPTURE_FIELDS})(?:")? fields of the last (species|ref
   fields.each do |field|
     sent_value = sent_params[field]
     db_value = new_record.send(field)
-    expect(sent_value).to eq db_value
+    expect(sent_value).to eq(db_value), lambda { "expected #{field} to be #{db_value}, got #{sent_value}" }
   end
 end
 
@@ -110,19 +120,20 @@ And(/^([^"]*) of (species) were( not)? changed$/) do |associations, model, negat
   end
 end
 
-And(/^the (species|references) array should include objects with all public fields$/) do |model|
-  expect(resource_hash_from_response(model).first.keys).to match_array public_fields(model.to_sym, output: :string)
+And(/^the (species|references|characteristics) array should include objects with all public fields$/) do |model|
+  expect(resource_hash_from_response(model).first.keys - ['links']).to match_array public_fields(model.to_sym, output: :string)
 end
 
-When(/^I send a DELETE request (?:for|to) "([^"]*)" for (?:the last|a) (species|reference)$/) do |path, model|
+When(/^I send a DELETE request (?:for|to) "([^"]*)" for (?:the last|a) (species|reference|characteristic)$/) do |path, model|
   load_last_record(model)
 
-  path = path.gsub(':UUID', last_record.uuid)
+  path.gsub!(':UUID', last_record.uuid)
+  path.gsub!(':SPECIES_UUID', last_record.species.uuid) if model == 'characteristic'
 
   steps %{ When I send a DELETE request to "#{path}" }
 end
 
-And(/^the last (species|reference) was(\snot)? deleted$/) do |model, negation|
+And(/^the last (species|reference|characteristic) was(\snot)? deleted$/) do |model, negation|
   if negation
     expect(last_record.reload).not_to be_nil
   else
@@ -130,9 +141,14 @@ And(/^the last (species|reference) was(\snot)? deleted$/) do |model, negation|
   end
 end
 
-And(/^location header should include link to created (species|reference)$/) do |model|
+And(/^location header should include link to created (species|reference|characteristic)$/) do |model|
   record = model_class(model).last
-  expect(last_response.header['Location']).to eq "#{DOMAIN}/#{resource_name(model)}/#{record.uuid}"
+  if model.to_s == 'characteristic'
+    path = "#{DOMAIN}/species/#{record.species.uuid}/#{resource_name(model)}/#{record.uuid}"
+  else
+    path = "#{DOMAIN}/#{resource_name(model)}/#{record.uuid}"
+  end
+  expect(last_response.header['Location']).to eq path
 end
 
 And /^I send a GET request to "([^"]*)" for first (species|reference) in database$/ do |path, model|
@@ -140,4 +156,15 @@ And /^I send a GET request to "([^"]*)" for first (species|reference) in databas
   path.gsub!(':UUID', uuid)
   @last_href = "#{DOMAIN}#{path}"
   get(path).inspect
+end
+
+And(/^the (reference|characteristic) id(s)? should be present in the links object$/) do |model, array|
+  uuid = main_resource_links_object[model] || main_resource_links_object[model.pluralize]
+  if array
+    expect(uuid.class).to eq Array
+    uuid = uuid.first
+  end
+
+  expect(uuid.class).to eq String
+  expect(model_class(model).find_by_uuid(uuid)).not_to be_nil
 end

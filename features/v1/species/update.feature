@@ -25,14 +25,6 @@ Feature: Updating species, endpoint: PATCH species/:UUID
     And "familia and ordo" fields of the last species were updated
     And species characteristics were not changed
 
-  Scenario: Supervisor updates some public fields; species characteristics were not changed even though they were sent
-    Given there is 1 species with characteristics
-    And I authenticate as supervisor
-    When I send a PATCH request to "/species/:UUID" with "familia, ordo and characteristics" updating last species
-    Then the response status should be "NO CONTENT"
-    And "familia and ordo" fields of the last species were updated
-    And species characteristics were not changed
-
   Scenario Outline: Supervisor sends invalid request to update last species
     Given there is 1 species
     And I authenticate as supervisor

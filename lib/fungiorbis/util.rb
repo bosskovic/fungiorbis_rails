@@ -20,5 +20,17 @@ module Fungiorbis
     def elements_to_str(array)
       array.map { |e| e.to_s }
     end
+
+    def array_is_superset?(superset, array)
+      superset.nil? && array.nil? || !superset.nil? && !array.nil? && array & superset == array
+    end
+
+    def hash_access(hash, path)
+      path.split('.').each do |p|
+        hash = hash[p.to_s] || hash[p.to_sym]
+        break unless hash
+      end
+      hash
+    end
   end
 end

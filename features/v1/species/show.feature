@@ -10,6 +10,7 @@ Feature: Show Species, endpoint: GET species/:UUID
     Then the response status should be "OK"
     And response should include first species object with all public fields
     And species should include array of characteristics with all public fields
+    And characteristic should include expanded reference with all public fields
     And response should include link to endpoint /species
 
   Scenario: Requesting details of non existing species

@@ -129,4 +129,54 @@ RSpec.describe Fungiorbis::Util do
       it_behaves_like 'csv_string_to_array'
     end
   end
+
+  describe 'hash_access' do
+    let(:hash) { {
+        h1: {
+            h11: {
+                h111: 123
+            },
+            'h12' => {
+                'h121' => 111
+            },
+            h13: 999
+        },
+        h2: {
+            h21: 888
+        },
+        h3: 123
+    } }
+
+    context 'when root key requested' do
+      specify { expect(hash_access(hash, 'h3')).to eq 123 }
+      specify { expect(hash_access(hash, 'h2')).to eq ({ :h21 => 888 }) }
+    end
+
+    context 'when middle key requested' do
+      specify { expect(hash_access(hash, 'h1.h11')).to eq hash[:h1][:h11] }
+      specify { expect(hash_access(hash, 'h1.h12')).to eq hash[:h1]['h12'] }
+    end
+
+    context 'when leaf key requested' do
+      specify { expect(hash_access(hash, 'h1.h11.h111')).to eq hash[:h1][:h11][:h111] }
+      specify { expect(hash_access(hash, 'h1.h12.h121')).to eq hash[:h1]['h12']['h121'] }
+    end
+
+    context 'when invalid arguments' do
+      context 'with empty hash' do
+        specify { expect(hash_access({}, 'h3')).to be_nil }
+      end
+
+      context 'with empty path' do
+        it 'returns the complete hash' do
+          expect(hash_access(hash, '')).to eq hash
+        end
+      end
+
+      context 'with incorrect path' do
+        specify { expect(hash_access(hash, 'some_key')).to be_nil }
+      end
+    end
+  end
+
 end

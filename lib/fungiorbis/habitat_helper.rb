@@ -6,36 +6,36 @@ module Fungiorbis
 
     HABITATS_FILE_PATH = 'config/locales/en/habitats.yml'
 
-    def all_habitat_keys
-      @all_habitats ||= elements_to_sym habitats.keys
+    def all_habitat_keys(options={ output: :symbol })
+      @all_habitats ||= options[:output] == :symbol ? elements_to_sym(habitats_hash.keys) : elements_to_str(habitats_hash.keys)
     end
 
     def subhabitat_keys(habitat_key)
-      if habitats[habitat_key.to_s]
-        has_subhabitats?(habitat_key) ? habitats[habitat_key.to_s]['subhabitat'].keys : nil
+      if habitats_hash[habitat_key.to_s]
+        has_subhabitats?(habitat_key) ? habitats_hash[habitat_key.to_s]['subhabitat'].keys : nil
       else
         raise "Unknown habitat #{habitat_key}"
       end
     end
 
     def species_keys(species_group)
-      if species[species_group.to_s]
-        elements_to_sym species[species_group.to_s].keys
+      if species_hash[species_group.to_s]
+        elements_to_sym species_hash[species_group.to_s].keys
       else
         raise "Unknown species group #{species_group}"
       end
     end
 
     def allowed_species_groups(habitat_key, subhabitat_key=nil)
-      raise "Unknown habitat #{habitat_key}" unless habitats[habitat_key.to_s]
+      raise "Unknown habitat #{habitat_key}" unless habitats_hash[habitat_key.to_s]
 
       if subhabitat_key
-        raise "Habitat #{habitat_key} has no subhabitats" unless habitats[habitat_key.to_s]['subhabitat']
-        raise "Unknown subhabitat #{subhabitat_key}" unless habitats[habitat_key.to_s]['subhabitat'][subhabitat_key.to_s]
+        raise "Habitat #{habitat_key} has no subhabitats" unless habitats_hash[habitat_key.to_s]['subhabitat']
+        raise "Unknown subhabitat #{subhabitat_key}" unless habitats_hash[habitat_key.to_s]['subhabitat'][subhabitat_key.to_s]
 
-        habitats[habitat_key.to_s]['subhabitat'][subhabitat_key.to_s]['allowed_species_groups'] || []
+        habitats_hash[habitat_key.to_s]['subhabitat'][subhabitat_key.to_s]['allowed_species_groups'] || []
       else
-        habitats[habitat_key.to_s]['allowed_species_groups'] || []
+        habitats_hash[habitat_key.to_s]['allowed_species_groups'] || []
       end
     end
 
@@ -55,7 +55,7 @@ module Fungiorbis
           all_habitat_keys
 
       habitats_sample = (habitats_sample+habitats_sample).flatten
-      sample = options[:number_of_habitats] || rand(1 + habitats_sample.length * 2)
+      sample = options[:number_of_habitats] || 1 + rand(habitats_sample.length * 2)
       habitats_sample = Array(habitats_sample.sample(sample))
 
       habitats_sample.map! do |habitat|
@@ -93,18 +93,18 @@ module Fungiorbis
     private
 
     def has_subhabitats?(habitat_key)
-      habitats[habitat_key.to_s]['subhabitat']
+      habitats_hash[habitat_key.to_s]['subhabitat']
     end
 
     def habitats_yaml
       @habitats_yaml ||= YAML.load_file(HABITATS_FILE_PATH)['en']
     end
 
-    def habitats
+    def habitats_hash
       habitats_yaml['habitats']
     end
 
-    def species
+    def species_hash
       habitats_yaml['species']
     end
   end

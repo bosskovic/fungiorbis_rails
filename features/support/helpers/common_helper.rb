@@ -14,6 +14,13 @@ module CommonHelper
     JSON.parse(last_json)[resource_name(model)]
   end
 
+  def main_resource_links_object
+    json = JSON.parse(last_json)
+    resource = %w(users species references characteristics).each { |model| break json[model] if json[model] }
+    resource = resource.first if resource.is_a? Array
+    resource['links']
+  end
+
   def correct_representation?(model, record, fields=nil)
     json_object = resource_hash_from_response(model)
 
@@ -32,6 +39,11 @@ module CommonHelper
     case model
       when :user
         keys_for_removal += [:password, :password_confirmation]
+      when :characteristic
+        keys_for_removal += [:reference_id]
+        [:fruiting_body, :microscopy, :flesh, :chemistry, :note, :substrates, :habitats].each do |key|
+          attributes[key] = attributes[key].to_json
+        end
       when :species, :reference
       else
         raise "unknown model #{model} for resource from request"
@@ -70,6 +82,10 @@ module CommonHelper
 
   def associations(model)
     model_class(model).reflect_on_all_associations.map { |a| a.name }
+  end
+
+  def response_is_for(model)
+    !resource_hash_from_response(model).nil?
   end
 
 end
