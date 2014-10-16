@@ -48,5 +48,7 @@ end
 #
 # Indexes
 #
-#  index_characteristics_on_uuid  (uuid) UNIQUE
+#  index_characteristics_on_reference_id  (reference_id)
+#  index_characteristics_on_species_id    (species_id)
+#  index_characteristics_on_uuid          (uuid) UNIQUE
 #

@@ -32,6 +32,8 @@ ActiveRecord::Schema.define(version: 20140915152225) do
     t.datetime "updated_at"
   end
 
+  add_index "characteristics", ["reference_id"], name: "index_characteristics_on_reference_id", using: :btree
+  add_index "characteristics", ["species_id"], name: "index_characteristics_on_species_id", using: :btree
   add_index "characteristics", ["uuid"], name: "index_characteristics_on_uuid", unique: true, using: :btree
 
   create_table "references", force: true do |t|

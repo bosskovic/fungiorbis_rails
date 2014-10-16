@@ -6,6 +6,8 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+require 'fungiorbis/old_data_import'
+
 User.create(email: 'ela@fungiorbis.edu',
             password: 'Ela12345!',
             password_confirmation: 'Ela12345!',
@@ -15,3 +17,5 @@ User.create(email: 'ela@fungiorbis.edu',
             institution: 'Prirodno-matematički fakultet',
             title: 'MSc',
             confirmed_at: DateTime.now)
+
+Fungiorbis::OldDataImport.import_species

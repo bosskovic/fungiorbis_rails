@@ -24,5 +24,7 @@ class CreateCharacteristics < ActiveRecord::Migration
     end
 
     add_index :characteristics, :uuid, unique: true
+    add_index :characteristics, :reference_id
+    add_index :characteristics, :species_id
   end
 end
