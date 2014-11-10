@@ -48,7 +48,9 @@ test: &test
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  <<: *default
+#  <<: *default
+  adapter: postgresql
+  encoding: utf8
   database: fungiorbis_production
   username: fungiorbis
   password: <%= ENV['RAILS_FUNGIORBIS_DATABASE_PASSWORD'] %>
