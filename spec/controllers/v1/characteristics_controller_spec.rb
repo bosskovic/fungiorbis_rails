@@ -94,11 +94,11 @@ RSpec.describe V1::CharacteristicsController, :type => :controller do
         subject { response }
         it { is_expected.to respond_with_ok }
         it { is_expected.to respond_with_objects_array(Characteristic) }
-        it { responds_with_characteristic_objects_in_array }
-        it { has_all_links(json, 'characteristics', ['reference', 'species']) }
         it { is_expected.to respond_with_links(:characteristic) }
       end
 
+      it { responds_with_characteristic_objects_in_array }
+      it { has_all_links(json, 'characteristics', ['reference', 'species']) }
       it 'belongs to the specified reference id' do
         json['characteristics'].each do |c|
           expect(c['links']['reference']).to eq @reference.uuid

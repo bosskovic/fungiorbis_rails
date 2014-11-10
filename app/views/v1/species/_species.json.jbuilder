@@ -1,9 +1,9 @@
 json.id species.uuid
-
+json.fullName "#{species.genus} #{species.name}"
 species_fields = to_underscore(fields)
 json.extract! species, *species_fields
 
-if expand? :characteristics, inclusions
+if expand?(:characteristics, inclusions)
   json.characteristics species.characteristics,
                        partial: 'v1/characteristics/characteristic',
                        collection: species.characteristics,

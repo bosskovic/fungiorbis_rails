@@ -1,10 +1,10 @@
-json.status :success
+json.status :success unless @filter
 
 json.links do
   json.species species_url_template
   json.set! 'species.characteristics', characteristic_url_template unless expand?(:characteristics, @inclusions)
   json.set! 'species.characteristics.reference', reference_url_template unless expand?('characteristics.reference', @inclusions)
-end
+end unless @filter
 
 json.species @species, partial: 'v1/species/species',
              collection: @species,
@@ -17,4 +17,4 @@ json.meta do
   json.species do
     json.partial! 'v1/common/meta'
   end
-end
+end unless @filter
