@@ -6,16 +6,16 @@ def pagination_with_context(context, model_class)
     case context
       when 'without meta params'
         page = 1
-        per_page = model_class.per_page
+        per_page = model_class::PER_PAGE
       when 'with perPage within limit'
         page = 2
-        per_page = model_class.per_page - 1
+        per_page = model_class::PER_PAGE - 1
       when 'with perPage outside the limit'
         page = 3
-        per_page = model_class.per_page
+        per_page = model_class::PER_PAGE
       when 'with page outside the limit'
         page = 1
-        per_page = model_class.per_page
+        per_page = model_class::PER_PAGE
       else
         raise 'unknown context'
     end
@@ -31,7 +31,7 @@ def pagination_with_context(context, model_class)
   def pagination(model, page, per_page, page_count, count)
     page ||= 1
 
-    per_page ||= model.per_page
+    per_page ||= model::PER_PAGE
     page_count ||= 1
     previous_page = page == 1 ? nil : page-1
     next_page = page == page_count ? nil : page+1

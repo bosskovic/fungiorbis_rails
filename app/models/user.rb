@@ -7,6 +7,9 @@ class User < ActiveRecord::Base
   SUPERVISOR_ROLE = 'supervisor'
   ROLES = [USER_ROLE, CONTRIBUTOR_ROLE, SUPERVISOR_ROLE]
 
+  PER_PAGE = 10
+  MAX_PER_PAGE = 100
+
   acts_as_token_authenticatable
 
   devise :database_authenticatable, :registerable, :recoverable, :trackable, :validatable, :confirmable
@@ -20,9 +23,6 @@ class User < ActiveRecord::Base
   # validates_uniqueness_of :email, case_sensitive: true
 
   validate :password_complexity
-
-  self.per_page = 10
-  self.max_per_page = 100
 
   def supervisor?
     self.role == SUPERVISOR_ROLE

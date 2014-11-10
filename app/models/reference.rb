@@ -1,14 +1,14 @@
 class Reference < ActiveRecord::Base
   include Uuid
 
+  PER_PAGE = 10
+  MAX_PER_PAGE = 100
+
   has_many :characteristics, dependent: :destroy
 
   validates :title, presence: true
   validates :isbn, uniqueness: true, if: 'isbn.present?'
   validates :url, format: { with: URI.regexp }, uniqueness: true, if: 'url.present?'
-
-  self.per_page = 10
-  self.max_per_page = 100
 
 end
 

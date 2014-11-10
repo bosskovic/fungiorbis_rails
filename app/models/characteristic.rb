@@ -7,6 +7,9 @@ class Characteristic < ActiveRecord::Base
   SPECIES_VALIDATION_ERROR = 'must take species from the list for specific habitat and subhabitat'
   SUBSTRATES_VALIDATION_ERROR = "have to be included in: #{all_substrate_keys.inspect}"
 
+  PER_PAGE = 10
+  MAX_PER_PAGE = 100
+
   belongs_to :species
   belongs_to :reference
 
@@ -25,9 +28,6 @@ class Characteristic < ActiveRecord::Base
   validate :habitats_array
   validate :substrates_array
   validate :localized_hashes
-
-  self.per_page = 10
-  self.max_per_page = 100
 
   private
 

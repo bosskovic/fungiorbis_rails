@@ -3,11 +3,11 @@ module Pageable
 
   private
 
-  def set_pagination(model, url_template)
+  def set_pagination(model_class, url_template)
     @meta ||= {}
     @meta[:page] = params[:page].blank? ? 1 : params[:page].to_i
-    @meta[:per_page] = page_size_within_bounds?(model, params) ? params['perPage'].to_i : model.per_page
-    @meta[:count] = model.count
+    @meta[:per_page] = page_size_within_bounds?(model_class, params) ? params['perPage'].to_i : model_class::PER_PAGE
+    @meta[:count] = model_class.count
 
     @meta[:page] = 1 if page_count_out_of_bounds?
 
@@ -19,8 +19,8 @@ module Pageable
     @meta[:next_href] = last_page? ? nil : next_href(url_template)
   end
 
-  def page_size_within_bounds?(model, params)
-    (1..model.max_per_page).include?(params['perPage'].to_i)
+  def page_size_within_bounds?(model_class, params)
+    (1..model_class::MAX_PER_PAGE).include?(params['perPage'].to_i)
   end
 
   def page_count_out_of_bounds?

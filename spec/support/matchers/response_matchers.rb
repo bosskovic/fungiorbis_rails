@@ -122,7 +122,7 @@ RSpec::Matchers.define :respond_with_objects_array do |model|
     expect(array).to be_an_instance_of(Array)
 
     model_count = model.count
-    array_count = model_count > model.per_page ? model.per_page : model_count
+    array_count = model_count > model::PER_PAGE ? model::PER_PAGE : model_count
 
     expect(array).not_to be_empty
     expect(array.count).to eq array_count

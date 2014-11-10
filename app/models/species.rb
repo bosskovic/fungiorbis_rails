@@ -8,6 +8,9 @@ class Species < ActiveRecord::Base
   GROWTH_TYPE_VALIDATION_ERROR = "has to be one of: #{GROWTH_TYPES.inspect}"
   NUTRITIVE_GROUPS_VALIDATION_ERROR = "has to be one of: #{NUTRITIVE_GROUPS.inspect}"
 
+  PER_PAGE = 10
+  MAX_PER_PAGE = 100
+
   has_many :characteristics, dependent: :destroy
 
   before_validation :generate_url
@@ -24,9 +27,6 @@ class Species < ActiveRecord::Base
 
   validates :growth_type, allow_nil: true, inclusion: { in: GROWTH_TYPES, message: GROWTH_TYPE_VALIDATION_ERROR }
   validates :nutritive_group, allow_nil: true, inclusion: { in: NUTRITIVE_GROUPS, message: NUTRITIVE_GROUPS_VALIDATION_ERROR }
-
-  self.per_page = 10
-  self.max_per_page = 100
 
   protected
 
