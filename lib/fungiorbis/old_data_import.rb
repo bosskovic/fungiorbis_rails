@@ -7,22 +7,24 @@ module Fungiorbis
       incomplete_species = []
       existing_species = []
       added_species = []
-      File.foreach('db/old_data/species.csv') do |line|
-        species = line.split(/,|\//)[0..7].each_with_index do |item, index|
-          item.strip!
-          index == 1 ? item.downcase! : item.capitalize!
-        end
+      Species.transaction do
+        File.foreach('db/old_data/species.csv') do |line|
+          species = line.split(/,|\//)[0..7].each_with_index do |item, index|
+            item.strip!
+            index == 1 ? item.downcase! : item.capitalize!
+          end
 
-        if species.any? { |field| field.empty? }
-          incomplete_species << species
-        elsif Species.where(name: species[0], genus: species[1]).first
-          existing_species << species
-        else
-          s = Species.new
-          s.name, s.genus, s.familia, s.ordo, s.subclassis, s.classis, s.subphylum, s.phylum = species
+          if species.any? { |field| field.empty? }
+            incomplete_species << species
+          elsif Species.where(name: species[1], genus: species[0]).first
+            existing_species << species
+          else
+            s = Species.new
+            s.genus, s.name, s.familia, s.ordo, s.subclassis, s.classis, s.subphylum, s.phylum = species
 
-          s.save!
-          added_species << species
+            s.save!
+            added_species << species
+          end
         end
       end
 
