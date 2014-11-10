@@ -108,7 +108,7 @@ RSpec::Matchers.define :serve_422_json_with do |errors|
     expect(JSON.parse(response.body)['errors']['details']).to eq errors
   end
   failure_message do |response|
-    "expected the response '422 Unprocessable', got '#{response.response_code} #{response.message}\n
+    "expected the response '422 Unprocessable Entity', got '#{response.response_code} #{response.message}\n
     expected to render_template public/422.json.jbuilder\n
     expected ['errors']['details'] = #{errors}\n
     got: #{JSON.parse(response.body)['errors']['details']}"
@@ -155,7 +155,7 @@ RSpec::Matchers.define :respond_with_meta do |model_class, expected_meta|
       "Expected response meta to be Hash, got #{response_meta.class.name}"
     else
       "#{expected_meta.keys.inspect}
-#{response_meta.keys.inspect}"
+      #{response_meta.keys.inspect}"
     end
   end
 end

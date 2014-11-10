@@ -15,7 +15,11 @@ RSpec.shared_examples 'an index with meta object' do |model_class|
         end
 
         subject { response }
-        it { is_expected.to respond_with_meta(model_class, send(:pagination_with_context, pagination_context[:context], model_class)) }
+        it 'behaves like meta' do
+          it_behaves_like_meta = respond_with_meta(model_class, send(:pagination_with_context, pagination_context[:context], model_class))
+          expect(it_behaves_like_meta).to be_truthy
+          # is_expected.to respond_with_meta(model_class, send(:pagination_with_context, pagination_context[:context], model_class))
+        end
       end
     end
   end
