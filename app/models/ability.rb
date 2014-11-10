@@ -13,6 +13,9 @@ class Ability
       end
     end
 
+    can :show, :habitats
+    can :show, :substrates
+
     can [:index, :show], Species
     can [:index, :show], Reference
     can [:index, :show], Characteristic

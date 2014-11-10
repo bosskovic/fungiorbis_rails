@@ -21,11 +21,11 @@ module Fungiorbis
       elements_to_str Array(all_substrate_keys.sample(sample))
     end
 
-    private
-
-    def substrates_yaml
-      @substrates_yaml ||= YAML.load_file(SUBSTRATES_FILE_PATH)['en']
+    def substrates_yaml(locale='en')
+      @substrates_yaml ||= YAML.load_file(SUBSTRATES_FILE_PATH)[locale]
     end
+
+    private
 
     def substrates_hash
       substrates_yaml['substrates']

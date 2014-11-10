@@ -55,5 +55,13 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:update, Characteristic) }
       it { is_expected.not_to be_able_to(:destroy, Characteristic) }
     end
+
+    context 'with Habitats' do
+      it { is_expected.to be_able_to(:show, :habitats) }
+    end
+
+    context 'with Substrates' do
+      it { is_expected.to be_able_to(:show, :substrates) }
+    end
   end
 end

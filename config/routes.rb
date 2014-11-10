@@ -13,6 +13,9 @@ Rails.application.routes.draw do
       resources :characteristics, only: [:index, :show, :create, :update, :destroy], param: :uuid
     end
     resources :references, only: [:index, :show, :create, :update, :destroy], param: :uuid
+
+    resource :habitats, only: :show
+    resource :substrates, only: :show
   end
 
 end

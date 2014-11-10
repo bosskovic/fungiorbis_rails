@@ -90,14 +90,14 @@ module Fungiorbis
       habitats_sample.uniq
     end
 
+    def habitats_yaml(locale='en')
+      @habitats_yaml ||= YAML.load_file(HABITATS_FILE_PATH)[locale]
+    end
+
     private
 
     def has_subhabitats?(habitat_key)
       habitats_hash[habitat_key.to_s]['subhabitat']
-    end
-
-    def habitats_yaml
-      @habitats_yaml ||= YAML.load_file(HABITATS_FILE_PATH)['en']
     end
 
     def habitats_hash

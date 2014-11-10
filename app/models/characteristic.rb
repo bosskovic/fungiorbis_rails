@@ -35,7 +35,7 @@ class Characteristic < ActiveRecord::Base
     locales = elements_to_str I18n.available_locales
     [:fruiting_body, :microscopy, :flesh, :chemistry, :note].each do |field|
       hash = self.send(field)
-      unless hash.empty? || array_is_superset?(locales, hash.keys)
+      unless hash.blank? || array_is_superset?(locales, hash.keys)
         errors.add field, "locale keys have to be included in #{locales}"
       end
     end
@@ -43,41 +43,49 @@ class Characteristic < ActiveRecord::Base
 
   # TODO: extract as custom validation
   def habitats_array
-    habitats.each do |habitat|
-      if habitat.keys.length > 1
-        errors.add :habitats, 'incorrect habitats format'
-        return false
-      elsif all_habitat_keys(output: :string).include?(habitat.keys.first.to_s)
-        habitat_key = habitat.keys.first.to_s
-        habitat = habitat.values.first
-        unless habitat.empty? || !habitat[:subhabitat]
-          allowed_subhabitats = subhabitat_keys(habitat_key)
-          unless array_is_superset?(allowed_subhabitats, Array(habitat[:subhabitat]))
-            errors.add :habitats, SUBHABITATS_VALIDATION_ERROR
-            return false
+    if habitats.is_a? Array
+      habitats.each do |habitat|
+        if habitat.keys.length > 1
+          errors.add :habitats, 'incorrect habitats format'
+          return false
+        elsif all_habitat_keys(output: :string).include?(habitat.keys.first.to_s)
+          habitat_key = habitat.keys.first.to_s
+          habitat = habitat.values.first
+          unless habitat.empty? || !habitat[:subhabitat]
+            allowed_subhabitats = subhabitat_keys(habitat_key)
+            unless array_is_superset?(allowed_subhabitats, Array(habitat[:subhabitat]))
+              errors.add :habitats, SUBHABITATS_VALIDATION_ERROR
+              return false
+            end
           end
-        end
-        unless habitat.empty? || !habitat[:species]
-          allowed_species = elements_to_str(allowed_species(habitat_key, habitat[:subhabitat]))
-          species = elements_to_str(Array(habitat[:species]))
-          unless array_is_superset?(allowed_species, species)
-            errors.add :habitats, SPECIES_VALIDATION_ERROR
-            return false
+          unless habitat.empty? || !habitat[:species]
+            allowed_species = elements_to_str(allowed_species(habitat_key, habitat[:subhabitat]))
+            species = elements_to_str(Array(habitat[:species]))
+            unless array_is_superset?(allowed_species, species)
+              errors.add :habitats, SPECIES_VALIDATION_ERROR
+              return false
+            end
           end
+        else
+          errors.add :habitats, HABITATS_VALIDATION_ERROR
+          return false
         end
-      else
-        errors.add :habitats, HABITATS_VALIDATION_ERROR
-        return false
       end
+    else
+      true
     end
   end
 
   # TODO: extract as custom validation
   def substrates_array
-    s = elements_to_str substrates
-    unless array_is_superset?(all_substrate_keys(output: :string), s)
-      errors.add :substrates, SUBSTRATES_VALIDATION_ERROR
-      false
+    if substrates.is_a? Array
+      s = elements_to_str substrates
+      unless array_is_superset?(all_substrate_keys(output: :string), s)
+        errors.add :substrates, SUBSTRATES_VALIDATION_ERROR
+        false
+      end
+    else
+      true
     end
   end
 
