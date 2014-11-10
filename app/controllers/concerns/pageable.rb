@@ -5,7 +5,7 @@ module Pageable
 
   def set_pagination(model, url_template)
     @meta ||= {}
-    @meta[:page] = params[:page] || 1
+    @meta[:page] = params[:page].blank? ? 1 : params[:page].to_i
     @meta[:per_page] = page_size_within_bounds?(model, params) ? params['perPage'].to_i : model.per_page
     @meta[:count] = model.count
 
@@ -20,7 +20,7 @@ module Pageable
   end
 
   def page_size_within_bounds?(model, params)
-    (1..model.per_page).include?(params['perPage'].to_i)
+    (1..model.max_per_page).include?(params['perPage'].to_i)
   end
 
   def page_count_out_of_bounds?

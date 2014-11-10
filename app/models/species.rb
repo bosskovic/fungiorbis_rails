@@ -26,6 +26,7 @@ class Species < ActiveRecord::Base
   validates :nutritive_group, allow_nil: true, inclusion: { in: NUTRITIVE_GROUPS, message: NUTRITIVE_GROUPS_VALIDATION_ERROR }
 
   self.per_page = 10
+  self.max_per_page = 100
 
   protected
 

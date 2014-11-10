@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   validate :password_complexity
 
   self.per_page = 10
+  self.max_per_page = 100
 
   def supervisor?
     self.role == SUPERVISOR_ROLE

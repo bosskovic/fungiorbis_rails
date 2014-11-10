@@ -27,6 +27,7 @@ class Characteristic < ActiveRecord::Base
   validate :localized_hashes
 
   self.per_page = 10
+  self.max_per_page = 100
 
   private
 
