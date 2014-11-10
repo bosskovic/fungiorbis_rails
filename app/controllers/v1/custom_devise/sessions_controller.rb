@@ -9,6 +9,8 @@ module V1
 
       ACCOUNT_DEACTIVATED_ERROR = 'Account deactivated. Please reactivate the account before signing in.'
 
+      skip_before_filter  :verify_authenticity_token
+
       # POST /users/sign_in
       def create
         allow_params_authentication!

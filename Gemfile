@@ -11,6 +11,7 @@ gem 'devise', '3.2.4'
 gem 'simple_token_authentication', '1.5.0'
 gem 'cancancan', '1.9.2'
 gem 'will_paginate', '3.0.7'
+gem 'rack-cors'
 
 gem 'rails-i18n'
 
@@ -23,6 +24,7 @@ group :development, :test do
   gem 'forgery', '0.6.0'
   gem 'byebug', '3.2.0'
   gem 'annotate', '~> 2.6.5'
+  gem 'metric_fu', '4.11.1'
 end
 
 group :test do

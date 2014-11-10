@@ -27,5 +27,16 @@ module RailsFungiorbis
     config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.{rb,yml}').to_s]
     config.i18n.default_locale = :en
     config.i18n.available_locales = [:en, :sr]
+
+    config.middleware.insert_before "ActionDispatch::Static", "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*',
+                 :headers => :any,
+                 :methods => [:get, :post, :delete, :put, :patch, :options, :head],
+                 :max_age => 0,
+                 :expose => :location
+      end
+    end
   end
 end
