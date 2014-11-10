@@ -4,7 +4,6 @@ source 'https://rubygems.org'
 #ruby-gemset=fungiorbis
 
 gem 'rails', '4.1.4'
-gem 'mysql2', '0.3.16'
 gem 'jbuilder', '~> 2.0'
 
 gem 'devise', '3.2.4'
@@ -16,6 +15,7 @@ gem 'rack-cors'
 gem 'rails-i18n'
 
 group :development, :test do
+  gem 'mysql2', '0.3.16'
   gem 'rspec-rails', '3.0.2'
   gem 'guard-rspec', '4.3.1', require: false
   gem 'fuubar', '2.0.0'
@@ -37,6 +37,11 @@ end
 group :doc do
   gem 'sdoc', '~> 0.4.0'
 end
+
+group :production do
+  gem 'pg'
+end
+
 
 # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
 #gem 'spring',      group: :development
