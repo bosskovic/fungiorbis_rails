@@ -90,17 +90,20 @@ RSpec.describe V1::CharacteristicsController, :type => :controller do
         get :index, { format: 'json', species_uuid: Species.first.uuid, referenceId: @reference.uuid }
       end
 
-      subject { response }
-      it { is_expected.to respond_with_ok }
+      context do
+        subject { response }
+        it { is_expected.to respond_with_ok }
+        it { is_expected.to respond_with_objects_array(Characteristic) }
+        it { responds_with_characteristic_objects_in_array }
+        it { has_all_links(json, 'characteristics', ['reference', 'species']) }
+        it { is_expected.to respond_with_links(:characteristic) }
+      end
+
       it 'belongs to the specified reference id' do
         json['characteristics'].each do |c|
           expect(c['links']['reference']).to eq @reference.uuid
         end
       end
-      it { is_expected.to respond_with_objects_array(Characteristic) }
-      it { responds_with_characteristic_objects_in_array }
-      it { has_all_links(json, 'characteristics', ['reference', 'species']) }
-      it { is_expected.to respond_with_links(:characteristic) }
     end
 
     context 'with custom fields' do
@@ -177,10 +180,7 @@ RSpec.describe V1::CharacteristicsController, :type => :controller do
       end
 
       context 'when sending valid params and requesting response body' do
-        before(:each) do
-
-          post :create, { format: 'json', respondWithBody: 'true' }.merge(characteristics: @params, species_uuid: Species.first.uuid)
-        end
+        before(:each) { post :create, { format: 'json', respondWithBody: 'true' }.merge(characteristics: @params, species_uuid: Species.first.uuid) }
 
         subject { response }
         it { is_expected.to respond_with_created }
@@ -296,6 +296,19 @@ RSpec.describe V1::CharacteristicsController, :type => :controller do
         subject { response }
         it { is_expected.to respond_with_no_content }
         specify { expect(response.body.strip).to be_empty }
+        it { updates_a_characteristic(characteristic) }
+      end
+
+      context 'when sending valid params and requesting response body' do
+        before(:each) { patch :update, { format: 'json', respondWithBody: 'true', uuid: characteristic.uuid, species_uuid: characteristic.species.uuid }.merge(characteristics: @params) }
+
+        subject { response }
+        it { is_expected.to respond_with_ok }
+        it { has_all_fields(json['characteristics'], characteristic, public_fields) }
+        it 'includes name and genus of the species in the response' do
+          expect(json['characteristics']['species']['name']).not_to be_nil
+          expect(json['characteristics']['species']['genus']).not_to be_nil
+        end
         it { updates_a_characteristic(characteristic) }
       end
 

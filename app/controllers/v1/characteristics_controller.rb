@@ -62,6 +62,8 @@ class V1::CharacteristicsController < ApplicationController
   end
 
   def update
+    respond_with_body = !params['respondWithBody'].nil?
+
     @characteristic = Characteristic.includes(:species).where(uuid: params[:uuid], species: { uuid: params[:species_uuid] }).first
 
     unless @characteristic
@@ -81,7 +83,7 @@ class V1::CharacteristicsController < ApplicationController
 
     @characteristic.update to_underscore(params)
 
-    if @characteristic.valid? && all_passed_fields_processed?
+    if @characteristic.valid? && all_passed_fields_processed? && !respond_with_body
       head status: :no_content
     elsif @characteristic.valid?
       render :show
@@ -127,9 +129,7 @@ class V1::CharacteristicsController < ApplicationController
     case action
       when :index
         []
-      when :show, :update
-        %w(reference)
-      when :create
+      when :show, :update, :create
         %w(reference species)
       else
         raise 'unsupported action'
@@ -147,13 +147,13 @@ class V1::CharacteristicsController < ApplicationController
 
   def default_nested_fields(action)
     case action
-      when :index, :show, :update
+      when :index
         {
             'reference' => {
                 fields: V1::ReferencesController::PUBLIC_FIELDS
             }
         }
-      when :create
+      when :create, :show, :update
         {
             'reference' => {
                 fields: V1::ReferencesController::PUBLIC_FIELDS
