@@ -5,9 +5,9 @@ class ApplicationController < ActionController::Base
 
   respond_to :json
 
-  protect_from_forgery with: :null_session
+  skip_before_filter  :verify_authenticity_token
 
-  unless Rails.env.test?
+  if Rails.env.production?
     rescue_from StandardError do |e|
       render file: "#{Rails.root}/public/500.json", status: :internal_server_error, locals: {errors: [e.message]}
     end
