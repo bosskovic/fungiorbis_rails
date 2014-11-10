@@ -3,6 +3,7 @@ json.status :success
 json.links do
   json.characteristics characteristic_url_template
   json.set! 'characteristics.reference', reference_url_template unless expand?(:reference, @inclusions)
+  json.set! 'characteristics.species', species_url_template unless expand?(:species, @inclusions)
 end
 
 json.characteristics @characteristics, partial: 'v1/characteristics/characteristic',

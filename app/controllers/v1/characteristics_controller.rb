@@ -13,11 +13,15 @@ class V1::CharacteristicsController < ApplicationController
   before_action :set_fields, only: [:index, :show, :create, :update]
   before_action { |controller| controller.send :set_pagination, Characteristic, 'species_characteristics_url' if action_name == 'index' }
 
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
 
   def index
+    reference_id = Reference.find_by_uuid(params[:referenceId]).id if params[:referenceId]
+
     species = Species.find_by_uuid params[:species_uuid]
-    @characteristics = Characteristic.where(species_id: species.id).paginate(page: @meta[:page], per_page: @meta[:per_page])
+    @characteristics = Characteristic.where(species_id: species.id)
+    @characteristics = @characteristics.where(reference_id: reference_id) if reference_id
+    @characteristics = @characteristics.paginate(page: @meta[:page], per_page: @meta[:per_page])
   end
 
   def show
@@ -26,6 +30,10 @@ class V1::CharacteristicsController < ApplicationController
   end
 
   def create
+    authorize! :create, Characteristic
+
+    respond_with_body = !params['respondWithBody'].nil?
+
     species = Species.find_by_uuid params[:species_uuid]
     unless species
       render file: "#{Rails.root}/public/422.json", status: :unprocessable_entity, locals: { errors: [V1::SpeciesController::SPECIES_NOT_FOUND_ERROR] }
@@ -42,10 +50,10 @@ class V1::CharacteristicsController < ApplicationController
 
     @characteristic = Characteristic.create(params)
 
-    if @characteristic.valid? && all_passed_fields_processed?
+    if @characteristic.valid? && all_passed_fields_processed? && !respond_with_body
       head status: :created, location: species_characteristic_url(species_uuid: species.uuid, uuid: @characteristic.uuid)
-
     elsif @characteristic.valid?
+      @characteristic = Characteristic.includes(:species).where(uuid: @characteristic.uuid).first
       render :show, status: :created, location: species_characteristic_url(species_uuid: species.uuid, uuid: @characteristic.uuid)
 
     else
@@ -61,16 +69,15 @@ class V1::CharacteristicsController < ApplicationController
       return
     end
 
-    params = to_underscore(permitted_params)
-
     if params[:characteristics] && params[:characteristics][:referenceId]
       reference = Reference.find_by_uuid(params[:characteristics][:referenceId])
       unless reference
         render file: "#{Rails.root}/public/422.json", status: :unprocessable_entity, locals: { errors: [V1::ReferencesController::REFERENCE_NOT_FOUND_ERROR] }
         return
       end
-      params = params.merge('reference_id' => reference.id)
     end
+    params = to_underscore(permitted_params)
+    params = params.merge('reference_id' => reference.id) if reference
 
     @characteristic.update to_underscore(params)
 
@@ -101,8 +108,8 @@ class V1::CharacteristicsController < ApplicationController
   private
 
   def permitted_params
-    @params ||= params.require(:characteristics).permit(public_fields).tap do |white_listed|
-      [:fruitingBody, :microscopy, :flesh, :chemistry, :note, :habitats, :substrates].each do |field|
+    @params ||= params.require(:characteristics).permit(PUBLIC_FIELDS).tap do |white_listed|
+      [:edible, :cultivated, :poisonous, :medicinal, :fruitingBody, :microscopy, :flesh, :chemistry, :note, :habitats, :substrates].each do |field|
         white_listed[field] = params[:characteristics][field] if params[:characteristics][field]
       end
     end
@@ -120,8 +127,10 @@ class V1::CharacteristicsController < ApplicationController
     case action
       when :index
         []
-      when :show, :create, :update
+      when :show, :update
         %w(reference)
+      when :create
+        %w(reference species)
       else
         raise 'unsupported action'
     end
@@ -138,10 +147,21 @@ class V1::CharacteristicsController < ApplicationController
 
   def default_nested_fields(action)
     case action
-      when :index, :show, :create, :update
-        { 'reference' => {
-            fields: V1::ReferencesController::PUBLIC_FIELDS
-        } }
+      when :index, :show, :update
+        {
+            'reference' => {
+                fields: V1::ReferencesController::PUBLIC_FIELDS
+            }
+        }
+      when :create
+        {
+            'reference' => {
+                fields: V1::ReferencesController::PUBLIC_FIELDS
+            },
+            'species' => {
+                fields: [:name, :genus]
+            }
+        }
       else
         raise 'unsupported action'
     end
