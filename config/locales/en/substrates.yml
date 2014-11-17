@@ -2,14 +2,22 @@ en:
   substrates:
     ground: Ground
     litter: Litter
+    humus: humus
     living_tree: Living tree
     dead_upright_trunk: Dead upright trunk
-    lying_trunk: Lying trunk
+    lying_trunk: Dead lying trunk
+    buried_wood: Buried wood
+    charred_wood: Charred wood
     branches: Branches
     stump: Stump
     leaves: Leaves
-    cones: Cones
+    pinecones: Pinecones
+    acorn: Acorn
+    grass: Grass
     moss: Moss
+    fern: Fern
+    sand: Sand
+    peat: Peat
     animals: Animals
     feces: Feces
-    mushroom: Mushroom
+    fungi: Fungi

@@ -21,7 +21,7 @@ class V1::ReferencesController < ApplicationController
     if filter_request?
       @references = Reference.includes(:characteristics)
       filter_values.each { |value| @references = @references.where(filter_condition, { value: value }) }
-      @references = @references.select(result_fields.join(','))
+      @references = @references.select(filter_response_fields)
     else
       @references = Reference.order(sort_and_order(PUBLIC_FIELDS))
       @references = @references.paginate(page: @meta[:page], per_page: @meta[:per_page])
