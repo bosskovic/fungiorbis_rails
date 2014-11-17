@@ -1,28 +1,35 @@
 en:
   species:
     coniferous:
-      pine: Pine
-      spruce: Spruce
-      fir: Fir
+      abies: Fir
+      larix: Larch
+      picea: Spruce
+      pinus: Pine
+      taxus: Yew
     decidous:
-      birch: Birch
-      beech: Beech
-      hornbeam: Hornbeam
-      oak: Oak
-      poplar: Poplar
-      willow: Willow
-      cornel: Cornel
-      linden: Linden
+      acer: Maple
+      betula: Birch
+      carpinus: Hornbeam
+      castanea: Chestnut
+      cornus: Cornel
+      corylus: Hazelnut
+      crategus: Hawthorn
+      fagus: Beech
+      fraxinus: Ash
+      populus: Poplar
+      quercus: Oak
+      robinia: Acacia
+      rubus: Raspberry
+      salix: Willow
+      sambucus: Elder
+      tilia: Linden
     orchard:
-      plum: Plum
-      apple: Apple
-    grasses:
-      zubača: Zubača
+      malus: Apple
+      prunus: Plum
   species_group_title:
     coniferous: Coniferous
     decidous: Decidous
     orchard: Orchard
-    grasses: Grasses
   habitats:
     forest:
       title: Forrest
@@ -54,14 +61,11 @@ en:
             - decidous
     meadow:
       title: Meadow
-      allowed_species_groups:
-        - grasses
     sands:
       title: Sands
       allowed_species_groups:
         - coniferous
         - decidous
-        - grasses
     peat:
       title: Peat
     anthropogenic:

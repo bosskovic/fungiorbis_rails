@@ -31,7 +31,6 @@ class Characteristic < ActiveRecord::Base
 
   private
 
-  # TODO: extract as custom validation
   def localized_hashes
     locales = elements_to_str I18n.available_locales
     [:fruiting_body, :microscopy, :flesh, :chemistry, :note].each do |field|
@@ -42,7 +41,6 @@ class Characteristic < ActiveRecord::Base
     end
   end
 
-  # TODO: extract as custom validation
   def habitats_array
     if habitats.is_a? Array
       habitats.each do |habitat|
@@ -77,7 +75,6 @@ class Characteristic < ActiveRecord::Base
     end
   end
 
-  # TODO: extract as custom validation
   def substrates_array
     if substrates.is_a? Array
       s = elements_to_str substrates

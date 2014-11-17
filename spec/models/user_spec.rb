@@ -16,8 +16,6 @@ RSpec.describe User, :type => :model do
     it { is_expected.to ensure_inclusion_of(:role).in_array(User::ROLES) }
   end
 
-  # TODO password complexity
-
 end
 
 # == Schema Information
