@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-#ruby=ruby-2.1.2
+#ruby=ruby-2.1.5
 #ruby-gemset=fungiorbis
 
 gem 'rails', '4.1.4'
@@ -15,6 +15,9 @@ gem 'rack-cors'
 gem 'rails-i18n'
 
 group :development, :test do
+  gem 'capistrano', '3.2.1'
+  gem 'capistrano-rails', '1.1.2'
+  gem 'capistrano-rvm', '0.1.2', require: false
   gem 'mysql2', '0.3.16'
   gem 'rspec-rails', '3.0.2'
   gem 'guard-rspec', '4.3.1', require: false
