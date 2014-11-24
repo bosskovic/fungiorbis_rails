@@ -14,6 +14,7 @@ gem 'rack-cors', '0.2.9'
 
 gem 'rails-i18n'
 gem 'mysql2', '0.3.16'
+gem 'annotate', '~> 2.6.5'
 
 group :development, :test do
   gem 'capistrano', '3.2.1'
@@ -31,7 +32,6 @@ group :development, :test do
   gem 'faker', '1.4.3'
   gem 'forgery', '0.6.0'
   gem 'byebug', '3.2.0'
-  gem 'annotate', '~> 2.6.5'
   gem 'metric_fu', '4.11.1'
 end
 
