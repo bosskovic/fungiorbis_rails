@@ -15,4 +15,6 @@
 /log/*.log
 /tmp
 
-rails_fungiorbis.iml
+/rails_fungiorbis.iml
+
+.keep
