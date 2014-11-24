@@ -7,7 +7,7 @@ set :deploy_user, 'root'
 set :scm, :git
 set :repo_url, "git@github.com:bosskovic/#{fetch(:application)}.git"
 
-set :rvm_type, :user
+set :rvm_type, :auto
 set :rvm_ruby_version, '2.1.5' # Defaults to: 'default'
 
 set :format, :pretty
@@ -32,8 +32,9 @@ set :tests, []
 set(:config_files, %w(
   nginx.conf
   log_rotation
-  monit
 ))
+
+set(:executable_config_files, [])
 
 # set(:executable_config_files, %w(
 #   passenger_init.sh

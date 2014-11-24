@@ -4,7 +4,7 @@ set :branch, 'master'
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :server_name, '178.79.152.32'
 
-server '178.79.152.32', user: 'deploy', roles: %w{web app db}, primary: true
+server '178.79.152.32', user: 'root', roles: %w{web app db}, primary: true
 
 set :deploy_to, "/home/#{fetch(:deploy_user)}/apps/#{fetch(:full_app_name)}"
 
