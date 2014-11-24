@@ -10,15 +10,20 @@ gem 'devise', '3.2.4'
 gem 'simple_token_authentication', '1.5.0'
 gem 'cancancan', '1.9.2'
 gem 'will_paginate', '3.0.7'
-gem 'rack-cors'
+gem 'rack-cors', '0.2.9'
 
 gem 'rails-i18n'
+gem 'mysql2', '0.3.16'
 
 group :development, :test do
   gem 'capistrano', '3.2.1'
   gem 'capistrano-rails', '1.1.2'
+  gem 'capistrano-bundler', '1.1.3'
   gem 'capistrano-rvm', '0.1.2', require: false
-  gem 'mysql2', '0.3.16'
+  gem 'capistrano-passenger', '0.0.1'
+  gem 'daemons', '1.1.9'
+
+
   gem 'rspec-rails', '3.0.2'
   gem 'guard-rspec', '4.3.1', require: false
   gem 'fuubar', '2.0.0'
@@ -42,7 +47,6 @@ group :doc do
 end
 
 group :production do
-  gem 'pg'
 end
 
 
