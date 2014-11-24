@@ -1,3 +1,6 @@
+require '../../lib/fungiorbis/habitat_helper'
+require '../../lib/fungiorbis/substrate_helper'
+
 class Characteristic < ActiveRecord::Base
   include Uuid
   include Fungiorbis::HabitatHelper

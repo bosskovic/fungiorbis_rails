@@ -6,7 +6,7 @@ set :server_name, '178.79.152.32'
 
 server '178.79.152.32', user: 'root', roles: %w{web app db}, primary: true
 
-set :deploy_to, "/home/#{fetch(:deploy_user)}/apps/#{fetch(:full_app_name)}"
+set :deploy_to, "/var/www/#{fetch(:full_app_name)}"
 
 # dont try and infer something as important as environment from
 # stage name.
