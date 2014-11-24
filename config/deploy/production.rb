@@ -1,5 +1,5 @@
 set :stage, :production
-set :branch, 'production'
+set :branch, 'master'
 
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :server_name, '178.79.152.32'
