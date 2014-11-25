@@ -14,7 +14,7 @@ set :log_level, :debug
 
 set :pty, true
 
-set :linked_files, %w{config/database_example.yml config/secrets_example.yml}
+set :linked_files, %w{config/database.yml config/secrets.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 set :keep_releases, 3
