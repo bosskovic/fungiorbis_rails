@@ -21,7 +21,6 @@ group :development, :test do
   gem 'capistrano-rails', '1.1.2'
   gem 'capistrano-bundler', '1.1.3'
   gem 'capistrano-rvm', '0.1.2', require: false
-  gem 'capistrano-passenger', '0.0.1'
   gem 'daemons', '1.1.9'
 
 
