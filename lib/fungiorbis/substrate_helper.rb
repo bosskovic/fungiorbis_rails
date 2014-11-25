@@ -9,7 +9,6 @@ module Fungiorbis
     def all_substrate_keys(options={ output: :symbol })
       @all_substrates ||= options[:output] == :symbol ? elements_to_sym(substrates_hash.keys) : elements_to_str(substrates_hash.keys)
     end
-    module_function :all_substrate_keys
 
     # @param [Hash] options
     # @option options [int] :number_of_substrates
@@ -25,13 +24,11 @@ module Fungiorbis
     def substrates_yaml(locale='en')
       @substrates_yaml ||= YAML.load_file(SUBSTRATES_FILE_PATH)[locale]
     end
-    module_function :substrates_yaml
 
     private
 
     def substrates_hash
       substrates_yaml['substrates']
     end
-    module_function :substrates_hash
   end
 end

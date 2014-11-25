@@ -1,13 +1,11 @@
-require "#{Rails.root}/lib/fungiorbis/habitat_helper"
-require "#{Rails.root}/lib/fungiorbis/substrate_helper"
-
 class Characteristic < ActiveRecord::Base
   include Uuid
+  include HabitatsAndSubstrates
 
-  HABITATS_VALIDATION_ERROR = "have to be included in: #{elements_to_str(Fungiorbis::HabitatHelper.all_habitat_keys)}"
+  HABITATS_VALIDATION_ERROR = "have to be included in: #{elements_to_str(all_habitat_keys)}"
   SUBHABITATS_VALIDATION_ERROR = 'must take subhabitats from the list for specific habitat'
   SPECIES_VALIDATION_ERROR = 'must take species from the list for specific habitat and subhabitat'
-  SUBSTRATES_VALIDATION_ERROR = "have to be included in: #{Fungiorbis::SubstrateHelper.all_substrate_keys.inspect}"
+  SUBSTRATES_VALIDATION_ERROR = "have to be included in: #{all_substrate_keys.inspect}"
 
   PER_PAGE = 10
   MAX_PER_PAGE = 100
@@ -49,7 +47,7 @@ class Characteristic < ActiveRecord::Base
         if habitat.keys.length > 1
           errors.add :habitats, 'incorrect habitats format'
           return false
-        elsif Fungiorbis::HabitatHelper.all_habitat_keys(output: :string).include?(habitat.keys.first.to_s)
+        elsif all_habitat_keys(output: :string).include?(habitat.keys.first.to_s)
           habitat_key = habitat.keys.first.to_s
           habitat = habitat.values.first
           unless habitat.empty? || !habitat[:subhabitat]
@@ -80,7 +78,7 @@ class Characteristic < ActiveRecord::Base
   def substrates_array
     if substrates.is_a? Array
       s = elements_to_str substrates
-      unless array_is_superset?(Fungiorbis::SubstrateHelper.all_substrate_keys(output: :string), s)
+      unless array_is_superset?(all_substrate_keys(output: :string), s)
         errors.add :substrates, SUBSTRATES_VALIDATION_ERROR
         false
       end
