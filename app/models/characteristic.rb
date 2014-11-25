@@ -6,7 +6,7 @@ class Characteristic < ActiveRecord::Base
   include Fungiorbis::HabitatHelper
   include Fungiorbis::SubstrateHelper
 
-  HABITATS_VALIDATION_ERROR = "have to be included in: #{elements_to_str(all_habitat_keys)}"
+  HABITATS_VALIDATION_ERROR = "have to be included in: #{elements_to_str(self.all_habitat_keys)}"
   SUBHABITATS_VALIDATION_ERROR = 'must take subhabitats from the list for specific habitat'
   SPECIES_VALIDATION_ERROR = 'must take species from the list for specific habitat and subhabitat'
   SUBSTRATES_VALIDATION_ERROR = "have to be included in: #{all_substrate_keys.inspect}"
