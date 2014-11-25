@@ -1,5 +1,5 @@
-require "#{::Rails.root}/lib/fungiorbis/habitat_helper"
-require "#{::Rails.root}/lib/fungiorbis/substrate_helper"
+require 'fungiorbis/habitat_helper'
+require 'fungiorbis/substrate_helper'
 
 class Characteristic < ActiveRecord::Base
   include Uuid
