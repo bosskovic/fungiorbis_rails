@@ -9,6 +9,7 @@ module Fungiorbis
     def all_habitat_keys(options={ output: :symbol })
       @all_habitats ||= options[:output] == :symbol ? elements_to_sym(habitats_hash.keys) : elements_to_str(habitats_hash.keys)
     end
+    module_function :all_habitat_keys
 
     def subhabitat_keys(habitat_key)
       if habitats_hash[habitat_key.to_s]
@@ -93,6 +94,7 @@ module Fungiorbis
     def habitats_yaml(locale='en')
       @habitats_yaml ||= YAML.load_file(HABITATS_FILE_PATH)[locale]
     end
+    module_function :habitats_yaml
 
     private
 
@@ -103,6 +105,7 @@ module Fungiorbis
     def habitats_hash
       habitats_yaml['habitats']
     end
+    module_function :habitats_hash
 
     def species_hash
       habitats_yaml['species']
