@@ -4,13 +4,25 @@ server {
 
   root <%= fetch(:deploy_to) %>/current/public;
 
-  access_log    <%= fetch(:deploy_to) %>/current/log/access.log;
-  error_log     <%= fetch(:deploy_to) %>/current/log/error.log;
+  location / {
+    # wordpress blog
+  }
 
-  passenger_enabled on;
-  passenger_app_env production;
-  passenger_friendly_error_pages on;
-  passenger_ruby /usr/local/rvm/gems/ruby-2.1.5@fungiorbis/wrappers/ruby;
+  location /api/ {
+    alias <%= fetch(:deploy_to) %>/current/public;
+
+    access_log    <%= fetch(:deploy_to) %>/current/log/access.log;
+    error_log     <%= fetch(:deploy_to) %>/current/log/error.log;
+
+    passenger_enabled on;
+    passenger_app_env production;
+    passenger_friendly_error_pages on;
+    passenger_ruby /usr/local/rvm/gems/ruby-2.1.5@fungiorbis/wrappers/ruby;
+  }
+
+  location /app/ {
+    alias /var/www/fungiorbis_angular_production/current/;
+  }
 
   client_max_body_size 4G;
   keepalive_timeout 10;
@@ -22,13 +34,25 @@ server {
   listen 443;
   root <%= fetch(:deploy_to) %>/current/public;
 
-  access_log    <%= fetch(:deploy_to) %>/current/log/access.log;
-  error_log     <%= fetch(:deploy_to) %>/current/log/error.log;
+  location / {
+    # wordpress blog
+  }
 
-  passenger_enabled on;
-  passenger_app_env production;
-  passenger_friendly_error_pages on;
-  passenger_ruby /usr/local/rvm/gems/ruby-2.1.5@fungiorbis/wrappers/ruby;
+  location /api/ {
+    alias <%= fetch(:deploy_to) %>/current/public;
+
+    access_log    <%= fetch(:deploy_to) %>/current/log/access.log;
+    error_log     <%= fetch(:deploy_to) %>/current/log/error.log;
+
+    passenger_enabled on;
+    passenger_app_env production;
+    passenger_friendly_error_pages on;
+    passenger_ruby /usr/local/rvm/gems/ruby-2.1.5@fungiorbis/wrappers/ruby;
+  }
+
+  location /app/ {
+    alias /var/www/fungiorbis_angular_production/current/;
+  }
 
   client_max_body_size 4G;
   keepalive_timeout 10;
