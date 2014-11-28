@@ -2,14 +2,15 @@ server {
   server_name <%= fetch(:server_name) %>;
   listen 80;
 
-  root <%= fetch(:deploy_to) %>/current/public;
+  #root var/www;
+  root /var/www/fungiorbis_angular_production/current/;
 
-  location / {
-    # wordpress blog
-  }
+#  location / {
+#    # wordpress blog
+#  }
 
-  location /api/ {
-    alias <%= fetch(:deploy_to) %>/current/public;
+  location ~^/api(/.*|$) {
+    alias <%= fetch(:deploy_to) %>/current/public$1;
 
     access_log    <%= fetch(:deploy_to) %>/current/log/access.log;
     error_log     <%= fetch(:deploy_to) %>/current/log/error.log;
@@ -18,11 +19,13 @@ server {
     passenger_app_env production;
     passenger_friendly_error_pages on;
     passenger_ruby /usr/local/rvm/gems/ruby-2.1.5@fungiorbis/wrappers/ruby;
+    passenger_base_uri /api;
+    passenger_app_root /var/www/fungiorbis_rails_production/current;
   }
 
-  location /app/ {
-    alias /var/www/fungiorbis_angular_production/current/;
-  }
+#  location /app/ {
+#    alias /var/www/fungiorbis_angular_production/current/;
+#  }
 
   client_max_body_size 4G;
   keepalive_timeout 10;
@@ -32,14 +35,16 @@ server {
 server {
   server_name <%= fetch(:server_name) %>;
   listen 443;
-  root <%= fetch(:deploy_to) %>/current/public;
 
-  location / {
-    # wordpress blog
-  }
+  #root var/www;
+  root /var/www/fungiorbis_angular_production/current/;
 
-  location /api/ {
-    alias <%= fetch(:deploy_to) %>/current/public;
+#  location / {
+#    # wordpress blog
+#  }
+
+  location ~^/api(/.*|$) {
+    alias <%= fetch(:deploy_to) %>/current/public$1;
 
     access_log    <%= fetch(:deploy_to) %>/current/log/access.log;
     error_log     <%= fetch(:deploy_to) %>/current/log/error.log;
@@ -48,16 +53,19 @@ server {
     passenger_app_env production;
     passenger_friendly_error_pages on;
     passenger_ruby /usr/local/rvm/gems/ruby-2.1.5@fungiorbis/wrappers/ruby;
+    passenger_base_uri /api;
+    passenger_app_root /var/www/fungiorbis_rails_production/current;
   }
 
-  location /app/ {
-    alias /var/www/fungiorbis_angular_production/current/;
-  }
+#  location /app/ {
+#    alias /var/www/fungiorbis_angular_production/current/;
+#  }
 
   client_max_body_size 4G;
   keepalive_timeout 10;
+
   ssl on;
   ssl_certificate <%= fetch(:deploy_to) %>/shared/ssl_cert.crt;
   ssl_certificate_key <%= fetch(:deploy_to) %>/shared/ssl_private_key.key;
-}#
+}
 <% end %>
