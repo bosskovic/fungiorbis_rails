@@ -19,6 +19,8 @@ class Ability
     can [:index, :show], Species
     can [:index, :show], Reference
     can [:index, :show], Characteristic
+    can [:index, :show], Location
+    can [:index, :show], Specimen
   end
 
 end

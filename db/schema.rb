@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140915152225) do
+ActiveRecord::Schema.define(version: 20141128173116) do
 
   create_table "characteristics", force: true do |t|
     t.integer  "reference_id",  null: false
@@ -35,6 +35,16 @@ ActiveRecord::Schema.define(version: 20140915152225) do
   add_index "characteristics", ["reference_id"], name: "index_characteristics_on_reference_id", using: :btree
   add_index "characteristics", ["species_id"], name: "index_characteristics_on_species_id", using: :btree
   add_index "characteristics", ["uuid"], name: "index_characteristics_on_uuid", unique: true, using: :btree
+
+  create_table "locations", force: true do |t|
+    t.string   "name",       null: false
+    t.string   "utm",        null: false
+    t.string   "uuid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "locations", ["uuid"], name: "index_locations_on_uuid", unique: true, using: :btree
 
   create_table "references", force: true do |t|
     t.string   "title",      null: false
@@ -69,6 +79,31 @@ ActiveRecord::Schema.define(version: 20140915152225) do
   add_index "species", ["name", "genus"], name: "index_species_on_name_and_genus", using: :btree
   add_index "species", ["url"], name: "index_species_on_url", unique: true, using: :btree
   add_index "species", ["uuid"], name: "index_species_on_uuid", unique: true, using: :btree
+
+  create_table "specimen", force: true do |t|
+    t.integer  "species_id",        null: false
+    t.integer  "location_id",       null: false
+    t.integer  "legator_id",        null: false
+    t.string   "legator_text"
+    t.integer  "determinator_id"
+    t.string   "determinator_text"
+    t.text     "habitats"
+    t.text     "substrates"
+    t.date     "date",              null: false
+    t.text     "quantity"
+    t.text     "growth_type"
+    t.text     "comment"
+    t.boolean  "approved"
+    t.string   "uuid"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "specimen", ["determinator_id"], name: "index_specimen_on_determinator_id", using: :btree
+  add_index "specimen", ["legator_id"], name: "index_specimen_on_legator_id", using: :btree
+  add_index "specimen", ["location_id"], name: "index_specimen_on_location_id", using: :btree
+  add_index "specimen", ["species_id"], name: "index_specimen_on_species_id", using: :btree
+  add_index "specimen", ["uuid"], name: "index_specimen_on_uuid", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                                   null: false

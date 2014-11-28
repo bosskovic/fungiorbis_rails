@@ -27,6 +27,8 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:manage, Species) }
     it { is_expected.to be_able_to(:manage, Reference) }
     it { is_expected.to be_able_to(:manage, Characteristic) }
+    it { is_expected.to be_able_to(:manage, Location) }
+    it { is_expected.to be_able_to(:manage, Specimen) }
   end
 
   context 'when visitor' do
@@ -54,6 +56,22 @@ RSpec.describe Ability do
       it { is_expected.not_to be_able_to(:create, Characteristic) }
       it { is_expected.not_to be_able_to(:update, Characteristic) }
       it { is_expected.not_to be_able_to(:destroy, Characteristic) }
+    end
+
+    context 'with Location' do
+      it { is_expected.to be_able_to(:index, Location) }
+      it { is_expected.to be_able_to(:show, Location) }
+      it { is_expected.not_to be_able_to(:create, Location) }
+      it { is_expected.not_to be_able_to(:update, Location) }
+      it { is_expected.not_to be_able_to(:destroy, Location) }
+    end
+
+    context 'with Specimen' do
+      it { is_expected.to be_able_to(:index, Specimen) }
+      it { is_expected.to be_able_to(:show, Specimen) }
+      it { is_expected.not_to be_able_to(:create, Specimen) }
+      it { is_expected.not_to be_able_to(:update, Specimen) }
+      it { is_expected.not_to be_able_to(:destroy, Specimen) }
     end
 
     context 'with Habitats' do

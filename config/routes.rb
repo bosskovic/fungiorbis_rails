@@ -14,6 +14,9 @@ Rails.application.routes.draw do
     end
     resources :references, only: [:index, :show, :create, :update, :destroy], param: :uuid
 
+    resources :locations, only: [:index, :show], param: :uuid
+    resources :specimens, only: [:index, :show], param: :uuid
+
     resource :habitats, only: :show
     resource :substrates, only: :show
   end
