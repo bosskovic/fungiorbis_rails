@@ -91,8 +91,7 @@ ActiveRecord::Schema.define(version: 20141128173116) do
     t.text     "substrates"
     t.date     "date",              null: false
     t.text     "quantity"
-    t.text     "growth_type"
-    t.text     "comment"
+    t.text     "note"
     t.boolean  "approved"
     t.string   "uuid"
     t.datetime "created_at"

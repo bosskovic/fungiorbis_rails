@@ -15,7 +15,6 @@ FactoryGirl.define do
     substrates { random_substrates }
     date "2014-11-28"
     quantity "MyText"
-    s.growth_type { (Species::GROWTH_TYPES + [nil]).sample }
   end
 end
 
@@ -34,8 +33,7 @@ end
 #  substrates        :text
 #  date              :date             not null
 #  quantity          :text
-#  growth_type       :text
-#  comment           :text
+#  note              :text
 #  approved          :boolean
 #  uuid              :string(255)
 #  created_at        :datetime

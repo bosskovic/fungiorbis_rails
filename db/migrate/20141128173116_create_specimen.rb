@@ -15,9 +15,8 @@ class CreateSpecimen < ActiveRecord::Migration
 
       t.date :date, null: false
       t.text :quantity
-      t.text :growth_type
 
-      t.text :comment
+      t.text :note
 
       t.boolean :approved
 

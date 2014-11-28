@@ -23,8 +23,7 @@ end
 #  substrates        :text
 #  date              :date             not null
 #  quantity          :text
-#  growth_type       :text
-#  comment           :text
+#  note              :text
 #  approved          :boolean
 #  uuid              :string(255)
 #  created_at        :datetime
