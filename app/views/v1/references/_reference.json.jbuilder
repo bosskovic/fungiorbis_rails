@@ -1,5 +1,5 @@
 json.id reference.uuid
-json.fullTitle "#{reference.authors} -  #{reference.title}"
+json.fullTitle reference.full_title
 reference_fields = to_underscore fields
 json.extract! reference, *reference_fields
 

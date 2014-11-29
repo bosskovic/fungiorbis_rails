@@ -1,6 +1,7 @@
 class V1::UsersController < ApplicationController
   include CamelCaseConvertible
   include Pageable
+  include Sortable
 
   before_action :authenticate_user!
   before_action { |controller| controller.send :set_pagination, User, 'users_url' if action_name == 'index' }
@@ -12,7 +13,7 @@ class V1::UsersController < ApplicationController
   OPTIONAL_RESPONSE_FIELDS = [:unconfirmedEmail, :authToken]
 
   def index
-    @users = User.active.paginate(page: @meta[:page], per_page: @meta[:per_page])
+    @users = User.active.order(sort_and_order(PUBLIC_FIELDS)).paginate(page: @meta[:page], per_page: @meta[:per_page])
     head :no_content if @users.empty?
   end
 

@@ -1,5 +1,5 @@
 json.id species.uuid
-json.fullName "#{species.genus} #{species.name}"
+json.fullName species.full_name
 species_fields = to_underscore(fields)
 json.extract! species, *species_fields
 

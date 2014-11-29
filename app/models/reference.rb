@@ -10,6 +10,9 @@ class Reference < ActiveRecord::Base
   validates :isbn, uniqueness: true, if: 'isbn.present?'
   validates :url, format: { with: URI.regexp }, uniqueness: true, if: 'url.present?'
 
+  def full_title
+    "#{self.authors} -  #{self.title}"
+  end
 end
 
 # == Schema Information

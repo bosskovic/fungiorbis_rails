@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
 
   validate :password_complexity
 
+  def full_name
+    "#{self.first_name} #{self.last_name}"
+  end
+
   def supervisor?
     self.role == SUPERVISOR_ROLE
   end

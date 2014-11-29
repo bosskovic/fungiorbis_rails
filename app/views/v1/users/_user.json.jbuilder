@@ -1,5 +1,5 @@
 json.id user.uuid
-
+json.fullName user.full_name
 user_fields = V1::UsersController::PUBLIC_FIELDS.map { |f| f.to_s.underscore.to_sym }
 json.extract! user, *user_fields
 
