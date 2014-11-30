@@ -6,7 +6,7 @@ en:
       picea: Spruce
       pinus: Pine
       taxus: Yew
-    decidous:
+    deciduous:
       acer: Maple
       betula: Birch
       carpinus: Hornbeam
@@ -28,44 +28,44 @@ en:
       prunus: Plum
   species_group_title:
     coniferous: Coniferous
-    decidous: Decidous
+    deciduous: Deciduous
     orchard: Orchard
   habitats:
     forest:
       title: Forrest
       allowed_species_groups:
         - coniferous
-        - decidous
+        - deciduous
       subhabitat:
         anthropogenic:
           title: Anthropogenic forest
           allowed_species_groups:
             - coniferous
-            - decidous
+            - deciduous
         coniferous:
           title: Coniferous forest
           allowed_species_groups:
             - coniferous
-        decidous:
-          title: Decidous forest
+        deciduous:
+          title: Deciduous forest
           allowed_species_groups:
-            - decidous
+            - deciduous
         mixed:
           title: Mixed forest
           allowed_species_groups:
             - coniferous
-            - decidous
+            - deciduous
         freshwater_swamp:
           title: Freshwater swamp
           allowed_species_groups:
-            - decidous
+            - deciduous
     meadow:
       title: Meadow
     sands:
       title: Sands
       allowed_species_groups:
         - coniferous
-        - decidous
+        - deciduous
     peat:
       title: Peat
     anthropogenic:
@@ -75,7 +75,7 @@ en:
           title: Park
           allowed_species_groups:
             - coniferous
-            - decidous
+            - deciduous
         garden:
           title: Garden
         yard:
