@@ -56,7 +56,7 @@ en:
             - coniferous
             - decidous
         freshwater_swamp:
-          title: Freshwater swamp forest
+          title: Freshwater swamp
           allowed_species_groups:
             - decidous
     meadow:

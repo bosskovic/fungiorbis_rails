@@ -23,9 +23,10 @@ module Fungiorbis
         File.foreach('db/old_data/references.csv') do |line|
           ref = line.split('#').each { |item| item.strip! }
           r = Reference.new
-          r.title = ref[0]
-          r.isbn = ref[1] unless ref[1].blank?
-          r.url = ref[2] unless ref[2].blank?
+          r.authors = ref[0]
+          r.title = ref[1]
+          r.isbn = ref[2] unless ref[2].blank?
+          r.url = ref[3] unless ref[3].blank?
           r.save!
         end
       end
@@ -157,6 +158,70 @@ module Fungiorbis
       write_to_csv_file invalid_location, 'db/old_data/not_added_specimens_location.csv'
     end
 
+    def self.import_characteristics
+      Characteristic.transaction do
+        File.foreach('db/old_data/characteristics.csv') do |line|
+          ch = line.split('#').each { |item| item.strip! }
+
+          c = Characteristic.new
+          temp = ch[0].split(' / ')
+          c.species = Species.where(genus: temp[0], name: temp[1]).first
+
+          c.reference = Reference.find_by_isbn(ch[1])
+          c.reference = Reference.find_by_url(ch[2]) unless c.reference
+
+          if ch[3] == 'edible'
+            c.edible = true
+          elsif ch[3] == 'poisonous'
+            c.poisonous = true
+          elsif ch[3] == 'medicinal'
+            c.medicinal = true
+          end
+
+          c.habitats = []
+          ch[4].split(';').each do |habitat|
+            temp = habitat.split('/').each { |item| item.strip! }
+
+            habitat = { temp[0] => {} }
+            habitat[temp[0]]['subhabitat'] = temp[1] unless temp[1].empty?
+            habitat[temp[0]]['species'] = temp[2].split(',').each { |item| item.strip! } unless temp[2].blank?
+            c.habitats << habitat
+          end
+
+          c.substrates = ch[5].split(';').each { |item| item.strip! }
+
+          c.fruiting_body = {
+              'sr' => ch[6],
+              'en' => ch[7]
+          }
+
+          c.microscopy = {
+              'sr' => ch[8],
+              'en' => ch[9]
+          }
+
+          c.flesh = {
+              'sr' => ch[10],
+              'en' => ch[11]
+          }
+
+          c.chemistry = {
+              'sr' => ch[12],
+              'en' => ch[13]
+          }
+
+          c.note = {
+              'sr' => ch[14],
+              'en' => ch[15]
+          }
+
+          c.save!
+        end
+      end
+
+      puts 'Characteristics import complete'
+    end
+
     private
 
     def self.update_growth_type(species, growth_type)
@@ -228,8 +293,8 @@ module Fungiorbis
           'šuma / listopadna / breza/topola' => 'forest / decidous / betula, populus',
           'šuma / listopadna / breza/grab/bukva/topola' => 'forest / decidous / betula, carpinus, fagus, populus',
           'šuma / listopadna / bukva/grab' => 'forest / decidous / fagus, carpinus',
-          'šuma / listopadna / bukva/lipa' => 'forest / decideous / fagus, tilia',
-          'šuma / listopadna / bukva/lipa/hrast/grab' => 'forest / decideous / fagus, tilia, quercus, carpinus',
+          'šuma / listopadna / bukva/lipa' => 'forest / decidous / fagus, tilia',
+          'šuma / listopadna / bukva/lipa/hrast/grab' => 'forest / decidous / fagus, tilia, quercus, carpinus',
           'šuma / listopadna / hrast/grab' => 'forest / decidous / quercus, carpinus',
           'šuma / listopadna / hrast/bukva' => 'forest / decidous / quercus, fagus',
           'šuma / listopadna / hrast/grab/bukva' => 'forest / decidous / quercus, carpinus, fagus',

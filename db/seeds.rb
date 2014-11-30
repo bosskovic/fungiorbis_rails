@@ -5,3 +5,4 @@ Fungiorbis::OldDataImport.import_references
 Fungiorbis::OldDataImport.import_locations
 Fungiorbis::OldDataImport.import_species
 Fungiorbis::OldDataImport.import_specimens
+Fungiorbis::OldDataImport.import_characteristics
