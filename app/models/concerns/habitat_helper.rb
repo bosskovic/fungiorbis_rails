@@ -6,7 +6,7 @@ module HabitatHelper
 
   include Fungiorbis::Util
 
-  HABITATS_FILE_PATH = 'config/locales/en/habitats.yml'
+  HABITATS_FILE_PATH = 'config/locales/sr/habitats.yml'
 
   def all_habitat_keys(options={ output: :symbol })
     @all_habitats ||= options[:output] == :symbol ? elements_to_sym(habitats_hash.keys) : elements_to_str(habitats_hash.keys)
@@ -92,7 +92,7 @@ module HabitatHelper
     habitats_sample.uniq
   end
 
-  def habitats_yaml(locale='en')
+  def habitats_yaml(locale='sr')
     @habitats_yaml ||= YAML.load_file(HABITATS_FILE_PATH)[locale]
   end
 

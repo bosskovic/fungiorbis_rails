@@ -5,7 +5,7 @@ module SubstrateHelper
 
   include Fungiorbis::Util
 
-  SUBSTRATES_FILE_PATH = 'config/locales/en/substrates.yml'
+  SUBSTRATES_FILE_PATH = 'config/locales/sr/substrates.yml'
 
   def all_substrate_keys(options={ output: :symbol })
     @all_substrates ||= options[:output] == :symbol ? elements_to_sym(substrates_hash.keys) : elements_to_str(substrates_hash.keys)
@@ -22,7 +22,7 @@ module SubstrateHelper
     elements_to_str Array(all_substrate_keys.sample(sample))
   end
 
-  def substrates_yaml(locale='en')
+  def substrates_yaml(locale='sr')
     @substrates_yaml ||= YAML.load_file(SUBSTRATES_FILE_PATH)[locale]
   end
 
