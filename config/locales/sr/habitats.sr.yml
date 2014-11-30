@@ -1,0 +1,88 @@
+sr:
+  species:
+    coniferous:
+      abies: Jela
+      larix: Ariš
+      picea: Smrča
+      pinus: Bor
+      taxus: Tisa
+    deciduous:
+      acer: Javor
+      betula: Breza
+      carpinus: Grab
+      castanea: Kesten
+      cornus: Dren
+      corylus: Leska
+      crategus: Glog
+      fagus: Bukva
+      fraxinus: Jasen
+      populus: Topola
+      quercus: Hrast
+      robinia: Bagrem
+      rubus: Malina
+      salix: Vrba
+      sambucus: Zova
+      tilia: Lipa
+    orchard:
+      malus: Jabuka
+      prunus: Šljiva
+  species_group_title:
+    coniferous: četinarske
+    deciduous: listopadne
+    orchard: voćnjak
+  habitats:
+    forest:
+      title: Šuma
+      allowed_species_groups:
+        - coniferous
+        - deciduous
+      subhabitat:
+        anthropogenic:
+          title: Antropogena šuma
+          allowed_species_groups:
+            - coniferous
+            - deciduous
+        coniferous:
+          title: Četinarska šuma
+          allowed_species_groups:
+            - coniferous
+        deciduous:
+          title: Listopadna šuma
+          allowed_species_groups:
+            - deciduous
+        mixed:
+          title: Mešovita šuma
+          allowed_species_groups:
+            - coniferous
+            - deciduous
+        freshwater_swamp:
+          title: Ritska šuma
+          allowed_species_groups:
+            - deciduous
+    meadow:
+      title: Livada
+    sands:
+      title: Peščara
+      allowed_species_groups:
+        - coniferous
+        - deciduous
+    peat:
+      title: Močvara
+    anthropogenic:
+      title: Antropogeno stanište
+      subhabitat:
+        park:
+          title: Park
+          allowed_species_groups:
+            - coniferous
+            - deciduous
+        garden:
+          title: Bašta
+        yard:
+          title: Dvorište
+        orchard:
+          title: Voćnjak
+          allowed_species_groups:
+            - orchard
+        vineyard:
+          title: Vinograd
