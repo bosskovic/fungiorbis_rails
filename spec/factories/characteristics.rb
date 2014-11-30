@@ -1,5 +1,5 @@
-require_relative '../../app/models/concerns/habitat_helper'
-require_relative '../../app/models/concerns/substrate_helper'
+require_relative "#{Rails.root}/app/models/concerns/habitat_helper"
+require_relative "#{Rails.root}/app/models/concerns/substrate_helper"
 include HabitatHelper
 include SubstrateHelper
 
