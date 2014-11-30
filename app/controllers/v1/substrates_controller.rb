@@ -1,4 +1,8 @@
+require "#{Rails.root}/app/models/concerns/substrate_helper"
+
 class V1::SubstratesController < ApplicationController
+
+  include SubstrateHelper
 
   def show
     authorize! :show, :substrates

@@ -1,4 +1,8 @@
+require "#{Rails.root}/app/models/concerns/habitat_helper"
+
 class V1::HabitatsController < ApplicationController
+
+  include HabitatHelper
 
   def show
     authorize! :show, :habitats
