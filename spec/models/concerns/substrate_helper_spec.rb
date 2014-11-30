@@ -1,8 +1,9 @@
-require 'fungiorbis/substrate_helper'
+require 'rails_helper'
+require "#{Rails.root}/app/models/concerns/substrate_helper"
 
-RSpec.describe Fungiorbis::SubstrateHelper do
+RSpec.describe SubstrateHelper do
 
-  include Fungiorbis::SubstrateHelper
+  include SubstrateHelper
 
   describe '#all_substrate_keys' do
     specify { expect(all_substrate_keys.is_a?(Array)).to be_truthy }

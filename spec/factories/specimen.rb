@@ -1,7 +1,7 @@
-require_relative '../../lib/fungiorbis/habitat_helper'
-require_relative '../../lib/fungiorbis/substrate_helper'
-include Fungiorbis::HabitatHelper
-include Fungiorbis::SubstrateHelper
+require_relative '../../app/models/concerns/habitat_helper'
+require_relative '../../app/models/concerns/substrate_helper'
+include HabitatHelper
+include SubstrateHelper
 
 FactoryGirl.define do
   factory :specimen, :class => 'Specimen' do

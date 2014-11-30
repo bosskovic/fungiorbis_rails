@@ -1,8 +1,9 @@
-require 'fungiorbis/habitat_helper'
+require 'rails_helper'
+require "#{Rails.root}/app/models/concerns/habitat_helper"
 
-RSpec.describe Fungiorbis::HabitatHelper do
+RSpec.describe HabitatHelper do
 
-  include Fungiorbis::HabitatHelper
+  include HabitatHelper
 
   describe '#all_habitat_keys' do
     specify { expect(all_habitat_keys.is_a?(Array)).to be_truthy }

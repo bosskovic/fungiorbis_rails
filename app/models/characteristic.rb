@@ -1,10 +1,7 @@
-require 'fungiorbis/habitat_helper'
-require 'fungiorbis/substrate_helper'
-
 class Characteristic < ActiveRecord::Base
   include Uuid
-  include Fungiorbis::HabitatHelper
-  include Fungiorbis::SubstrateHelper
+  include HabitatHelper
+  include SubstrateHelper
 
   HABITATS_VALIDATION_ERROR = "have to be included in: #{elements_to_str(all_habitat_keys)}"
   SUBHABITATS_VALIDATION_ERROR = 'must take subhabitats from the list for specific habitat'
