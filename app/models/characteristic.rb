@@ -3,10 +3,10 @@ class Characteristic < ActiveRecord::Base
   include HabitatHelper
   include SubstrateHelper
 
-  HABITATS_VALIDATION_ERROR = "have to be included in: #{elements_to_str(all_habitat_keys)}"
+  # HABITATS_VALIDATION_ERROR = "have to be included in: #{elements_to_str(all_habitat_keys)}"
   SUBHABITATS_VALIDATION_ERROR = 'must take subhabitats from the list for specific habitat'
   SPECIES_VALIDATION_ERROR = 'must take species from the list for specific habitat and subhabitat'
-  SUBSTRATES_VALIDATION_ERROR = "have to be included in: #{all_substrate_keys.inspect}"
+  # SUBSTRATES_VALIDATION_ERROR = "have to be included in: #{all_substrate_keys.inspect}"
 
   PER_PAGE = 10
   MAX_PER_PAGE = 100
@@ -67,7 +67,7 @@ class Characteristic < ActiveRecord::Base
             end
           end
         else
-          errors.add :habitats, HABITATS_VALIDATION_ERROR
+          errors.add :habitats, "have to be included in: #{elements_to_str(all_habitat_keys)}"
           return false
         end
       end
@@ -80,7 +80,7 @@ class Characteristic < ActiveRecord::Base
     if substrates.is_a? Array
       s = elements_to_str substrates
       unless array_is_superset?(all_substrate_keys(output: :string), s)
-        errors.add :substrates, SUBSTRATES_VALIDATION_ERROR
+        errors.add :substrates, "have to be included in: #{all_substrate_keys.inspect}"
         false
       end
     else
