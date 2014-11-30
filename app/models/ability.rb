@@ -16,6 +16,7 @@ class Ability
     can :show, :habitats
     can :show, :substrates
     can :show, :species_systematics
+    can :show, :stats
 
     can [:index, :show], Species
     can [:index, :show], Reference

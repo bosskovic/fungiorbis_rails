@@ -32,6 +32,10 @@ class Species < ActiveRecord::Base
     "#{self.genus} #{self.name}"
   end
 
+  def self.usability_count(usability)
+    Characteristic.where(usability => true).select(:species_id).distinct.count
+  end
+
   protected
 
   def generate_url

@@ -81,5 +81,13 @@ RSpec.describe Ability do
     context 'with Substrates' do
       it { is_expected.to be_able_to(:show, :substrates) }
     end
+
+    context 'with Species Systematics' do
+      it { is_expected.to be_able_to(:show, :species_systematics) }
+    end
+
+    context 'with Stats' do
+      it { is_expected.to be_able_to(:show, :stats) }
+    end
   end
 end

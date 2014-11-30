@@ -21,5 +21,6 @@ Rails.application.routes.draw do
     resource :substrates, only: :show
 
     resources :species_systematics, only: :show, param: :category
+    resources :stats, only: :show, param: :section
   end
 end
