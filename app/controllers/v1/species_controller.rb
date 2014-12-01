@@ -23,6 +23,7 @@ class V1::SpeciesController < ApplicationController
     @species = Species
 
     if filter_request?
+puts "---"
       filter_values.each { |value| @species = @species.where(filter_condition, { value: value }) }
       search_by_fields(PUBLIC_FIELDS).each { |condition| @species = @species.where(condition) }
       @species = @species.select(filter_response_fields)
