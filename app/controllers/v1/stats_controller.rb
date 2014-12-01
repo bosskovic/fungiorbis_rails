@@ -13,9 +13,17 @@ class V1::StatsController < ApplicationController
           cultivatedCount: Species.usability_count(:cultivated)
       }
 
-      render json: {
-          stats: stats
+      render json: { stats: stats }
+    elsif params['section'] == 'home'
+      stats = {
+          speciesCount: Species.count,
+          specimenCount: Specimen.count,
+          locationCount: Location.count,
+          fieldStudiesCount: Specimen.select(:date).distinct.count,
+          lastDeployAPI: (File.new("#{Rails.root}/REVISION").atime rescue Time.now).strftime('%Y-%d-%m %H:%M')
       }
+
+      render json: { stats: stats }
     else
       render file: "#{Rails.root}/public/404.json", status: :not_found, locals: { errors: ['not found'] }
     end
@@ -25,7 +33,7 @@ class V1::StatsController < ApplicationController
       category = params[:category].to_sym
 
       render json: {
-          systematics: Species.where("#{params[:category]} LIKE ?", "%#{params['value']}%").group(category).pluck(category).map { |item| { value: item }}
+          systematics: Species.where("#{params[:category]} LIKE ?", "%#{params['value']}%").group(category).pluck(category).map { |item| { value: item } }
       }
     else
 
