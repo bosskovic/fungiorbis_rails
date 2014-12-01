@@ -68,6 +68,7 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       execute :mkdir, '-p', "#{ release_path }/tmp"
       execute :touch, release_path.join('tmp/restart.txt')
+      execute :touch, release_path.join('Gemfile')
     end
   end
   after :publishing, :restart
