@@ -20,7 +20,7 @@ class V1::StatsController < ApplicationController
           specimenCount: Specimen.count,
           locationCount: Location.count,
           fieldStudiesCount: Specimen.select(:date).distinct.count,
-          lastDeployAPI: File.mtime("REVISIONS").strftime('%Y-%d-%m %H:%M')
+          lastDeployAPI: File.mtime("REVISION").strftime('%Y-%d-%m %H:%M')
       }
 
       render json: { stats: stats }
