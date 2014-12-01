@@ -14,6 +14,8 @@ class V1::StatsController < ApplicationController
       }
 
       render json: { stats: stats }
+    elsif params['section'] == 'specimens'
+      render json: { stats: {} }
     elsif params['section'] == 'home'
       stats = {
           speciesCount: Species.count,
