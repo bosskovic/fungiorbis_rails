@@ -11,7 +11,6 @@ class V1::CharacteristicsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_inclusions, only: [:index, :show, :create, :update]
   before_action :set_fields, only: [:index, :show, :create, :update]
-  before_action { |controller| controller.send :set_pagination, Characteristic, 'species_characteristics_url' if action_name == 'index' }
 
   load_and_authorize_resource except: :create
 
@@ -21,6 +20,8 @@ class V1::CharacteristicsController < ApplicationController
     species = Species.find_by_uuid params[:species_uuid]
     @characteristics = Characteristic.where(species_id: species.id)
     @characteristics = @characteristics.where(reference_id: reference_id) if reference_id
+
+    set_pagination @characteristics, 'species_characteristics_url'
     @characteristics = @characteristics.paginate(page: @meta[:page], per_page: @meta[:per_page])
   end
 

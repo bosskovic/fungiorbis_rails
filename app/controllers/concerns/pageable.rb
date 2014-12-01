@@ -3,11 +3,11 @@ module Pageable
 
   private
 
-  def set_pagination(model_class, url_template)
+  def set_pagination(search_result, url_template)
     @meta ||= {}
     @meta[:page] = params[:page].blank? ? 1 : params[:page].to_i
-    @meta[:per_page] = page_size_within_bounds?(model_class, params) ? params['perPage'].to_i : model_class::PER_PAGE
-    @meta[:count] = model_class.count
+    @meta[:per_page] = page_size_within_bounds?(search_result.klass, params) ? params['perPage'].to_i : search_result.klass::PER_PAGE
+    @meta[:count] = search_result.count
 
     @meta[:page] = 1 if page_count_out_of_bounds?
 

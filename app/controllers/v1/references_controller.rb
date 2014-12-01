@@ -13,7 +13,6 @@ class V1::ReferencesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_fields, only: [:index, :show, :create, :update]
   before_action :set_inclusions, only: [:index, :show, :create, :update]
-  before_action { |controller| controller.send :set_pagination, Reference, 'references_url' if action_name == 'index' }
 
   load_and_authorize_resource
 
@@ -24,6 +23,8 @@ class V1::ReferencesController < ApplicationController
       @references = @references.select(filter_response_fields)
     else
       @references = Reference.order(sort_and_order(PUBLIC_FIELDS))
+
+      set_pagination @references, 'references_url'
       @references = @references.paginate(page: @meta[:page], per_page: @meta[:per_page])
     end
   end

@@ -15,7 +15,7 @@ class V1::SpeciesController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_inclusions, only: [:index, :show, :create, :update]
   before_action :set_fields, only: [:index, :show, :create, :update]
-  before_action { |controller| controller.send :set_pagination, Species, 'species_index_url' if action_name == 'index' }
+  # before_action { |controller| controller.send :set_pagination, Species, 'species_index_url' if action_name == 'index' }
 
   load_and_authorize_resource only: :index
 
@@ -23,13 +23,27 @@ class V1::SpeciesController < ApplicationController
     @species = Species
 
     if filter_request?
-puts "---"
       filter_values.each { |value| @species = @species.where(filter_condition, { value: value }) }
       search_by_fields(PUBLIC_FIELDS).each { |condition| @species = @species.where(condition) }
       @species = @species.select(filter_response_fields)
     else
       @species = @species.includes(:characteristics).order(sort_and_order(PUBLIC_FIELDS))
       search_by_fields(PUBLIC_FIELDS).each { |condition| @species = @species.where(condition) }
+
+      association_fields = { characteristics: V1::CharacteristicsController::PUBLIC_FIELDS }
+      search_by_fields(association_fields).each { |condition| @species = @species.where(characteristics: condition) }
+
+      if params['habitats']
+        c = Characteristic.where('habitats like ?', '%' + params['habitats'].gsub(/,|:|-/, '%')+'%').pluck(:species_id)
+        @species = @species.where(characteristics: { id: c })
+      end
+
+      if params['substrates']
+        c = Characteristic.where('substrates like ?', '%' + params['substrates'].gsub(',', '%')+'%').pluck(:species_id)
+        @species = @species.where(characteristics: { id: c })
+      end
+
+      set_pagination @species, 'species_index_url'
       @species = @species.paginate(page: @meta[:page], per_page: @meta[:per_page]) unless params['all']
     end
   end
