@@ -338,7 +338,7 @@ module Fungiorbis
           'Radnović,Matavulj,B.' => 'dragan.radnovic@dbe.uns.ac.rs',
           'Sabadoš K.' => 'sabados.k@fungiorbis.edu',
           'Site T.' => 'site.t@fungiorbis.edu',
-          'Tepavčević Andrea' => 'etepavce@gmail.com'
+          'Tepavčević Andreja' => 'etepavce@gmail.com'
       }
 
       User.find_by_email(users[full_name] ? users[full_name] : 'maja.karaman@dbe.uns.ac.rs')
