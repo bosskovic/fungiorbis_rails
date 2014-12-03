@@ -1,5 +1,6 @@
 json.id species.uuid
 json.fullName species.full_name
+json.image "/images/species/#{species.full_name.gsub(' ', '_')}.jpg" if FileTest.exist?("#{Rails.root}/public/images/species/#{species.full_name.gsub(' ', '_')}.jpg")
 species_fields = to_underscore(fields)
 json.extract! species, *species_fields
 
