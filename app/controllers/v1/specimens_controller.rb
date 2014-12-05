@@ -20,17 +20,75 @@ class V1::SpecimensController < ApplicationController
   load_and_authorize_resource only: :index
 
   def index
-    @specimens = Specimen
+    # @species = Species
+    #
+    # if filter_request?
+    #   filter_values.each { |value| @species = @species.where(filter_condition, { value: value }) }
+    #   search_by_fields(V1::SpeciesController::PUBLIC_FIELDS).each { |condition| @species = @species.where(condition) }
+    #   @species = @species.select(filter_response_fields)
+    # else
+    #   @species = @species.includes(:characteristics).order(sort_and_order(V1::SpeciesController::PUBLIC_FIELDS))
+    #   search_by_fields(PUBLIC_FIELDS).each { |condition| @species = @species.where(condition) }
+    #
+    #   association_fields = { characteristics: V1::CharacteristicsController::PUBLIC_FIELDS }
+    #   search_by_fields(association_fields).each { |condition| @species = @species.where(characteristics: condition) }
+    #
+    #   if params['habitats']
+    #     c = Characteristic.where('habitats like ?', '%' + params['habitats'].gsub(/,|:|-/, '%')+'%').pluck(:species_id)
+    #     @species = @species.where(characteristics: { id: c })
+    #   end
+    #
+    #   if params['substrates']
+    #     c = Characteristic.where('substrates like ?', '%' + params['substrates'].gsub(',', '%')+'%').pluck(:species_id)
+    #     @species = @species.where(characteristics: { id: c })
+    #   end
+    # end
+    #
+    # ids = @species.pluck(:id)
+    #
+    # @specimens = Specimen.includes(:species, :characteristics, :legator, :determinator).where(species: {id: ids})
+    #
+    #
+    # set_pagination @specimens, 'specimens_url'
+    # @specimens = @specimens.paginate(page: @meta[:page], per_page: @meta[:per_page]) unless params['all']
 
-    @specimens = @specimens.includes(:species, :characteristics)
 
-     search_by_fields(PUBLIC_FIELDS).each { |condition| @specimens = @specimens.where(condition) }
 
-     association_fields = { species: V1::SpeciesController::PUBLIC_FIELDS }
-     search_by_fields(association_fields).each { |condition| @specimens = @specimens.where(species: condition) }
+
+    @specimens = Specimen.includes(:species, :characteristics, :legator, :determinator)
+
+    search_by_fields(PUBLIC_FIELDS).each { |condition| @specimens = @specimens.where(condition) }
 
     # association_fields = { species: V1::SpeciesController::PUBLIC_FIELDS }
     # search_by_fields(association_fields).each { |condition| @specimens = @specimens.where(species: condition) }
+
+    # association_fields = { species: V1::SpeciesController::PUBLIC_FIELDS }
+    # search_by_fields(association_fields).each { |condition| @specimens = @specimens.where(species: condition) }
+
+
+    search_by_fields(V1::SpeciesController::PUBLIC_FIELDS).each { |condition| @specimens = @specimens.where(species: condition) }
+    # params.each do |k, v|
+    #   if V1::SpeciesController::PUBLIC_FIELDS.include? k.to_sym
+    #     @specimens = @specimens.where(species: { k => v})
+    #   end
+    # end
+
+    sp = Species.includes(:characteristics)
+    params.each do |k, v|
+      v = true if v == 'true'
+      v = false if v == 'false'
+      if ['characteristics.edible', 'characteristics.cultivated', 'characteristics.poisonous', 'characteristics.medicinal', 'characteristics.fruitingBody', 'characteristics.microscopy', 'characteristics.flesh', 'characteristics.chemistry'].include? k
+        pair = k.split '.'
+        # @specimens = @specimens.where(species: { characteristics:  {pair[1] => v}})
+        sp = sp.where( k => v)
+      end
+    end
+    unless sp.is_a?(Class)
+      ids = sp.pluck(:id)
+      puts ids.inspect
+      @specimens = @specimens.where(species_id: ids)
+    end
+
 
     if params['habitats']
       @specimens = @specimens.where('habitats like ?', '%' + params['habitats'].gsub(/,|:|-/, '%')+'%')
