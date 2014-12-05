@@ -25,8 +25,8 @@ Amanita / pantherina,Amanitaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agar
 Amanita / phalloides,Amanitaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Amanita / rubescens,Amanitaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Amanita / spissa,Amanitaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
-Amanita / vaginata,Amanitaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Amanita / vaginata var.fulva,Amanitaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
+Amanita / vaginata,Amanitaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Amanita / vaginata var.fulva,Amanitaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Armallaria / polymyces,Physalacriaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Armillaria / mellea,Physalacriaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Ascocoryne / sarcoides,Heliotiaceae,Heliotiales,Leotiomycetidae,Leotiomycetes,Pezizomycotina,Ascomycota,Fungi
@@ -86,9 +86,9 @@ Coprinellus / disseminatus,Psathyrellaceae,Agaricales,Agaricomycetidae,Agaricomy
 Coprinus / domesticus,Agaricaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Coprinus / micaceus,Agaricaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Coprinellus / pallidissimus,Psathyrellaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
-Coprinus / picaceus,Agaricaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Coprinus / silvaticus,Agaricaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Coprinus / sp.,Agaricaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
+Coprinus / picaceus,Agaricaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Coprinus / silvaticus,Agaricaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Coprinus / sp.,Agaricaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Elaphocordyceps / ophioglossoides,Ophiocordycipitaceae,Hypocreales,Hypocreomycetidae,Sordariomycetes,Pezizomycotina,Ascomycota,Fungi
 Antrodia / albida,Formitopsidaceae,Polyporales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Coriolus / hirsutus,Polyporaceae s.lato,Polyporales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
@@ -168,7 +168,7 @@ Inocybe / geophylla var.liliac,Inocybaceae,Agaricales,Agaricomycetidae,Agaricomy
 Inocybe / geophylla var.violac,Inocybaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Inocybe / sp.,Inocybaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Pseudoinonotus / dryadeus,Hymenochaetaceae,Hymenochaetales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
-Kuehneromyces / mutabilis,Strophariaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
+Kuehneromyces / mutabilis,Strophariaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Laccaria / laccata,Hydnangiaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Laccaria / laccata var.amethyst,Hydnangiaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Lacrymaria / lacrymabunda,Psathyrellaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
@@ -255,10 +255,10 @@ Gymnopus / foetidum,Omphalotaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Aga
 Nectria / cinnabarina,Nectriaceae,Hypocreales,Hypocreomycetidae,Sordariomycetes,Pezizomycotina,Ascomycota,Fungi
 Omphalotus / olearius,Omphalotaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Otidea / onotica,Pyronemataceae,Pezizales,Pezizomycetidae,Pezizomycetes,Pezizomycotina,Ascomycota,Fungi
-Xerula / pudens,Physalacriaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Mucidula / mucida,Physalacriaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Hymenopellis / radicata,Physalacriaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Panaeolus / rickenii,Incertae sedis,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
+Xerula / pudens,Physalacriaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Mucidula / mucida,Physalacriaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Hymenopellis / radicata,Physalacriaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Panaeolus / rickenii,Incertae sedis,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Panellus / mitis,Mycenaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Panellus / stipticus,Mycenaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Tapinella / atrotomentosa,Tapinellaceae,Boletales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
@@ -313,13 +313,13 @@ Russula / amoena,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomyc
 Russula / anthracina,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Russula / aurea,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Russula / cavipes,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
-Russula / cyanoxantha,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Russula / delica,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Russula / claroflava,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Russula / foetens,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Russula / heterophylla,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
+Russula / cyanoxantha,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Russula / delica,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Russula / claroflava,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Russula / foetens,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Russula / heterophylla,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Russula / illota,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
-Russula / rosea,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
+Russula / rosea,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Russula / risigallina,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Russula / nigricans,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Russula / ochroleuca,Russulaceae,Russulales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
@@ -331,8 +331,8 @@ Sarcoscypha / coccinea,Sarcoscyphaceae,Pezizales,Pezizomycetidae,Pezizomycetes,P
 Schizophyllum / commune,Schizophyllaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Schizopora / paradoxa,Schizoporaceae,Hymenochaetales,Incertae sedis,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Scleroderma / aurantium,Sclerodermataceae,Boletales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
-Scleroderma / citrinum,Sclerodermataceae,Boletales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Scleroderma / verrucosum,Sclerodermataceae,Boletales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
+Scleroderma / citrinum,Sclerodermataceae,Boletales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Scleroderma / verrucosum,Sclerodermataceae,Boletales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Scutellinia / scutellata,Pyronemataceae,Pezizales,Pezizomycetidae,Pezizomycetes,Pezizomycotina,Ascomycota,Fungi
 Scutellinia / umbrarum,Pyronemataceae,Pezizales,Pezizomycetidae,Pezizomycetes,Pezizomycotina,Ascomycota,Fungi
 Stemonitis / axifera,Stemonitidaceae,Stemonitida,Incertae sedis,Myxogastrea,Mycetozoa,Amoebozoa,Protozoa
@@ -357,12 +357,12 @@ Tremella / mesenterica,Tremellaceae,Tremellales,Incertae sedis,Tremellomycetes,A
 Tremella / sp.,Tremellaceae,Tremellales,Incertae sedis,Tremellomycetes,Agaricomycotina,Basidiomycota,Fungi
 Trichia / botrytis,Trichiaceae,Trichiida,Incertae sedis,Myxogastrea,Mycetozoa,Amoebozoa,Protozoa
 Trichia / sp.,Trichiaceae,Trichiida,Incertae sedis,Myxogastrea,Mycetozoa,Amoebozoa,Protozoa
-Tricholoma / atrosquamosum,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Tricholoma / portentosum,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Tricholoma / sejunctum,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Tricholoma / sp.,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Tricholoma / sulphureum,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
-Tricholomopsis / decora,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basiodiomycota,Fungi
+Tricholoma / atrosquamosum,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Tricholoma / portentosum,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Tricholoma / sejunctum,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Tricholoma / sp.,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Tricholoma / sulphureum,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
+Tricholomopsis / decora,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Tricholomopsis / platyphylla,Tricholomataceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi
 Tubifera / ferruginosa,Tubiferaceae,Liceida,Incertae sedis,Myxogastrea,Mycetozoa,Amoebozoa,Protozoa
 Tulostoma / brumale,Agaricaceae,Agaricales,Agaricomycetidae,Agaricomycetes,Agaricomycotina,Basidiomycota,Fungi

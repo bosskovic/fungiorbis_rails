@@ -8,13 +8,15 @@ class Specimen < ActiveRecord::Base
   SPECIES_VALIDATION_ERROR = 'must take species from the list for specific habitat and subhabitat'
   # SUBSTRATES_VALIDATION_ERROR = "have to be included in: #{all_substrate_keys.inspect}"
 
-  PER_PAGE = 10
+  PER_PAGE = 60
   MAX_PER_PAGE = 100
 
   belongs_to :species
   belongs_to :location
   belongs_to :legator, class_name: 'User'
   belongs_to :determinator, class_name: 'User'
+
+  has_many :characteristics, :through => :species
 
   serialize :habitats, JSON
   serialize :substrates, JSON

@@ -16,6 +16,14 @@ module UrlTemplatesHelper
     species_url(uuid: 'xxx').gsub('xxx', '{species.id}')
   end
 
+  def specimens_url_template
+    specimens_url
+  end
+
+  def specimen_url_template
+    specimens_url(uuid: 'xxx').gsub('xxx', '{specimens.id}')
+  end
+
   def references_url_template
     references_url
   end

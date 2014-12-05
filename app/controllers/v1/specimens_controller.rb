@@ -1,45 +1,47 @@
 class V1::SpecimensController < ApplicationController
 
-  # include Pageable
-  # include CamelCaseConvertible
-  # include Includable
-  # include FieldSelectable
-  # include FieldSearchable
-  # include Filterable
-  # include Sortable
+   include Pageable
+   include CamelCaseConvertible
+   include Includable
+   include FieldSelectable
+   include FieldSearchable
+   include Filterable
+   include Sortable
   #
   # SPECIES_NOT_FOUND_ERROR = 'Species not found.'
-  # PUBLIC_FIELDS = [:genus, :name, :familia, :ordo, :subclassis, :classis, :subphylum, :phylum, :synonyms, :growthType, :nutritiveGroup]
-  # PUBLIC_ASSOCIATIONS = [:characteristics]
+  PUBLIC_FIELDS = [:date, :quantity, :note]
+  PUBLIC_ASSOCIATIONS = [:species]
   #
-  # before_action :authenticate_user!, except: [:index, :show]
-  # before_action :set_inclusions, only: [:index, :show, :create, :update]
-  # before_action :set_fields, only: [:index, :show, :create, :update]
-  # # before_action { |controller| controller.send :set_pagination, Species, 'species_index_url' if action_name == 'index' }
+   before_action :authenticate_user!, except: [:index, :show]
+   before_action :set_inclusions, only: [:index, :show, :create, :update]
+   before_action :set_fields, only: [:index, :show, :create, :update]
+   # before_action { |controller| controller.send :set_pagination, Specimen, 'specimens_url' if action_name == 'index' }
 
   load_and_authorize_resource only: :index
 
   def index
-    @specimens = Specimens
+    @specimens = Specimen
 
-    @specimens = @species.includes(species: :characteristics)
-    search_by_fields(PUBLIC_FIELDS).each { |condition| @specimens = @species.where(condition) }
+    @specimens = @specimens.includes(:species, :characteristics)
 
-    association_fields = { characteristics: V1::CharacteristicsController::PUBLIC_FIELDS }
-    search_by_fields(association_fields).each { |condition| @specimens = @species.where(characteristics: condition) }
+     search_by_fields(PUBLIC_FIELDS).each { |condition| @specimens = @specimens.where(condition) }
+
+     association_fields = { species: V1::SpeciesController::PUBLIC_FIELDS }
+     search_by_fields(association_fields).each { |condition| @specimens = @specimens.where(species: condition) }
+
+    # association_fields = { species: V1::SpeciesController::PUBLIC_FIELDS }
+    # search_by_fields(association_fields).each { |condition| @specimens = @specimens.where(species: condition) }
 
     if params['habitats']
-      c = Characteristic.where('habitats like ?', '%' + params['habitats'].gsub(/,|:|-/, '%')+'%').pluck(:species_id)
-      @specimens = @species.where(characteristics: { id: c })
+      @specimens = @specimens.where('habitats like ?', '%' + params['habitats'].gsub(/,|:|-/, '%')+'%')
     end
 
     if params['substrates']
-      c = Characteristic.where('substrates like ?', '%' + params['substrates'].gsub(',', '%')+'%').pluck(:species_id)
-      @specimens = @species.where(characteristics: { id: c })
+      @specimens = @specimens.where('substrates like ?', '%' + params['substrates'].gsub(',', '%')+'%')
     end
 
-    set_pagination @species, 'species_index_url'
-    @specimens = @species.paginate(page: @meta[:page], per_page: @meta[:per_page]) unless params['all']
+    set_pagination @specimens, 'specimens_url'
+    @specimens = @specimens.paginate(page: @meta[:page], per_page: @meta[:per_page]) unless params['all']
   end
 
   private
@@ -57,7 +59,7 @@ class V1::SpecimensController < ApplicationController
       when :index
         []
       when :show, :create, :update
-        %w(characteristics characteristics.reference)
+        %w(species species.characteristics species.references)
       else
         raise 'unsupported action'
     end
@@ -75,11 +77,14 @@ class V1::SpecimensController < ApplicationController
   def default_nested_fields(action)
     case action
       when :index, :show, :create, :update
-        { 'characteristics' => {
-            fields: V1::CharacteristicsController::PUBLIC_FIELDS,
+        { 'species' => {
+            fields: V1::SpeciesController::PUBLIC_FIELDS,
             nested_fields: {
-                'reference' => {
-                    fields: V1::ReferencesController::PUBLIC_FIELDS
+                'characteristics' => {
+                    fields: V1::CharacteristicsController::PUBLIC_FIELDS
+                },
+                'references' => {
+                  fields: V1::ReferencesController::PUBLIC_FIELDS
                 }
             }
         } }

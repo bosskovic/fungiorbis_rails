@@ -8,7 +8,7 @@ class Species < ActiveRecord::Base
   GROWTH_TYPE_VALIDATION_ERROR = "has to be one of: #{GROWTH_TYPES.inspect}"
   NUTRITIVE_GROUPS_VALIDATION_ERROR = "has to be one of: #{NUTRITIVE_GROUPS.inspect}"
 
-  PER_PAGE = 10
+  PER_PAGE = 60
   MAX_PER_PAGE = 100
 
   has_many :characteristics, dependent: :destroy
